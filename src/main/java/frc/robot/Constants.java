@@ -53,7 +53,9 @@ public class Constants {
     }
 
     public static class IntakeConstants {
-        
+        /* Motors */
+        public static final int spinMotor = 6;
+        public static final int conveyorMotor = 11;
     }
 
     public static class ShooterConstants {
