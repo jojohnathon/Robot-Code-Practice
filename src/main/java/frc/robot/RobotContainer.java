@@ -5,6 +5,9 @@ import frc.robot.commands.Drive;
 import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -12,17 +15,23 @@ public class RobotContainer {
     private static RobotContainer instance = null;
     private static final XboxController driverController = new XboxController(Constants.InputPorts.driverController);
     private static final XboxController operatorController = new XboxController(Constants.InputPorts.operatorController);
+    private static final JoystickButton driver_A = new JoystickButton(driverController, 1),
+            driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
+            driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
+            driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
+            driver_MENU = new JoystickButton(driverController, 8);
 
     private static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
     public static Intake intake;
     public static Climber climber;
+    public static Arm arm;
 
     private RobotContainer() {
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
-
+        arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
 
@@ -37,7 +46,11 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-
+        driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
+                    .alongWith(new RunCommand( ()->intake.intake(0.5)))
+                    .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
+                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
+                    .alongWith(new InstantCommand(intake::stopIntake)));
     }
 
      /**

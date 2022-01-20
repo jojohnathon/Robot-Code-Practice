@@ -24,6 +24,27 @@ public class Constants {
                                                   // turn to [0,1]
     }
     
+    public static class ArmConstants {
+        public static final int armMotor = 5;
+
+        /* PID Constants */
+        public static double kP = 2.9;
+        public static double kI = 0;
+        public static double kD = 0;
+
+        /* Feedforward Constants */
+        public static double kS = 0.402;
+        public static double kCos = 0.771;
+        public static double kV = 0.758;
+        public static double kA = 0.00717;
+
+        /* Intake constants */
+        public static double kMaxVelocity = 0.25; // Maximum velocity to turn arm at, radians per second
+        public static double kMaxAcceleration = 2; // Maximum acceleration to turn arm at, radians per second per second
+        public static double kArmOffset = 4.22; // Initial position of the intake arm
+
+    }
+
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */
