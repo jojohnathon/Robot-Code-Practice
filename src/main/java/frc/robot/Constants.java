@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C.Port;
+
 /*  Robot Specs:
     4 TalonFX motors
     4-6 NEO motors
@@ -102,6 +104,9 @@ public class Constants {
     }
 
     public static class VisionConstants {
+        /* Color Sensor Constants */
+        public static Port colorSensorV3 = Port.kOnboard;
+
         /* Turn PID Constants */
         public static double kPTurn = 0;
         public static double kITurn = 0;

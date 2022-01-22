@@ -1,13 +1,15 @@
 package frc.robot.subsystems;
 
+import frc.robot.Util;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.ArmConstants;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Util;
-import frc.robot.Constants.IntakeConstants;
 
 public class Intake implements Subsystem {
     
@@ -54,4 +56,5 @@ public class Intake implements Subsystem {
     public void stopConveyor(){
         conveyorMotor.set(0);
     }
+
 }

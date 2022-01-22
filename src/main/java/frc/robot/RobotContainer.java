@@ -1,13 +1,18 @@
 package frc.robot;
 
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -27,13 +32,15 @@ public class RobotContainer {
     public static Intake intake;
     public static Climber climber;
     public static Arm arm;
+    public static ColorSensorV3 colorSensorV3;
 
     private RobotContainer() {
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
-        arm.getInstance();
+        arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
+        colorSensorV3 = Util.createColorSensorV3(VisionConstants.colorSensorV3);
 
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -78,6 +85,35 @@ public class RobotContainer {
     public static double getTurn() {
         return deadbandX(driverController.getRightX(), Constants.DriverConstants.kJoystickDeadband);
     }
+
+    public static class RGBValues {
+        private int red;
+        private int green;
+        private int blue;
+        public RGBValues(int r, int g, int b) {
+            red = r;
+            green = g;
+            blue = b;
+        }
+        public int getR() {
+            return red;
+        }
+        public int getG() {
+            return green;
+        }
+        public int getB() {
+            return blue;
+        }
+    }
+
+    public RGBValues getColor() {
+        return new RGBValues(colorSensorV3.getRed(), colorSensorV3.getGreen(), colorSensorV3.getBlue());
+    }     
+
+    public int getProximity() {
+        return colorSensorV3.getProximity();
+    }
+
     /**
      * Set the LED mode on the Limelight
      * 
