@@ -25,7 +25,7 @@ public class Intake implements Subsystem {
     private Intake(){
         conveyorMotor.setInverted(false);
         conveyorMotor.burnFlash();
-        
+        register();
     }
 
     /**

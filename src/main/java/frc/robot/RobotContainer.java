@@ -86,28 +86,8 @@ public class RobotContainer {
         return deadbandX(driverController.getRightX(), Constants.DriverConstants.kJoystickDeadband);
     }
 
-    public static class RGBValues {
-        private int red;
-        private int green;
-        private int blue;
-        public RGBValues(int r, int g, int b) {
-            red = r;
-            green = g;
-            blue = b;
-        }
-        public int getR() {
-            return red;
-        }
-        public int getG() {
-            return green;
-        }
-        public int getB() {
-            return blue;
-        }
-    }
-
-    public RGBValues getColor() {
-        return new RGBValues(colorSensorV3.getRed(), colorSensorV3.getGreen(), colorSensorV3.getBlue());
+    public static Color getColor() {
+        return colorSensorV3.getColor();
     }     
 
     public int getProximity() {
