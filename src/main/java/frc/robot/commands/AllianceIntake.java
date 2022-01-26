@@ -41,12 +41,12 @@ public class AllianceIntake implements Command {
                                             new InstantCommand(intake::stopIntake, intake)));
         switch(allianceColor) {
             case red:
-                if(RobotContainer.getColor().red > 200 && robot.getProximity() > VisionConstants.minimumProximity) { //TODO: check that the object is adequately red
+                if(RobotContainer.getColor().red > VisionConstants.minimumSimilarity && robot.getProximity() > VisionConstants.minimumProximity) { //TODO: check that the object is adequately red
                     CommandScheduler.getInstance().schedule(intakeCommand); 
                 }
             case blue:
-                if(RobotContainer.getColor().blue > 200 && robot.getProximity() > 1680) { //TODO: check that the object is adequately blue                    
-                    CommandScheduler.getInstance().schedule(intakeCommand); //TODO: schedule Intake of ball
+                if(RobotContainer.getColor().blue > VisionConstants.minimumSimilarity && robot.getProximity() > VisionConstants.minimumProximity) { //TODO: check that the object is adequately blue                    
+                    CommandScheduler.getInstance().schedule(intakeCommand); 
                 }
         }
     }
