@@ -97,7 +97,9 @@ public class Constants {
         public static int master;
         public static int slave;
     }
-
+    public static class ConveyorConstants {
+        public static final int motor = 10;
+    }
     public static class ClimbConstants {
         /* PID constants */
         public static final double kP = 0;
