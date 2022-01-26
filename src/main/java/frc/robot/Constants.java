@@ -94,6 +94,8 @@ public class Constants {
  
          /* Shooter Constants */ 
          public static double kTolerance = 0;
+        public static int master;
+        public static int slave;
     }
 
     public static class ClimbConstants {

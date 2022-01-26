@@ -27,7 +27,8 @@ public class AllianceIntake implements Command {
                     CommandScheduler.getInstance().schedule(); //TODO: schedule Intake of ball
                 }
             case blue:
-                if(robot.getColor().getB() > 200 && robot.getProximity() > 1680) { //TODO: check that the object is adequately blue                    CommandScheduler.getInstance().schedule(); //TODO: schedule Intake of ball
+                if(robot.getColor().getB() > 200 && robot.getProximity() > 1680) { //TODO: check that the object is adequately blue                    
+                    CommandScheduler.getInstance().schedule(); //TODO: schedule Intake of ball
                 }
         }
     }

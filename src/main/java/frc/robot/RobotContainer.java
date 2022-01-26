@@ -32,6 +32,7 @@ public class RobotContainer {
     public static Intake intake;
     public static Climber climber;
     public static Arm arm;
+    public static Shooter shooter;
     public static ColorSensorV3 colorSensorV3;
 
     private RobotContainer() {
@@ -40,6 +41,7 @@ public class RobotContainer {
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
+        shooter = Shooter.getInstance();
         colorSensorV3 = Util.createColorSensorV3(VisionConstants.colorSensorV3);
 
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
