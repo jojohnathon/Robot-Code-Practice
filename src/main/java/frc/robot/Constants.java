@@ -107,7 +107,8 @@ public class Constants {
 
     public static class VisionConstants {
         /* Color Sensor Constants */
-        public static Port colorSensorV3 = Port.kOnboard;
+        public static final Port colorSensorV3 = Port.kOnboard;
+        public static final int minimumProximity = 1680;
 
         /* Turn PID Constants */
         public static double kPTurn = 0;

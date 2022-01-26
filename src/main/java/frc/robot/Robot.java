@@ -51,6 +51,10 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
     SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
+    SmartDashboard.putNumber("CV3 red", RobotContainer.getColor().red);
+    SmartDashboard.putNumber("CV3 green", RobotContainer.getColor().green);
+    SmartDashboard.putNumber("CV3 blue", RobotContainer.getColor().blue);
+
   }
 
   /**
