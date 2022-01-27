@@ -33,8 +33,14 @@ public class DriveXMeters implements Command {
     @Override
     public void execute() {
         TrapezoidProfile.State profileCalc = profile.calculate(Constants.dt);
-        Drivetrain.LEFT_PID_CONTROLLER.calculate(Drivetrain.getLeftEnc(), profileCalc);
-        Drivetrain.RIGHT_PID_CONTROLLER.calculate(Drivetrain.getRightEnc(), profileCalc);
+        double left, right;
+        left = Drivetrain.FEEDFORWARD.calculate(profileCalc.velocity);
+        right = Drivetrain.FEEDFORWARD.calculate(profileCalc.velocity);
+        left += Drivetrain.LEFT_PID_CONTROLLER.calculate(Drivetrain.getLeftEnc(), profileCalc);
+        right += Drivetrain.RIGHT_PID_CONTROLLER.calculate(Drivetrain.getRightEnc(), profileCalc);
+        left /= Constants.kMaxVoltage;
+        right /= Constants.kMaxVoltage;
+        drivetrain.setOpenLoop(left, right);
         profile = new TrapezoidProfile(Drivetrain.constraints, goal, profileCalc);
     }
 
