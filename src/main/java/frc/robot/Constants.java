@@ -71,6 +71,7 @@ public class Constants {
         public static final double kWheelDiameter = 0;
 
         public static final double kMaxSpeedMPS = 0; // max speed in meters per second
+        public static final double kMaxAcceleration = 0; //max acceleration in meters per second per second
         public static final double kTrackWidth = 0; // distance between wheels
         public static final double kMaxCurvature = 0; // Maximum turn rate in radians per meter
     }
