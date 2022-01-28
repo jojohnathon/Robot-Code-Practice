@@ -16,22 +16,16 @@ public class DriveXMeters implements Command {
     private TrapezoidProfile profile;
     private TrapezoidProfile.Constraints constraints;
     
-    /*
-    @param goal     the goal in terms of distance & max speed: the actual goal needs to be modified for speed 0, the endpoint
-    */
-    public DriveXMeters(TrapezoidProfile.State goal) {
-        this.goal.position = goal.position;
-        this.goal.velocity = 0;
-        constraints = new TrapezoidProfile.Constraints(goal.velocity, DrivetrainConstants.kMaxAcceleration);
-        profile = new TrapezoidProfile(constraints, this.goal);
-    }
 
     /*
         @param distance     desired distance
         @param maxSpeedMPS  max speed during motion
+        @param maxAccelMPSS max acceleration during motion
     */
-    public DriveXMeters(double distance, double maxSpeedMPS) {
-        this(new TrapezoidProfile.State(distance, maxSpeedMPS));
+    public DriveXMeters(double distance, double maxSpeedMPS, double maxAccelMPSS) {
+        constraints = new TrapezoidProfile.Constraints(maxSpeedMPS, maxAccelMPSS);
+        goal = new TrapezoidProfile.State(distance, 0);
+        profile = new TrapezoidProfile(constraints, goal);
 
     }
 
