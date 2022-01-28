@@ -11,6 +11,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ColorSensorV3;
+import edu.wpi.first.wpilibj.I2C.Port;
 
 public class Util {
 
@@ -129,5 +131,15 @@ public class Util {
 
         return talon;
 
+    }
+
+    /*
+    * Create a configured ColorSensorV3
+    * @param id the ID of the motor
+    * @return a fully configured ColorSensorV3
+    */
+    public static ColorSensorV3 createColorSensorV3(Port port) {
+        ColorSensorV3 colorSensorV3 = new ColorSensorV3(port);
+        return colorSensorV3;
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C.Port;
+
 /*  Robot Specs:
     4 TalonFX motors
     4-6 NEO motors
@@ -69,6 +71,7 @@ public class Constants {
         public static final double kWheelDiameter = 0;
 
         public static final double kMaxSpeedMPS = 0; // max speed in meters per second
+        public static final double kMaxAcceleration = 0; //max acceleration in meters per second per second
         public static final double kTrackWidth = 0; // distance between wheels
         public static final double kMaxCurvature = 0; // Maximum turn rate in radians per meter
     }
@@ -92,8 +95,12 @@ public class Constants {
  
          /* Shooter Constants */ 
          public static double kTolerance = 0;
+        public static int master;
+        public static int slave;
     }
-
+    public static class ConveyorConstants {
+        public static final int motor = 10;
+    }
     public static class ClimbConstants {
         /* PID constants */
         public static final double kP = 0;
@@ -102,6 +109,11 @@ public class Constants {
     }
 
     public static class VisionConstants {
+        /* Color Sensor Constants */
+        public static final Port colorSensorV3 = Port.kOnboard;
+        public static final int minimumProximity = 450;
+        public static final double minimumSimilarity = 0.6;
+
         /* Turn PID Constants */
         public static double kPTurn = 0;
         public static double kITurn = 0;
