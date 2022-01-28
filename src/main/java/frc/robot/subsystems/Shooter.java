@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Util;
 import frc.robot.Constants.ShooterConstants;
@@ -12,11 +14,15 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter implements Subsystem {
     private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, MotorType.kBrushless);
     private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, MotorType.kBrushless);
+    public static PIDController controller;
+    public static SimpleMotorFeedforward FEEDFORWARD;
     private static RelativeEncoder encoder = master.getEncoder();
 
     private static Shooter instance = null;
 
     private Shooter() {
+        controller = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
+        FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
         slave.follow(master);
     }
 
