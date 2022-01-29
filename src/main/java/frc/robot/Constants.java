@@ -100,6 +100,9 @@ public class Constants {
     }
     public static class ConveyorConstants {
         public static final int motor = 10;
+        public static final int intakePhotoelectric = 0;
+        public static final int shooterPhotoelectric = 1;
+
     }
     public static class ClimbConstants {
         /* PID constants */

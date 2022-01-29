@@ -9,7 +9,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class DriveXMeters implements Command {
-    private Drivetrain drivetrain = RobotContainer.drivetrain;
+    private Drivetrain drivetrain = Drivetrain.getInstance();
     private Subsystem[] requirements = {drivetrain};
     private TrapezoidProfile.State goal;
     private TrapezoidProfile profile;

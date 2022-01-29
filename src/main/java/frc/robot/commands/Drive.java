@@ -15,13 +15,12 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 
 public class Drive implements Command {
-    private Subsystem[] requirements = {RobotContainer.drivetrain};
+    private Drivetrain drivetrain = Drivetrain.getInstance();
+    private Subsystem[] requirements = {drivetrain};
 
-    private Drivetrain drivetrain;
 
     public Drive(State state) {
         this.state = state;
-        drivetrain = Drivetrain.getInstance();
     }
 
     public enum State {
