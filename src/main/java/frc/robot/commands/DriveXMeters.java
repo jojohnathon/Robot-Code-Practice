@@ -45,7 +45,7 @@ public class DriveXMeters implements Command {
         left /= Constants.kMaxVoltage;
         right /= Constants.kMaxVoltage;
         drivetrain.setOpenLoop(left, right);
-        profile = new TrapezoidProfile(Drivetrain.constraints, goal, profileCalc);
+        profile = new TrapezoidProfile(constraints, goal, profileCalc);
     }
 
     public Set<Subsystem> getRequirements() {
