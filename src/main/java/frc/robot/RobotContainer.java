@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -38,8 +40,10 @@ public class RobotContainer {
     public static Shooter shooter;
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX;
+    public static PhotonCamera camera;
 
     private RobotContainer() {
+        camera = new PhotonCamera("photonvision");
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
