@@ -59,7 +59,7 @@ public class Drivetrain implements Subsystem {
 
     }
 
-    public void setOpenLoop(double left, double right) {
+    public static void setOpenLoop(double left, double right) {
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
     }

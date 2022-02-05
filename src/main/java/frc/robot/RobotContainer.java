@@ -7,11 +7,13 @@ import frc.robot.commands.Shoot;
 import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -35,8 +37,10 @@ public class RobotContainer {
     public static Arm arm;
     public static Shooter shooter;
     public static ColorSensorV3 colorSensorV3;
+    public static AHRS navX;
 
     private RobotContainer() {
+        navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         arm = Arm.getInstance();
