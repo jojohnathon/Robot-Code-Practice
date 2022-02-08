@@ -4,6 +4,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.VisionTrack;
 import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,6 +18,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -70,6 +72,7 @@ public class RobotContainer {
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
         driver_LB.whileHeld(new Shoot(0.65));
+        driver_X.whileHeld(new VisionTrack());
     }
 
      /**
@@ -188,5 +191,8 @@ public class RobotContainer {
         VisionPipeline(int val) {
             this.val = val;
         }
+    }
+    public static PhotonPipelineResult getSnapshot() {
+        return camera.getLatestResult();
     }
 }
