@@ -4,7 +4,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.VisionTrack;
+import frc.robot.commands.CargoTrack;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -73,7 +73,7 @@ public class RobotContainer {
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
         driver_LB.whileHeld(new Shoot(0.65));*/
-        driver_X.whileHeld(new VisionTrack());
+        driver_X.whileHeld(new CargoTrack());
     }
 
      /**

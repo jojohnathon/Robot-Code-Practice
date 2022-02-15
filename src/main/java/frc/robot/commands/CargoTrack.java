@@ -17,7 +17,7 @@ import frc.robot.subsystems.Drivetrain;
 
 import java.util.Set;
 
-public class VisionTrack implements Command {
+public class CargoTrack implements Command {
 
     private static final PIDController TURN_PID_CONTROLLER = new PIDController(VisionConstants.kPTurn,
             VisionConstants.kITurn, VisionConstants.kDTurn);
@@ -26,7 +26,7 @@ public class VisionTrack implements Command {
 
     private Subsystem[] requirements = { Drivetrain.getInstance() };
 
-    public VisionTrack() {
+    public CargoTrack() {
 
     }
 
