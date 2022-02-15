@@ -1,22 +1,21 @@
 package frc.robot.commands;
 
-
-import java.util.Set;
-
-import org.photonvision.common.hardware.VisionLEDMode;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.LEDMode;
+import frc.robot.RobotContainer.VisionPipeline;
 import frc.robot.subsystems.Drivetrain;
+
+import java.util.Set;
 
 public class VisionTrack implements Command {
 
@@ -25,7 +24,7 @@ public class VisionTrack implements Command {
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
 
-    private Subsystem[] requirements = { RobotContainer.drivetrain };
+    private Subsystem[] requirements = { Drivetrain.getInstance() };
 
     public VisionTrack() {
 
@@ -33,7 +32,8 @@ public class VisionTrack implements Command {
 
     @Override
     public void initialize() {
-        //TODO: Configure photonvision pipeline
+        RobotContainer.getInstance().setIntakeLEDMode(LEDMode.OFF);
+        RobotContainer.getInstance().setIntakePipeline(RobotContainer.allianceToPipeline());
 
     }
 
@@ -42,14 +42,22 @@ public class VisionTrack implements Command {
 
         double left, right;
 
-        double turnError = RobotContainer.getSnapshot().getBestTarget().getPitch();
-        double distError = RobotContainer.getSnapshot().getBestTarget().getYaw();
+        double turnError = RobotContainer.getIntakeXOffset();
+        double distError = RobotContainer.getIntakeYOffset();
 
         if (turnError < VisionConstants.kTurnTolerance) turnError = 0;
         if (distError < VisionConstants.kDistTolerance) distError = 0;
 
         double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
+        //double length, width, len, shrt;
+        
+        /*length = RobotContainer.getInstance().limelight.getEntry("thor").getDouble(0);
+        width = RobotContainer.getInstance().limelight.getEntry("tvert").getDouble(0);
+        len = RobotContainer.getInstance().limelight.getEntry("tlong").getDouble(0);
+        shrt = RobotContainer.getInstance().limelight.getEntry("tshort").getDouble(0);*/
+
+
 
         if (throttle != 0) {
             throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
@@ -70,13 +78,19 @@ public class VisionTrack implements Command {
             right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         }
 
-        Drivetrain.setOpenLoop(left, right);
+        //Drivetrain.setOpenLoop(left, right);
 
     }
 
     @Override
+    public boolean isFinished() {
+        //TODO: Add a suitable end condition
+        return false;
+    }
+
+    @Override
     public void end(boolean interrupted) {
-        RobotContainer.camera.setLED(VisionLEDMode.kOff);
+        RobotContainer.getInstance().setIntakeLEDMode(LEDMode.OFF);
         Drivetrain.setOpenLoop(0.0, 0.0);
     }
 

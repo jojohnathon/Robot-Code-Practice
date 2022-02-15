@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.RobotContainer;
+import frc.robot.commands.VisionTrack;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,7 +37,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     robot = RobotContainer.getInstance();
 
-    RobotContainer.drivetrain.resetEncoders();
+    Drivetrain.getInstance().resetEncoders();
   }
 
   /**
@@ -51,9 +52,19 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
     SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
-    SmartDashboard.putNumber("CV3 red", RobotContainer.getColor().red);
+    //double length, width, len, shrt;
+    
+    /*length = RobotContainer.limelight.getEntry("thor").getDouble(0);
+    width = RobotContainer.getInstance().limelight.getEntry("tvert").getDouble(0);
+    len = RobotContainer.getInstance().limelight.getEntry("tlong").getDouble(0);
+    shrt = RobotContainer.getInstance().limelight.getEntry("tshort").getDouble(0);
+    //SmartDashboard.putNumber("charles", length);
+    SmartDashboard.putNumberArray("hor, vert, ratio", new double[] {length, width, length/width});
+    SmartDashboard.putNumberArray("long, short, ratio", new double[] {len, shrt, length/shrt});*/
+
+    /*SmartDashboard.putNumber("CV3 red", RobotContainer.getColor().red);
     SmartDashboard.putNumber("CV3 green", RobotContainer.getColor().green);
-    SmartDashboard.putNumber("CV3 blue", RobotContainer.getColor().blue);
+    SmartDashboard.putNumber("CV3 blue", RobotContainer.getColor().blue);*/
 
   }
 
@@ -69,15 +80,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
+    //CommandScheduler.getInstance().schedule(new VisionTrack());
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
+    //
+    /*switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
         break;
@@ -85,7 +97,7 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
-    }
+    }*/
   }
 
   /** This function is called once when teleop is enabled. */

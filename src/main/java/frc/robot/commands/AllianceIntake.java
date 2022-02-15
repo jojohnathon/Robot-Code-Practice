@@ -28,7 +28,7 @@ public class AllianceIntake implements Command {
     public AllianceIntake(AllianceColors allianceColor) {
         this.allianceColor = allianceColor;
     }
-
+/*
     public void execute() {
         final Command intakeCommand = new SequentialCommandGroup(
                                         new ParallelCommandGroup(
@@ -50,7 +50,7 @@ public class AllianceIntake implements Command {
                 }
         }
     }
-
+*/
     public Set<Subsystem> getRequirements() {
         return Set.of(requirements);
     }

@@ -63,7 +63,7 @@ public class TurnXDegrees implements Command {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         drivetrain.resetEncoders();
-        startAngle = RobotContainer.navX.getAngle();
+        //startAngle = RobotContainer.navX.getAngle();
 
     }
 

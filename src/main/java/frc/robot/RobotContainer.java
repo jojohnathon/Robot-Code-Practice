@@ -6,8 +6,9 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.VisionTrack;
 import frc.robot.subsystems.*;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -33,8 +34,8 @@ public class RobotContainer {
             driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
             driver_MENU = new JoystickButton(driverController, 8);
 
-    private static NetworkTable limelight;
-
+    public static NetworkTable limelightIntake;
+/*
     public static Drivetrain drivetrain;
     public static Intake intake;
     public static Climber climber;
@@ -43,9 +44,9 @@ public class RobotContainer {
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX;
     public static PhotonCamera camera;
-
+*/
     private RobotContainer() {
-        camera = new PhotonCamera("photonvision");
+        /*camera = new PhotonCamera("photonvision");
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
@@ -54,8 +55,8 @@ public class RobotContainer {
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
         colorSensorV3 = Util.createColorSensorV3(VisionConstants.colorSensorV3);
-
-        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+*/
+        limelightIntake = NetworkTableInstance.getDefault().getTable("limelight-intake");
 
         bindOI();
     }
@@ -66,12 +67,12 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
+        /*driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
                     .alongWith(new RunCommand( ()->intake.intake(0.5)))
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
                 .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
-        driver_LB.whileHeld(new Shoot(0.65));
+        driver_LB.whileHeld(new Shoot(0.65));*/
         driver_X.whileHeld(new VisionTrack());
     }
 
@@ -101,21 +102,21 @@ public class RobotContainer {
         return deadbandX(driverController.getRightX(), Constants.DriverConstants.kJoystickDeadband);
     }
 
-    public static Color getColor() {
+    /*public static Color getColor() {
         return colorSensorV3.getColor();
     }     
 
     public int getProximity() {
         return colorSensorV3.getProximity();
-    }
+    }*/
 
     /**
      * Set the LED mode on the Limelight
      * 
      * @param ledMode The mode to set the Limelight LEDs to
      */
-    public void setLEDMode(LEDMode ledMode) {
-        limelight.getEntry("ledMode").setNumber(ledMode.val);
+    public void setIntakeLEDMode(LEDMode ledMode) {
+        limelightIntake.getEntry("ledMode").setNumber(ledMode.val);
     }
 
     /**
@@ -123,8 +124,8 @@ public class RobotContainer {
      * 
      * @param stream Stream mode to set the Limelight to
      */
-    public void setStreamMode(StreamMode stream) {
-        limelight.getEntry("stream").setNumber(stream.val);
+    public void setIntakeStreamMode(StreamMode stream) {
+        limelightIntake.getEntry("stream").setNumber(stream.val);
     }
 
     /**
@@ -132,8 +133,8 @@ public class RobotContainer {
      * 
      * @param pipeline The pipeline to use
      */
-    public void setPipeline(VisionPipeline pipeline) {
-        limelight.getEntry("pipeline").setNumber(pipeline.val);
+    public void setIntakePipeline(IntakeVisionPipeline pipeline) {
+        limelightIntake.getEntry("pipeline").setNumber(pipeline.val);
     }
 
     /**
@@ -141,8 +142,8 @@ public class RobotContainer {
      * 
      * @return the horizontal offset between the target and the crosshair in degrees
      */
-    public static double getXOffset() {
-        return -limelight.getEntry("tx").getDouble(0);
+    public static double getIntakeXOffset() {
+        return -limelightIntake.getEntry("tx").getDouble(0);
     }
 
     /**
@@ -150,8 +151,8 @@ public class RobotContainer {
      * 
      * @return the vertical offset between the target and the crosshair in degrees
      */
-    public static double getYOffset() {
-        return -limelight.getEntry("ty").getDouble(0.0);
+    public static double getIntakeYOffset() {
+        return -limelightIntake.getEntry("ty").getDouble(0.0);
     }
 
     /**
@@ -192,7 +193,29 @@ public class RobotContainer {
             this.val = val;
         }
     }
-    public static PhotonPipelineResult getSnapshot() {
-        return camera.getLatestResult();
+
+    public enum IntakeVisionPipeline {
+        RED(0), BLUE(1), INVALID(2);
+
+        public int val;
+
+        IntakeVisionPipeline(int val) {
+            this.val = val;
+        }
+        
     }
+    public static IntakeVisionPipeline allianceToPipeline() {
+        Alliance alliance = DriverStation.getAlliance();
+        switch(alliance) {
+            case Blue:
+                return IntakeVisionPipeline.BLUE;
+            case Red:
+                return IntakeVisionPipeline.RED;
+            default:
+                return IntakeVisionPipeline.INVALID;
+        }
+    }
+    /*public static PhotonPipelineResult getSnapshot() {
+        return camera.getLatestResult();
+    }*/
 }
