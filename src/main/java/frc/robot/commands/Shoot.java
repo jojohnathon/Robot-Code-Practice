@@ -40,7 +40,7 @@ public class Shoot implements Command {
             conveyor.setOpenLoop(0.3); //Feed any balls into shooter once it has reached the desired angular velocity
         }
     }
-
+    
     @Override
     public void end(boolean interrupted) {
         shooter.stop();

@@ -16,6 +16,12 @@ public class Constants {
         public static final int driverController = 0, operatorController = 1;
     }
 
+    public static class AutoConstants {
+        
+        final static double[] DXMConstraints = {0.2, 0.1}, TXDConstraints = {480, 360};
+        final static double hubXOffset = 0.3,  shooterVelocity = 0.65, backupDistance = 0.3;
+    }
+
     public static class DriverConstants {
         /* Common drive mode settings */
         public static final double kJoystickDeadband = 0.07; // How much of joystick is "dead" zone [0,1]

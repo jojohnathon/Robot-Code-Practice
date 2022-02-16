@@ -1,65 +1,49 @@
 package frc.robot.commands;
 
+import java.util.Set;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.LEDMode;
-import frc.robot.RobotContainer.VisionPipeline;
+import frc.robot.RobotContainer.ShooterVisionPipeline;
 import frc.robot.subsystems.Drivetrain;
 
-import java.util.Set;
-
-public class CargoTrack implements Command {
-
+public class HubTrack implements Command {
     private static final PIDController TURN_PID_CONTROLLER = new PIDController(VisionConstants.kPTurn,
             VisionConstants.kITurn, VisionConstants.kDTurn);
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
-
-    private Subsystem[] requirements = { Drivetrain.getInstance() };
     private int ticksAtTarget;
-    public CargoTrack() {
-
+    private Subsystem[] requirements = { RobotContainer.drivetrain };
+    public HubTrack() {
     }
 
     @Override
     public void initialize() {
-        RobotContainer.getInstance().setIntakeLEDMode(LEDMode.OFF);
-        RobotContainer.getInstance().setIntakePipeline(RobotContainer.allianceToPipeline());
+        RobotContainer.getInstance().setShooterLEDMode(LEDMode.ON);
+        RobotContainer.getInstance().setShooterPipeline(ShooterVisionPipeline.ROBOT);
         ticksAtTarget = 0;
     }
 
     @Override
     public void execute() {
-
         double left, right;
+        double turnError = RobotContainer.getShooterXOffset();
+        double distError = RobotContainer.getShooterYOffset();
 
-        double turnError = RobotContainer.getIntakeXOffset();
-        double distError = RobotContainer.getIntakeYOffset();
-
-        //TODO: Modify error values such that the error becomes proportional to a target offset, which won't be 0
         if (turnError < VisionConstants.kTurnTolerance) turnError = 0;
         if (distError < VisionConstants.kDistTolerance) distError = 0;
-
         double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
-        
-        //double length, width, len, shrt;
-        
-        /*length = RobotContainer.getInstance().limelight.getEntry("thor").getDouble(0);
-        width = RobotContainer.getInstance().limelight.getEntry("tvert").getDouble(0);
-        len = RobotContainer.getInstance().limelight.getEntry("tlong").getDouble(0);
-        shrt = RobotContainer.getInstance().limelight.getEntry("tshort").getDouble(0);*/
-
-
 
         if (throttle != 0) {
             throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
@@ -97,11 +81,10 @@ public class CargoTrack implements Command {
 
     @Override
     public void end(boolean interrupted) {
-        RobotContainer.getInstance().setIntakeLEDMode(LEDMode.OFF);
+        RobotContainer.getInstance().setShooterLEDMode(LEDMode.OFF);
         Drivetrain.setOpenLoop(0.0, 0.0);
     }
 
-    @Override
     public Set<Subsystem> getRequirements() {
         return Set.of(requirements);
     }
