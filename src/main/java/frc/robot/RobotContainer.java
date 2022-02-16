@@ -87,7 +87,7 @@ public class RobotContainer {
                                         );
     }
 
-    public static Command getBackupCommand() { //Back up and find new ball
+    private static Command getBackupCommand() { //Back up and find new ball
         return new SequentialCommandGroup(
             new DriveXMeters(-AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
             new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]),
