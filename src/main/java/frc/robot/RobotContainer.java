@@ -9,6 +9,7 @@ import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurnXDegrees;
 import frc.robot.commands.CargoTrack;
+import frc.robot.commands.ConveyorQueue;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
@@ -50,6 +51,7 @@ public class RobotContainer {
     public static Climber climber;
     public static Arm arm;
     public static Shooter shooter;
+    public static Conveyor conveyor;
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX;
     public static PhotonCamera camera;
@@ -62,14 +64,18 @@ public class RobotContainer {
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        colorSensorV3 = Util.createColorSensorV3(VisionConstants.colorSensorV3);
+        conveyor = Conveyor.getInstance();
+        conveyor.setDefaultCommand(new ConveyorQueue());
+        //colorSensorV3 = Util.createColorSensorV3(VisionConstants.colorSensorV3);
         limelightIntake = NetworkTableInstance.getDefault().getTable("limelight-intake");
+        limelightShooter = NetworkTableInstance.getDefault().getTable("limelight-shooter");
 
         bindOI();
     }
 
     public static Command getIntakeCommand() { //Arm down and spin conveyor
         return new SequentialCommandGroup(
+            /*new WaitCommand(0.3), */ // move balls in storage if needed
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.rotate(-0.4), arm),
                 new RunCommand( ()->intake.intake(0.5), intake), 
@@ -81,10 +87,11 @@ public class RobotContainer {
     }
 
     public static Command getShootCommand() { //Drive up and shoot
-        return new SequentialCommandGroup(new HubTrack(),
-                                                new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]), 
-                                                new Shoot(AutoConstants.shooterVelocity).withTimeout(4)
-                                        );
+        return new SequentialCommandGroup(
+            new HubTrack(),
+            new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]), 
+            new Shoot(AutoConstants.shooterVelocity).withTimeout(4)
+            );
     }
 
     private static Command getBackupCommand() { //Back up and find new ball
