@@ -62,24 +62,24 @@ public class Constants {
             rightSlave = 3; // TalonFX
         
         /* feedforward constants */
-        public static final double kS = 0; // voltage required to overcome friction (V)
-        public static final double kV = 0; // voltage over velocity (V/(meters/second))
-        public static final double kA = 0; // voltage over acceleration (V(meters/second/second))
+        public static final double kS = 0.364; // voltage required to overcome friction (V)
+        public static final double kV = 2.34; // voltage over velocity (V/(meters/second))
+        public static final double kA = 0.0824; // voltage over acceleration (V(meters/second/second))
 
         /* PID constants */
-        public static final double kP = 0;
+        public static final double kP = 2.9;
         public static final double kI = 0;
         public static final double kD = 0;
 
         /* Wheels Constants */
-        public static final double kTicksPerRotation = 2048 * 8.45; // Falcon 500 integrated encoder (2048 CPR)
+        public static final double kTicksPerRotation = 2048 * 10.71; // Falcon 500 integrated encoder (2048 CPR)
                                                                      // multiplied by gear ratio (10.42:1)
-        public static final double kWheelDiameter = 0;
+        public static final double kWheelDiameter = Units.InchesToMeters(6);
 
-        public static final double kMaxSpeedMPS = 0; // max speed in meters per second
+        public static final double kMaxSpeedMPS = 4.972; // max speed in meters per second
         public static final double kMaxAcceleration = 0; //max acceleration in meters per second per second
-        public static final double kTrackWidth = 0; // distance between wheels
-        public static final double kMaxCurvature = 0; // Maximum turn rate in radians per meter
+        public static final double kTrackWidth = 0.7051868402911773; // distance between wheels
+        public static final double kMaxCurvature = Math.toRadians(-162); // Maximum turn rate in radians per meter
     }
 
     public static class IntakeConstants {
@@ -124,13 +124,13 @@ public class Constants {
         public static final double minimumSimilarity = 0.6;
 
         /* Turn PID Constants */
-        public static double kPTurn = 0;
+        public static double kPTurn = 0.1;
         public static double kITurn = 0;
         public static double kDTurn = 0;
         public static double kTurnTolerance = 0;
 
         /* Distance PID Constants */
-        public static double kPDist = 0;
+        public static double kPDist = 0.1;
         public static double kIDist = 0;
         public static double kDDist = 0;
         public static double kDistTolerance = 0;
