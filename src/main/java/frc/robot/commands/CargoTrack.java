@@ -86,7 +86,7 @@ public class CargoTrack implements Command {
             ticksAtTarget = 0;
         }
 
-        //Drivetrain.setOpenLoop(left, right);
+        Drivetrain.setOpenLoop(left, right);
 
     }
 

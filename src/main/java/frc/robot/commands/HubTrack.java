@@ -70,13 +70,13 @@ public class HubTrack implements Command {
             ticksAtTarget = 0;
         }
 
-        //Drivetrain.setOpenLoop(left, right);
+        Drivetrain.setOpenLoop(left, right);
 
     }
 
     @Override
     public boolean isFinished() {
-        return ticksAtTarget >= (1.5 * 50);
+        return ticksAtTarget >= (1.5 * 50); // On target for 1.5s
     }
 
     @Override
