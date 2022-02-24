@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
 import frc.robot.Util;
 import frc.robot.Constants.ConveyorConstants;
 
@@ -34,7 +35,11 @@ public class Conveyor implements Subsystem {
     }
 
     public boolean getIntakeSensor() {
-        return !intakePhotoelectric.get();
+        if(!ConveyorConstants.useColorSensor) {
+            return !intakePhotoelectric.get();
+        } else {
+            return (RobotContainer.colorSensorV3.getProximity() >= ConveyorConstants.minimumProximity);
+        }
     }
 
     public boolean getShooterSensor() {

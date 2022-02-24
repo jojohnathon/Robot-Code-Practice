@@ -3,6 +3,7 @@ package frc.robot;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.ConveyorConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
@@ -66,7 +67,7 @@ public class RobotContainer {
         shooter = Shooter.getInstance();
         conveyor = Conveyor.getInstance();
         conveyor.setDefaultCommand(new ConveyorQueue());
-        //colorSensorV3 = Util.createColorSensorV3(VisionConstants.colorSensorV3);
+        colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         limelightIntake = NetworkTableInstance.getDefault().getTable("limelight-intake");
         limelightShooter = NetworkTableInstance.getDefault().getTable("limelight-shooter");
 
