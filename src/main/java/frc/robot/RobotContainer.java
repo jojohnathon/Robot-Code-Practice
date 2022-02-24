@@ -53,7 +53,7 @@ public class RobotContainer {
     public static Shooter shooter;
     public static Conveyor conveyor;
     public static ColorSensorV3 colorSensorV3;
-    public static AHRS navX;
+    public static AHRS navX; //TODO: Create odometry class
     public static PhotonCamera camera;
     private RobotContainer() {
         /*camera = new PhotonCamera("photonvision");*/

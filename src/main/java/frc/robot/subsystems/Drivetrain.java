@@ -56,7 +56,7 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Master output: ", rightMaster.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
-
+        //TODO: update odometry
     }
 
     public static void setOpenLoop(double left, double right) {
