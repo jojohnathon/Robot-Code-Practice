@@ -79,13 +79,13 @@ public class RobotContainer {
         Command auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
         switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
             case 1:
-                auto.andThen();
+                auto = auto.andThen();
                 return auto;
             case 2:
-                auto.andThen();
+                auto = auto.andThen();
                 return auto;
             case 3:
-                auto.andThen();
+                auto = auto.andThen();
                 return auto;
             default:
                 return auto;
