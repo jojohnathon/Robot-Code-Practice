@@ -10,6 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 
@@ -78,8 +79,10 @@ public class Robot extends TimedRobot {
    * below with additional strings. If using the SendableChooser make sure to add them to the
    * chooser code above as well.
    */
+  private Command auto;
   @Override
   public void autonomousInit() {
+    CommandScheduler.getInstance().schedule(auto = RobotContainer.getAutonomousCommand());
     //CommandScheduler.getInstance().schedule(new VisionTrack());
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
 
@@ -102,7 +105,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    if(auto != null) auto.cancel();
+  }
 
   /** This function is called periodically during operator control. */
   @Override

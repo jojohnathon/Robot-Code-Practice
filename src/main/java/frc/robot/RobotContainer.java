@@ -237,7 +237,7 @@ public class RobotContainer {
     }
 
     public enum IntakeVisionPipeline {
-        RED(0), BLUE(1), INVALID(2);
+        RED(0), BLUE(1), DRIVER(2), INVALID(3);
 
         public int val;
 
