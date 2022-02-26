@@ -37,7 +37,7 @@ public class Drivetrain implements Subsystem {
     public static final TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(DrivetrainConstants.kMaxSpeedMPS, DrivetrainConstants.kMaxAcceleration);
     public static final ProfiledPIDController LEFT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
     public static final ProfiledPIDController RIGHT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
-    //public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()));
+    public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()));
     
     private Drivetrain() {
         leftSlave.follow(leftMaster);
@@ -52,11 +52,14 @@ public class Drivetrain implements Subsystem {
 
     @Override
     public void periodic() {
+        ODOMETRY.update(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()),
+        getLeftEncMeters(),
+        getRightEncMeters());
         SmartDashboard.putNumber("Left Master output: ", leftMaster.getMotorOutputPercent());
         SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Master output: ", rightMaster.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
-        //TODO: update odometry
+        
     }
 
     public static void setOpenLoop(double left, double right) {
