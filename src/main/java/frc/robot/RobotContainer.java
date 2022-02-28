@@ -100,8 +100,8 @@ public class RobotContainer {
 
     private void bindOI() {
         driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm)
-                    .alongWith(new RunCommand( ()->intake.intake(0.5)))
-                    .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
+                    .alongWith(new RunCommand( ()->intake.intake(0.85)))
+                    .alongWith(new RunCommand( ()->conveyor.setOpenLoop(0.85))))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
         /*driver_LB.whileHeld(new Shoot(0.65));*/

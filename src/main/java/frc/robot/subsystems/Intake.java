@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class Intake implements Subsystem {
     
     private static final TalonSRX spinMotor = Util.createTalonSRX(IntakeConstants.spinMotor, false);
-    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
+    //private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
     
     private static Intake instance;
     public static Intake getInstance(){
@@ -23,8 +23,8 @@ public class Intake implements Subsystem {
     }
 
     private Intake(){
-        conveyorMotor.setInverted(false);
-        conveyorMotor.burnFlash();
+        /*conveyorMotor.setInverted(false);
+        conveyorMotor.burnFlash();*/
         register();
     }
 
@@ -32,9 +32,9 @@ public class Intake implements Subsystem {
      * Sets the conveyor to spin at a percent of max speed
      * @param value Percent speed
      */
-    public void setConveyor(double value) {
+    /*public void setConveyor(double value) {
         conveyorMotor.set(value);
-    }
+    }*/
 
     /**
      * Sets the intake to spin at a given voltage
@@ -50,11 +50,11 @@ public class Intake implements Subsystem {
      */
     public void stopIntake() {
         spinMotor.set(ControlMode.PercentOutput, 0);
-        conveyorMotor.set(0);
+        //conveyorMotor.set(0);
     }
 
     public void stopConveyor(){
-        conveyorMotor.set(0);
+        //conveyorMotor.set(0);
     }
 
 }

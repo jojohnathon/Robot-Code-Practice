@@ -12,6 +12,7 @@ import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurnXDegrees;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,13 +24,14 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class Auto {
     private static Arm arm = Arm.getInstance();
     private static Intake intake = Intake.getInstance();
+    private static Conveyor conveyor = Conveyor.getInstance();
     public static Command getIntakeCommand() { //Arm down and spin conveyor
         return new SequentialCommandGroup(
             /*new WaitCommand(0.3), */ // move balls in storage if needed
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
-                new RunCommand( ()->intake.intake(0.5), intake), 
-                new RunCommand( ()->intake.setConveyor(0.5), intake)), 
+                new RunCommand( ()->intake.intake(0.85), intake), 
+                new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)), 
             new WaitCommand(1.7), 
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
