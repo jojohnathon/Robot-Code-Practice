@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.I2C.Port;
+import frc.robot.Units;
 
 /*  Robot Specs:
     4 TalonFX motors
@@ -49,7 +50,7 @@ public class Constants {
         /* Intake constants */
         public static double kMaxVelocity = 0.25; // Maximum velocity to turn arm at, radians per second
         public static double kMaxAcceleration = 2; // Maximum acceleration to turn arm at, radians per second per second
-        public static double kArmOffset = 4.22; // Initial position of the intake arm
+        public static double kArmOffset = Math.toRadians(27); //The extension of the arm necessary to enter "intake" position
 
     }
 

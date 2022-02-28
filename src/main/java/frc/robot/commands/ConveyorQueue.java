@@ -17,10 +17,15 @@ public class ConveyorQueue implements Command {
 
     @Override
     public void execute() {
-        if(!conveyor.getShooterSensor() && conveyor.getIntakeSensor()) { //Ball in front of conveyor and no ball in the back of the conveyor 
-            conveyor.setOpenLoop(0.2);
+        if(conveyor.getIntakeSensor()) { //Ball in front of conveyor 
+            conveyor.setOpenLoop(0.85);
         } else {
-            conveyor.stop();
+            conveyor.stopConveyor();
+        }
+        if(conveyor.getShooterSensor()) { //Ball in back of conveyor that needs to be propped into storage
+            conveyor.setStorageMotor(0.70);
+        } else {
+            conveyor.stopStorage();
         }
     }
 

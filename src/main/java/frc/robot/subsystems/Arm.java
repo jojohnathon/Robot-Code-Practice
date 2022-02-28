@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
@@ -22,7 +23,7 @@ public class Arm extends ProfiledPIDSubsystem {
     
     private static Arm instance;
     public static Arm getInstance() {
-        if (instance == null) instance = new Arm();
+        if(instance == null) instance = new Arm();
         return instance;
     }
     
@@ -30,7 +31,7 @@ public class Arm extends ProfiledPIDSubsystem {
      * Enum class representing the two possible positions of the intake arm, UP and DOWN
      */
     public enum State {
-        UP(ArmConstants.kArmOffset), DOWN(-0.132);
+        STORED(0), OUT(ArmConstants.kArmOffset); //Stored is the starting position, where the arm is stored in the bot, while out is used for intake
         
         public double position;
         
@@ -50,7 +51,7 @@ public class Arm extends ProfiledPIDSubsystem {
         motor.configPeakCurrentLimit(0);
         motor.enableCurrentLimit(true);
         
-        setGoal(ArmConstants.kArmOffset);
+        setGoal(State.STORED);
 
         disable();
         register();

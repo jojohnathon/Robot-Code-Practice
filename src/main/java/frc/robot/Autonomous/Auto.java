@@ -16,6 +16,9 @@ import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+/*
+    Class to store autonomous sequences, including sequences such as intake, are stored
+*/
 
 public class Auto {
     private static Arm arm = Arm.getInstance();
@@ -24,12 +27,12 @@ public class Auto {
         return new SequentialCommandGroup(
             /*new WaitCommand(0.3), */ // move balls in storage if needed
             new ParallelCommandGroup(
-                new RunCommand( ()->arm.rotate(-0.4), arm),
+                new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
                 new RunCommand( ()->intake.intake(0.5), intake), 
                 new RunCommand( ()->intake.setConveyor(0.5), intake)), 
             new WaitCommand(1.7), 
             new ParallelCommandGroup(
-                new RunCommand( ()->arm.rotate(0.35), arm),
+                new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
                 new InstantCommand(intake::stopIntake, intake)));
     }
 

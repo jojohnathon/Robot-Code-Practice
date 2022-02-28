@@ -10,7 +10,7 @@ import frc.robot.Util;
 import frc.robot.Constants.ConveyorConstants;
 
 public class Conveyor implements Subsystem {
-    private static CANSparkMax master;
+    private static CANSparkMax conveyorMotor, storageMotor;
     private static Conveyor instance;
     private static final DigitalInput intakePhotoelectric = new DigitalInput(ConveyorConstants.intakePhotoelectric); //sensor closest to intake
     private static final DigitalInput shooterPhotoelectric = new DigitalInput(ConveyorConstants.shooterPhotoelectric); //sensor closest to shooter
@@ -20,18 +20,34 @@ public class Conveyor implements Subsystem {
     }
 
     private Conveyor() {
-        master = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
-        master.setInverted(true);
-        master.burnFlash();
+        conveyorMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
+        conveyorMotor.setInverted(true);
+        conveyorMotor.burnFlash();
+        storageMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
+        storageMotor.setInverted(true);
+        storageMotor.burnFlash();
         register();
     }
 
     public void setOpenLoop(double value) {
-        master.set(value);
+        conveyorMotor.set(value);
+    }
+
+    public void setStorageMotor(double value) {
+        storageMotor.set(value);
+    }
+
+    public void stopConveyor() {
+        conveyorMotor.stopMotor();
+    }
+
+    public void stopStorage() {
+        storageMotor.stopMotor();
     }
 
     public void stop() {
-        master.stopMotor();
+        stopConveyor();
+        stopStorage();
     }
 
     public boolean getIntakeSensor() {

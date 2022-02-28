@@ -99,12 +99,12 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        /*driver_RB.whileHeld(new RunCommand(()->arm.rotate(-0.4), arm)
+        driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm)
                     .alongWith(new RunCommand( ()->intake.intake(0.5)))
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.5))))
-                .whenReleased(new RunCommand( ()->arm.rotate(0.35), arm)
+                .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
-        driver_LB.whileHeld(new Shoot(0.65));*/
+        /*driver_LB.whileHeld(new Shoot(0.65));*/
         driver_X.whileHeld(new HubTrack());
     }
 
@@ -117,9 +117,9 @@ public class RobotContainer {
      * @return the input rescaled and to fit [-1, -deadband], [deadband, 1]
      */
     public static double deadbandX(double input, double deadband) {
-        if (Math.abs(input) <= deadband) {
+        if(Math.abs(input) <= deadband) {
             return 0;
-        } else if (Math.abs(input) == 1) {
+        } else if(Math.abs(input) == 1) {
             return input;
         } else {
             return (1 / (1 - deadband) * (input + Math.signum(-input) * deadband));
