@@ -58,6 +58,7 @@ public class RobotContainer {
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX; 
     public static PhotonCamera camera;
+    public static Shoot shootCommand;
     private RobotContainer() {
         /*camera = new PhotonCamera("photonvision");*/
         navX = new AHRS(Port.kMXP);
@@ -67,6 +68,7 @@ public class RobotContainer {
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
+        shooter.setDefaultCommand((shootCommand = new Shoot(0.65))); //TODO: Tune shooter velocity
         conveyor = Conveyor.getInstance();
         conveyor.setDefaultCommand(new ConveyorQueue());
         colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
