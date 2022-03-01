@@ -64,7 +64,7 @@ public class HubTrack implements Command {
             right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         }
 
-        if(turnError == 0 && distError == 0) {
+        if(turnError == 0 && distError == 0) { //TODO: Replace current tick system with a queue of pairs representing the amount of ticks in a timeframe, then compare to a percentage for a "good" match
             ticksAtTarget++;
         } else {
             ticksAtTarget = 0;
