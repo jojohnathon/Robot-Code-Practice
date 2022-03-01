@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.RobotContainer;
+import frc.robot.Autonomous.Auto;
 import frc.robot.commands.CargoTrack;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -24,7 +25,7 @@ public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private RobotContainer robot;
 
   /**
@@ -33,11 +34,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
     robot = RobotContainer.getInstance();
-
+    m_chooser.setDefaultOption("Shoot First", RobotContainer.getAutonomousCommand(Auto.Selection.SHOOTFIRST));
+    m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
+    SmartDashboard.putData("Auto choices", m_chooser);
     Drivetrain.getInstance().resetEncoders();
   }
 
@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
   private Command auto;
   @Override
   public void autonomousInit() {
-    CommandScheduler.getInstance().schedule(auto = RobotContainer.getAutonomousCommand());
+    CommandScheduler.getInstance().schedule(auto = m_chooser.getSelected());
     //CommandScheduler.getInstance().schedule(new VisionTrack());
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
 

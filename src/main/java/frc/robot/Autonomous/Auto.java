@@ -25,6 +25,13 @@ public class Auto {
     private static Arm arm = Arm.getInstance();
     private static Intake intake = Intake.getInstance();
     private static Conveyor conveyor = Conveyor.getInstance();
+    public enum Selection {
+        SHOOTFIRST(0), INTAKEFIRST(1);
+        public int val;
+        private Selection(int val) {
+            this.val = val;
+        }
+    }
     public static Command getIntakeCommand() { //Arm down and spin conveyor
         return new SequentialCommandGroup(
             /*new WaitCommand(0.3), */ // move balls in storage if needed
@@ -41,9 +48,9 @@ public class Auto {
     public static Command getShootCommand() { //Drive up and shoot
         return new SequentialCommandGroup(
             new HubTrack(),
-            new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]), 
-            new Shoot(AutoConstants.shooterVelocity).withTimeout(4)
-            );
+            //new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]), 
+            new Shoot(AutoConstants.shooterVelocity).withTimeout(4) //TODO: adjust shooter velocity based on distance
+        );
     }
 
     public static Command getBackupCommand() { //Back up and find new ball

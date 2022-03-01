@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Constants;
 import frc.robot.Autonomous.Auto;
+import frc.robot.Autonomous.Auto.Selection;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.ConveyorConstants;
@@ -75,8 +76,18 @@ public class RobotContainer {
         bindOI();
     }
 
-    public static Command getAutonomousCommand() {
-        Command auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
+    public static Command getAutonomousCommand(Auto.Selection selectedAuto) {
+        Command auto;
+        switch(selectedAuto) {
+            case INTAKEFIRST:
+                auto = new SequentialCommandGroup(new CargoTrack(), new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]), Auto.getShootCommand());
+                break;
+            case SHOOTFIRST:
+                auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
+                break;
+            default:
+                auto = Auto.getShootCommand();
+        }
         switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
             case 1:
                 auto = auto.andThen();
@@ -101,7 +112,7 @@ public class RobotContainer {
     private void bindOI() {
         driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm)
                     .alongWith(new RunCommand( ()->intake.intake(0.85)))
-                    .alongWith(new RunCommand( ()->conveyor.setOpenLoop(0.85))))
+                    .alongWith(new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
         /*driver_LB.whileHeld(new Shoot(0.65));*/
