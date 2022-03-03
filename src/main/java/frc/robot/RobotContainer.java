@@ -199,6 +199,12 @@ public class RobotContainer {
     public static double getShooterXOffset() {
         return -limelightShooter.getEntry("tx").getDouble(0);
     }
+    
+    public static double getDistance() {
+        double offsetAngle = limelightShooter.getEntry("ty").getDouble(0.0);
+        double angleGoalRads = (VisionConstants.mountAngle + offsetAngle) * (Math.PI/180);
+        return (VisionConstants.goalHeightInches - VisionConstants.limelightHeightInches)/(Math.tan(angleGoalRads));
+    }
     /**
      * Returns the vertical offset between the target and the crosshair in degrees
      * 

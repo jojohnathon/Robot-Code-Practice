@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -13,6 +14,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.CustomUtil.Timeframe;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.RobotContainer.ShooterVisionPipeline;
 import frc.robot.subsystems.Drivetrain;
@@ -22,16 +24,16 @@ public class HubTrack implements Command {
             VisionConstants.kITurn, VisionConstants.kDTurn);
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
-    private int ticksAtTarget;
     private Subsystem[] requirements = { RobotContainer.drivetrain };
+    private Timeframe<Integer> timeframe;
     public HubTrack() {
+        timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
     }
 
     @Override
     public void initialize() {
         RobotContainer.getInstance().setShooterLEDMode(LEDMode.ON);
         RobotContainer.getInstance().setShooterPipeline(ShooterVisionPipeline.ROBOT);
-        ticksAtTarget = 0;
     }
 
     @Override
@@ -64,19 +66,20 @@ public class HubTrack implements Command {
             right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         }
 
-        if(turnError == 0 && distError == 0) { //TODO: Replace current tick system with a queue of pairs representing the amount of ticks in a timeframe, then compare to a percentage for a "good" match
-            ticksAtTarget++;
+        if(turnError == 0 && distError == 0) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
+            timeframe.update(1);
         } else {
-            ticksAtTarget = 0;
+            timeframe.update(0);
         }
-
+        SmartDashboard.putNumber("AtTarget?", (turnError == 0 && distError == 0) ? 1 : 0);
+        SmartDashboard.putBoolean("Adequate tracking?", (timeframe.percentEqual(1) >= 0.85));
         Drivetrain.setOpenLoop(left, right);
 
     }
 
     @Override
     public boolean isFinished() {
-        return ticksAtTarget >= (1.5 * 50); // On target for 1.5s
+         return timeframe.percentEqual(1) >= 0.85;
     }
 
     @Override

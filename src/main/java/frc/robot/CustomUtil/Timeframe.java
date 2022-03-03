@@ -11,12 +11,10 @@ import edu.wpi.first.math.Pair;
 */
 public class Timeframe<N extends Number> {
     private LinkedList<N> frame;
-    private int seconds, updatesPerSecond, maxLen;
-    public Timeframe(int seconds, int updatesPerSecond) {
+    private double maxLen;
+    public Timeframe(double seconds, double updatesPerSecond) {
         frame = new LinkedList<>();
-        this.seconds = seconds;
-        this.updatesPerSecond = updatesPerSecond;
-        maxLen = this.seconds * this.updatesPerSecond;
+        maxLen = seconds * updatesPerSecond;
     }
 
     /*
@@ -33,6 +31,7 @@ public class Timeframe<N extends Number> {
     /*
         Get a percentage of existing entries that are greater than a target number
         @param target the target to compare other data points to
+        @return returns the percentage of matching entries in decimal form (0 - 1.0)
     */
     public double percentGreaterThan(N target, boolean includeEqual) {
         int matches = 0;
@@ -43,15 +42,29 @@ public class Timeframe<N extends Number> {
                 matches++;
             }
         }
-        return ((double)matches) / frame.size();
+        return ((double)matches) / maxLen;
     }
 
     /*
         Get a percentage of existing entries that are less than a target number
         @param target the target to compare other data points to
+        @return returns the percentage of matching entries in decimal form (0 - 1.0)
     */
     public double percentLessThan(N target, boolean includeEqual) {
         return 1.0 - percentGreaterThan(target, includeEqual);
+    }
+
+    /*
+        Get a percentage of existing entries that are equal to a target number
+        @param target the target to compare other data points to
+        @return returns the percentage of matching entries in decimal form (0 - 1.0)
+    */
+    public double percentEqual(N target) {
+        int matches = 0;
+        for(int i = 0; i < frame.size(); i++) {
+            if(frame.get(i).doubleValue() == target.doubleValue()) matches++;
+        }
+        return ((double)matches) / maxLen;
     }
 
     public void forEach(Consumer<? super N> action) {

@@ -53,21 +53,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
-    SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
-    //double length, width, len, shrt;
+    // SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
+    // SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
+    SmartDashboard.putNumber("limelight distance", RobotContainer.getDistance());
     
-    /*length = RobotContainer.limelight.getEntry("thor").getDouble(0);
-    width = RobotContainer.getInstance().limelight.getEntry("tvert").getDouble(0);
-    len = RobotContainer.getInstance().limelight.getEntry("tlong").getDouble(0);
-    shrt = RobotContainer.getInstance().limelight.getEntry("tshort").getDouble(0);
-    //SmartDashboard.putNumber("charles", length);
-    SmartDashboard.putNumberArray("hor, vert, ratio", new double[] {length, width, length/width});
-    SmartDashboard.putNumberArray("long, short, ratio", new double[] {len, shrt, length/shrt});*/
-
-    /*SmartDashboard.putNumber("CV3 red", RobotContainer.getColor().red);
-    SmartDashboard.putNumber("CV3 green", RobotContainer.getColor().green);
-    SmartDashboard.putNumber("CV3 blue", RobotContainer.getColor().blue);*/
 
   }
 
