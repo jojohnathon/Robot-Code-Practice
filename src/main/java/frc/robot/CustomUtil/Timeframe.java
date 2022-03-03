@@ -1,10 +1,6 @@
 package frc.robot.CustomUtil;
-
-import java.lang.reflect.Array;
 import java.util.LinkedList;
 import java.util.function.Consumer;
-
-import edu.wpi.first.math.Pair;
 /*
     Custom class to analyze a stream of data within a specified timeframe in real-time, given the length of the timeframe along with the frequency of updates
     @author WilliamBruce
@@ -34,6 +30,7 @@ public class Timeframe<N extends Number> {
         @return returns the percentage of matching entries in decimal form (0 - 1.0)
     */
     public double percentGreaterThan(N target, boolean includeEqual) {
+        if(frame.size() == 0) return 0.0;
         int matches = 0;
         for(int i = 0; i < frame.size(); i++) {
             if(includeEqual && frame.get(i).doubleValue() >= target.doubleValue()) {
@@ -51,6 +48,7 @@ public class Timeframe<N extends Number> {
         @return returns the percentage of matching entries in decimal form (0 - 1.0)
     */
     public double percentLessThan(N target, boolean includeEqual) {
+        if(frame.size() == 0) return 0.0;
         return 1.0 - percentGreaterThan(target, includeEqual);
     }
 
@@ -60,6 +58,7 @@ public class Timeframe<N extends Number> {
         @return returns the percentage of matching entries in decimal form (0 - 1.0)
     */
     public double percentEqual(N target) {
+        if(frame.size() == 0) return 0.0;
         int matches = 0;
         for(int i = 0; i < frame.size(); i++) {
             if(frame.get(i).doubleValue() == target.doubleValue()) matches++;
