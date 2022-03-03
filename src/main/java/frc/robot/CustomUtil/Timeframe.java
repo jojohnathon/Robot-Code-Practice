@@ -2,7 +2,7 @@ package frc.robot.CustomUtil;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 /*
-    Custom class to analyze a stream of data within a specified timeframe in real-time, given the length of the timeframe along with the frequency of updates
+    Custom class to contain and analyze all data within a certain timeframe
     @author WilliamBruce
 */
 public class Timeframe<N extends Number> {
@@ -49,7 +49,7 @@ public class Timeframe<N extends Number> {
     */
     public double percentLessThan(N target, boolean includeEqual) {
         if(frame.size() == 0) return 0.0;
-        return 1.0 - percentGreaterThan(target, includeEqual);
+        return 1.0 - percentGreaterThan(target, !includeEqual);
     }
 
     /*
