@@ -14,7 +14,7 @@ public class Timeframe<N extends Number> {
     }
 
     /*
-        Updates the Timeframe class with a new input
+        Updates the Timeframe object with a new input
         @param value the value to update the Timeframe with
     */
     public void update(N value) {
