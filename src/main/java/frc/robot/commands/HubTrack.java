@@ -34,6 +34,7 @@ public class HubTrack implements Command {
     public void initialize() {
         RobotContainer.getInstance().setShooterLEDMode(LEDMode.ON);
         RobotContainer.getInstance().setShooterPipeline(ShooterVisionPipeline.ROBOT);
+        //TODO: set limelightServo
     }
 
     @Override
