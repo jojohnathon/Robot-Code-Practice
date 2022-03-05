@@ -10,7 +10,7 @@ public class Timeframe<N extends Number> {
     private double maxLen;
     public Timeframe(double seconds, double updatesPerSecond) {
         frame = new LinkedList<>();
-        maxLen = seconds * updatesPerSecond;
+        maxLen = Math.round(seconds * updatesPerSecond);
     }
 
     /*
