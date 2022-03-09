@@ -14,6 +14,7 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.RobotContainer.VisionPipeline;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.VisionMount;
 
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class CargoTrack implements Command {
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
 
-    private Subsystem[] requirements = { Drivetrain.getInstance() };
+    private Subsystem[] requirements = { Drivetrain.getInstance(), VisionMount.getInstance() };
     private int ticksAtTarget;
     public CargoTrack() {
 
@@ -32,9 +33,10 @@ public class CargoTrack implements Command {
 
     @Override
     public void initialize() {
-        RobotContainer.getInstance().setIntakeLEDMode(LEDMode.OFF);
-        RobotContainer.getInstance().setIntakePipeline(RobotContainer.allianceToPipeline());
+        RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
+        RobotContainer.getInstance().setPipeline(RobotContainer.allianceToPipeline());
         ticksAtTarget = 0;
+        VisionMount.getInstance().setAngle(0); //TODO: Tune Cargo mounting angle
     }
 
     @Override
@@ -42,8 +44,8 @@ public class CargoTrack implements Command {
 
         double left, right;
 
-        double turnError = RobotContainer.getIntakeXOffset();
-        double distError = RobotContainer.getIntakeYOffset();
+        double turnError = RobotContainer.getXOffset();
+        double distError = RobotContainer.getYOffset();
 
         //TODO: Modify error values such that the error becomes proportional to a target offset, which won't be 0
         if (turnError < VisionConstants.kTurnTolerance) turnError = 0;
@@ -96,8 +98,8 @@ public class CargoTrack implements Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        RobotContainer.getInstance().setIntakeLEDMode(LEDMode.OFF);
+    public void end(boolean interrupted) { //TODO: return limelight servo to driving position
+        RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
         Drivetrain.setOpenLoop(0.0, 0.0);
     }
 

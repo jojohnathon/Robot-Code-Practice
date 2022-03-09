@@ -107,7 +107,6 @@ public class Constants {
     }
     public static class ConveyorConstants {
         public static final Port colorSensorV3 = Port.kOnboard;
-        public static final boolean useColorSensor = false; //Backup incase a photoelectric fails
         public static final double minimumProximity = 1800;
         public static final int motor = 10;
         public static final int intakePhotoelectric = 0;
@@ -122,6 +121,11 @@ public class Constants {
     }
 
     public static class VisionConstants {
+        /*
+            Servo Constants
+        */
+        public static final int servoChannel = 0;
+
         /* Color Sensor Constants */
         public static final int minimumProximity = 450;
         public static final double minimumSimilarity = 0.6;

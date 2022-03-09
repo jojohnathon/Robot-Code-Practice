@@ -11,20 +11,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.CustomUtil.Timeframe;
+import frc.robot.RobotContainer.IntakeVisionPipeline;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.RobotContainer.ShooterVisionPipeline;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.VisionMount;
 
 public class HubTrack implements Command {
     private static final PIDController TURN_PID_CONTROLLER = new PIDController(VisionConstants.kPTurn,
             VisionConstants.kITurn, VisionConstants.kDTurn);
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
-    private Subsystem[] requirements = { RobotContainer.drivetrain };
+    private Subsystem[] requirements = { Drivetrain.getInstance(), VisionMount.getInstance() };
     private Timeframe<Integer> timeframe;
     public HubTrack() {
         timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
@@ -32,16 +35,16 @@ public class HubTrack implements Command {
 
     @Override
     public void initialize() {
-        RobotContainer.getInstance().setShooterLEDMode(LEDMode.ON);
-        RobotContainer.getInstance().setShooterPipeline(ShooterVisionPipeline.ROBOT);
-        //TODO: set limelightServo
+        VisionMount.getInstance().setAngle(VisionConstants.mountAngle); //TODO: Tune angle
+        RobotContainer.getInstance().setLEDMode(LEDMode.ON);
+        RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.ROBOT);
     }
 
     @Override
     public void execute() {
         double left, right;
-        double turnError = RobotContainer.getShooterXOffset();
-        double distError = RobotContainer.getShooterYOffset();
+        double turnError = RobotContainer.getXOffset();
+        double distError = RobotContainer.getYOffset();
 
         if (turnError < VisionConstants.kTurnTolerance) turnError = 0;
         if (distError < VisionConstants.kDistTolerance) distError = 0;
@@ -84,8 +87,8 @@ public class HubTrack implements Command {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        RobotContainer.getInstance().setShooterLEDMode(LEDMode.OFF);
+    public void end(boolean interrupted) { //TODO: return limelight servo to driving position
+        RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
         Drivetrain.setOpenLoop(0.0, 0.0);
     }
 

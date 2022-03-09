@@ -46,8 +46,7 @@ public class RobotContainer {
             driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
             driver_MENU = new JoystickButton(driverController, 8);
 
-    public static NetworkTable limelightIntake;
-    public static NetworkTable limelightShooter;
+    public static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
     public static Intake intake;
@@ -57,7 +56,7 @@ public class RobotContainer {
     public static Conveyor conveyor;
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX; 
-    public static PhotonCamera camera;
+    public static VisionMount limelightAngle;
     public static Shoot shootCommand;
     private RobotContainer() {
         /*camera = new PhotonCamera("photonvision");*/
@@ -68,17 +67,16 @@ public class RobotContainer {
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        shooter.setDefaultCommand((shootCommand = new Shoot(0.65))); //TODO: Tune shooter velocity
         conveyor = Conveyor.getInstance();
         conveyor.setDefaultCommand(new ConveyorQueue());
         colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
-        limelightIntake = NetworkTableInstance.getDefault().getTable("limelight-intake");
-        limelightShooter = NetworkTableInstance.getDefault().getTable("limelight-shooter");
+        limelightAngle = VisionMount.getInstance();
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
         bindOI();
     }
 
-    public static Command getAutonomousCommand(Auto.Selection selectedAuto) {
+    public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
         Command auto;
         switch(selectedAuto) {
             case INTAKEFIRST:
@@ -117,7 +115,7 @@ public class RobotContainer {
                     .alongWith(new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
-        /*driver_LB.whileHeld(new Shoot(0.65));*/
+        driver_LB.whileHeld(new Shoot(0.65));
         driver_X.whileHeld(new HubTrack());
     }
 
@@ -160,48 +158,36 @@ public class RobotContainer {
      * 
      * @param ledMode The mode to set the Limelight LEDs to
      */
-    public void setIntakeLEDMode(LEDMode ledMode) {
-        limelightIntake.getEntry("ledMode").setNumber(ledMode.val);
-    }
-    public void setShooterLEDMode(LEDMode ledMode) {
-        limelightShooter.getEntry("ledMode").setNumber(ledMode.val);
+    public void setLEDMode(LEDMode ledMode) {
+        limelight.getEntry("ledMode").setNumber(ledMode.val);
     }
     /**
      * Sets the appearance of the Limelight camera stream
      * 
      * @param stream Stream mode to set the Limelight to
      */
-    public void setIntakeStreamMode(StreamMode stream) {
-        limelightIntake.getEntry("stream").setNumber(stream.val);
-    }
-    public void setShooterStreamMode(StreamMode stream) {
-        limelightShooter.getEntry("stream").setNumber(stream.val);
+    public void setStreamMode(StreamMode stream) {
+        limelight.getEntry("stream").setNumber(stream.val);
     }
     /**
      * Sets Limelight vision pipeline
      * 
      * @param pipeline The pipeline to use
      */
-    public void setIntakePipeline(IntakeVisionPipeline pipeline) {
-        limelightIntake.getEntry("pipeline").setNumber(pipeline.val);
-    }
-    public void setShooterPipeline(ShooterVisionPipeline pipeline) {
-        limelightShooter.getEntry("pipeline").setNumber(pipeline.val);
+    public void setPipeline(IntakeVisionPipeline pipeline) {
+        limelight.getEntry("pipeline").setNumber(pipeline.val);
     }
     /**
      * Returns the horizontal offset between the target and the crosshair in degrees
      * 
      * @return the horizontal offset between the target and the crosshair in degrees
      */
-    public static double getIntakeXOffset() {
-        return -limelightIntake.getEntry("tx").getDouble(0);
-    }
-    public static double getShooterXOffset() {
-        return -limelightShooter.getEntry("tx").getDouble(0);
+    public static double getXOffset() {
+        return -limelight.getEntry("tx").getDouble(0);
     }
     
     public static double getDistance() {
-        double offsetAngle = limelightShooter.getEntry("ty").getDouble(0.0);
+        double offsetAngle = limelight.getEntry("ty").getDouble(0.0);
         double angleGoalRads = (VisionConstants.mountAngle + offsetAngle) * (Math.PI/180);
         return (VisionConstants.goalHeightInches - VisionConstants.limelightHeightInches)/(Math.tan(angleGoalRads));
     }
@@ -210,11 +196,8 @@ public class RobotContainer {
      * 
      * @return the vertical offset between the target and the crosshair in degrees
      */
-    public static double getIntakeYOffset() {
-        return -limelightIntake.getEntry("ty").getDouble(0.0);
-    }
-    public static double getShooterYOffset() {
-        return -limelightShooter.getEntry("ty").getDouble(0.0);
+    public static double getYOffset() {
+        return -limelight.getEntry("ty").getDouble(0.0);
     }
     /**
      * Enum representing the different possible Limelight LED modes
@@ -256,7 +239,7 @@ public class RobotContainer {
     }
 
     public enum IntakeVisionPipeline {
-        RED(0), BLUE(1), DRIVER(2), INVALID(3);
+        RED(0), BLUE(1), ROBOT(3), DRIVER(2), INVALID(3);
 
         public int val;
 
