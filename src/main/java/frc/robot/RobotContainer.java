@@ -10,6 +10,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.StagingQueue;
 import frc.robot.commands.TurnXDegrees;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.ConveyorQueue;
@@ -53,7 +54,6 @@ public class RobotContainer {
     public static Climber climber;
     public static Arm arm;
     public static Shooter shooter;
-    public static Conveyor conveyor;
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX; 
     public static VisionMount limelightAngle;
@@ -67,8 +67,8 @@ public class RobotContainer {
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        conveyor = Conveyor.getInstance();
-        conveyor.setDefaultCommand(new ConveyorQueue());
+        intake.setDefaultCommand(new ConveyorQueue());
+        shooter.setDefaultCommand(new StagingQueue());
         colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         limelightAngle = VisionMount.getInstance();
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -113,10 +113,9 @@ public class RobotContainer {
     private void bindOI() {
         driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm) //TODO: update conveyor staging logic
                     .alongWith(new RunCommand( ()->intake.intake(0.85)))
-                    .alongWith(new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)))
+                    .alongWith(new RunCommand( ()->intake.setConveyor(0.85), intake)))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
-                    .alongWith(new InstantCommand(intake::stopIntake))
-                    .alongWith(new InstantCommand(conveyor::stop)));
+                    .alongWith(new InstantCommand(intake::stopIntake)));
         driver_LB.whileHeld(new Shoot(0.65));
         driver_X.whileHeld(new HubTrack());
     }

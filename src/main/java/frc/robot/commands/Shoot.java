@@ -6,14 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Shoot implements Command {
     private Shooter shooter = Shooter.getInstance();
-    private Conveyor conveyor = Conveyor.getInstance();
-    private Subsystem[] requirements = {shooter, conveyor};
+    private Intake intake = Intake.getInstance();
+    private Subsystem[] requirements = {shooter, intake};
     private double speed;
     Timer shootTimer;
 
@@ -37,15 +37,15 @@ public class Shoot implements Command {
         shooter.setOpenLoop(nextSpeed);
 
         if(Shooter.PID_CONTROLLER.atSetpoint() && shootTimer.hasElapsed(1.5)) { //TODO: Replace with Timeframe implementation
-            conveyor.setOpenLoop(0.3); //Feed any balls into shooter once it has reached the desired angular velocity
-            conveyor.setStorageMotor(0.3);
+            intake.setConveyor(0.3); //Feed any balls into shooter once it has reached the desired angular velocity
+            shooter.setStagingMotor(0.3);
         }
     }
     
     @Override
     public void end(boolean interrupted) {
         shooter.stop();
-        conveyor.stop();
+        intake.stopIntake();
     }
     
     public Set<Subsystem> getRequirements() {

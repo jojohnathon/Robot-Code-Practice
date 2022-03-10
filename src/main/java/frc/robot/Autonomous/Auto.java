@@ -12,7 +12,6 @@ import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurnXDegrees;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -24,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class Auto {
     private static Arm arm = Arm.getInstance();
     private static Intake intake = Intake.getInstance();
-    private static Conveyor conveyor = Conveyor.getInstance();
     public enum Selection {
         SHOOTFIRST(0), INTAKEFIRST(1);
         public int val;
@@ -38,12 +36,11 @@ public class Auto {
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
                 new RunCommand( ()->intake.intake(0.85), intake), 
-                new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)), //TODO: update conveyor/staging during intake
+                new RunCommand( ()->intake.setConveyor(0.85), intake)), //TODO: update conveyor/staging during intake
             new WaitCommand(1.7), 
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
-                new InstantCommand(intake::stopIntake, intake),
-                new InstantCommand(conveyor::stop, conveyor)));
+                new InstantCommand(intake::stopIntake, intake)));
     }
 
     public static Command getShootCommand() { //Drive up and shoot
