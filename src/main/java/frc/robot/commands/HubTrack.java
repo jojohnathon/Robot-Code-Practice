@@ -44,38 +44,28 @@ public class HubTrack implements Command {
     public void execute() {
         double left, right;
         double turnError = RobotContainer.getXOffset();
-        double distError = RobotContainer.getYOffset();
+        //double distError = RobotContainer.getYOffset();
 
         if (turnError < VisionConstants.kTurnTolerance) turnError = 0;
-        if (distError < VisionConstants.kDistTolerance) distError = 0;
-        double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
+        //if (distError < VisionConstants.kDistTolerance) distError = 0;
+        //double throttle = DIST_PID_CONTROLLER.calculate(distError, 0);
         double turn = TURN_PID_CONTROLLER.calculate(turnError, 0);
 
-        if (throttle != 0) {
-            throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
-            turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
+        
+        // Turns in place when there is no throttle input
+        left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
+        right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
 
-            DifferentialDriveWheelSpeeds wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-            wSpeeds.desaturate(DrivetrainConstants.kMaxSpeedMPS);
+        left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
+        right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
+        
 
-            left = Drivetrain.FEEDFORWARD.calculate(wSpeeds.leftMetersPerSecond) / Constants.kMaxVoltage;
-            right = Drivetrain.FEEDFORWARD.calculate(wSpeeds.rightMetersPerSecond) / Constants.kMaxVoltage;
-
-        } else {
-            // Turns in place when there is no throttle input
-            left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
-            right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
-
-            left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
-            right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
-        }
-
-        if(turnError == 0 && distError == 0) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
+        if(turnError == 0) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
             timeframe.update(1);
         } else {
             timeframe.update(0);
         }
-        SmartDashboard.putNumber("AtTarget?", (turnError == 0 && distError == 0) ? 1 : 0);
+        SmartDashboard.putNumber("AtTarget?", (turnError == 0) ? 1 : 0);
         SmartDashboard.putBoolean("Adequate tracking?", (timeframe.percentEqual(1) >= 0.85));
         Drivetrain.setOpenLoop(left, right);
 

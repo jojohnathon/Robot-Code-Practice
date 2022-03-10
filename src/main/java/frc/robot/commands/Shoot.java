@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.CustomUtil.Timeframe;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,17 +16,15 @@ public class Shoot implements Command {
     private Intake intake = Intake.getInstance();
     private Subsystem[] requirements = {shooter, intake};
     private double speed;
-    Timer shootTimer;
+    private Timeframe<Integer> timeframe;
 
     public Shoot(double speed) {
         this.speed = speed;
-        shootTimer = new Timer();
+        timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
     }
 
     @Override
     public void initialize() {
-        shootTimer.start();
-        shootTimer.reset();
     }
 
     @Override
@@ -35,8 +34,13 @@ public class Shoot implements Command {
         nextSpeed += Shooter.PID_CONTROLLER.calculate(Shooter.getShooterVelocity());
         nextSpeed /= Constants.kMaxVoltage;
         shooter.setOpenLoop(nextSpeed);
+        if(Shooter.PID_CONTROLLER.atSetpoint()) {
+            timeframe.update(1);
+        } else {
+            timeframe.update(0);
+        }
 
-        if(Shooter.PID_CONTROLLER.atSetpoint() && shootTimer.hasElapsed(1.5)) { //TODO: Replace with Timeframe implementation
+        if(timeframe.percentEqual(1) >= 0.85) { //TODO: Replace with Timeframe implementation
             intake.setConveyor(0.3); //Feed any balls into shooter once it has reached the desired angular velocity
             shooter.setStagingMotor(0.3);
         }

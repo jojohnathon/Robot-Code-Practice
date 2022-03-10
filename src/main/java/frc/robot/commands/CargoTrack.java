@@ -10,6 +10,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.CustomUtil.Timeframe;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.RobotContainer.VisionPipeline;
@@ -19,24 +20,23 @@ import frc.robot.subsystems.VisionMount;
 import java.util.Set;
 
 public class CargoTrack implements Command {
-
+    
+    private Timeframe<Integer> timeframe;
     private static final PIDController TURN_PID_CONTROLLER = new PIDController(VisionConstants.kPTurn,
             VisionConstants.kITurn, VisionConstants.kDTurn);
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
 
     private Subsystem[] requirements = { Drivetrain.getInstance(), VisionMount.getInstance() };
-    private int ticksAtTarget;
     public CargoTrack() { //TODO: Implement Timeframe (similarly to HubTrack)
-
+        timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
     }
 
     @Override
     public void initialize() {
+        VisionMount.getInstance().setAngle(0); //TODO: Tune Cargo mounting angle
         RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
         RobotContainer.getInstance().setPipeline(RobotContainer.allianceToPipeline());
-        ticksAtTarget = 0;
-        VisionMount.getInstance().setAngle(0); //TODO: Tune Cargo mounting angle
     }
 
     @Override
@@ -82,10 +82,10 @@ public class CargoTrack implements Command {
             right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         }
 
-        if(turnError == 0 && distError == 0) {
-            ticksAtTarget++;
+        if(turnError == 0 && distError == 0) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
+            timeframe.update(1);
         } else {
-            ticksAtTarget = 0;
+            timeframe.update(0);
         }
 
         Drivetrain.setOpenLoop(left, right);
@@ -94,7 +94,7 @@ public class CargoTrack implements Command {
 
     @Override
     public boolean isFinished() {
-        return ticksAtTarget >= (1.5 * 50);
+        return timeframe.percentEqual(1) >= 0.85;
     }
 
     @Override
