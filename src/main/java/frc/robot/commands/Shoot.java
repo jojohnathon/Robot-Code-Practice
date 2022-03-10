@@ -36,7 +36,7 @@ public class Shoot implements Command {
         nextSpeed /= Constants.kMaxVoltage;
         shooter.setOpenLoop(nextSpeed);
 
-        if(Shooter.PID_CONTROLLER.atSetpoint() && shootTimer.hasElapsed(1.5)) {
+        if(Shooter.PID_CONTROLLER.atSetpoint() && shootTimer.hasElapsed(1.5)) { //TODO: Replace with Timeframe implementation
             conveyor.setOpenLoop(0.3); //Feed any balls into shooter once it has reached the desired angular velocity
         }
     }

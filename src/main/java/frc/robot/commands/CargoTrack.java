@@ -27,7 +27,7 @@ public class CargoTrack implements Command {
 
     private Subsystem[] requirements = { Drivetrain.getInstance(), VisionMount.getInstance() };
     private int ticksAtTarget;
-    public CargoTrack() {
+    public CargoTrack() { //TODO: Implement Timeframe (similarly to HubTrack)
 
     }
 
