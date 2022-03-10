@@ -38,11 +38,12 @@ public class Auto {
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
                 new RunCommand( ()->intake.intake(0.85), intake), 
-                new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)), 
+                new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)), //TODO: update conveyor/staging during intake
             new WaitCommand(1.7), 
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
-                new InstantCommand(intake::stopIntake, intake)));
+                new InstantCommand(intake::stopIntake, intake),
+                new InstantCommand(conveyor::stop, conveyor)));
     }
 
     public static Command getShootCommand() { //Drive up and shoot
