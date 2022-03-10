@@ -81,35 +81,27 @@ public class RobotContainer {
         if(selectedAuto == Auto.Selection.INTAKEFIRST) {
             auto = new SequentialCommandGroup(new CargoTrack(), Auto.getIntakeCommand(), new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]), Auto.getShootCommand());
             switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
-            case 1:
-                auto = auto.andThen();
-                return auto;
-            case 2:
-                auto = auto.andThen();
-                return auto;
-            case 3:
-                auto = auto.andThen();
-                return auto;
-            default:
-                return auto;
+                case 1:
+                    auto = auto.andThen();
+                case 2:
+                    auto = auto.andThen();
+                case 3:
+                    auto = auto.andThen();
+            }
         } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
             auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
             switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
             case 1:
                 auto = auto.andThen();
-                return auto;
             case 2:
                 auto = auto.andThen();
-                return auto;
             case 3:
                 auto = auto.andThen();
-                return auto;
-            default:
-                return auto;
+            }
         } else {
             auto = Auto.getShootCommand();
         }
-        
+        return auto;
     }
 
     
@@ -124,7 +116,7 @@ public class RobotContainer {
                     .alongWith(new RunCommand( ()->conveyor.setOpenLoop(0.85), conveyor)))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake))
-                    .alongWith(new InstandCommand(conveyor::stop)));
+                    .alongWith(new InstantCommand(conveyor::stop)));
         driver_LB.whileHeld(new Shoot(0.65));
         driver_X.whileHeld(new HubTrack());
     }
