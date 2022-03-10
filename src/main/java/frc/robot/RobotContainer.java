@@ -78,17 +78,9 @@ public class RobotContainer {
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
         Command auto;
-        switch(selectedAuto) {
-            case INTAKEFIRST:
-                auto = new SequentialCommandGroup(new CargoTrack(), new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]), Auto.getShootCommand());
-                break;
-            case SHOOTFIRST:
-                auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
-                break;
-            default:
-                auto = Auto.getShootCommand();
-        }
-        switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
+        if(selectedAuto == Auto.Selection.INTAKEFIRST) {
+            auto = new SequentialCommandGroup(new CargoTrack(), Auto.getIntakeCommand(), new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]), Auto.getShootCommand());
+            switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
             case 1:
                 auto = auto.andThen();
                 return auto;
@@ -100,7 +92,24 @@ public class RobotContainer {
                 return auto;
             default:
                 return auto;
+        } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
+            auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
+            switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
+            case 1:
+                auto = auto.andThen();
+                return auto;
+            case 2:
+                auto = auto.andThen();
+                return auto;
+            case 3:
+                auto = auto.andThen();
+                return auto;
+            default:
+                return auto;
+        } else {
+            auto = Auto.getShootCommand();
         }
+        
     }
 
     
