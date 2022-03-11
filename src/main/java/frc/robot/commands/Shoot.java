@@ -43,6 +43,9 @@ public class Shoot implements Command {
         if(timeframe.percentEqual(1) >= 0.85) { //TODO: Replace with Timeframe implementation
             intake.setConveyor(0.3); //Feed any balls into shooter once it has reached the desired angular velocity
             shooter.setStagingMotor(0.3);
+        } else {
+            intake.setConveyor(0);
+            shooter.setStagingMotor(0);
         }
     }
     
