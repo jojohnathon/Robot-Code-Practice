@@ -119,7 +119,7 @@ public class RobotContainer {
                     .alongWith(new InstantCommand(intake::stopIntake)));
         driver_LB.whileHeld((new SmartShoot(getDistance())));
         driver_X.whileHeld(new HubTrack());
-        driver_Y.whileHeld(new Shoot(20));
+        driver_Y.whileHeld(new Shoot(AutoConstants.shooterVelocity));
     }
 
      /**
