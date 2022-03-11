@@ -6,13 +6,16 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SmartShoot;
 import frc.robot.commands.TurnXDegrees;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.VisionMount;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
@@ -36,7 +39,7 @@ public class Auto {
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
                 new RunCommand( ()->intake.intake(0.85), intake), 
-                new RunCommand( ()->intake.setConveyor(0.85), intake)), //TODO: update conveyor/staging during intake
+                new RunCommand( ()->intake.setConveyor(0.85))), //TODO: update conveyor/staging during intake
             new WaitCommand(1.7), 
             new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
@@ -47,7 +50,7 @@ public class Auto {
         return new SequentialCommandGroup(
             new HubTrack(),
             //new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]), 
-            new Shoot(AutoConstants.shooterVelocity).withTimeout(4) //TODO: adjust shooter velocity based on distance
+            new SmartShoot(RobotContainer.getDistance()).withTimeout(4) //TODO: adjust shooter velocity based on distance
         );
     }
 

@@ -10,6 +10,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SmartShoot;
 import frc.robot.commands.StagingQueue;
 import frc.robot.commands.TurnXDegrees;
 import frc.robot.commands.CargoTrack;
@@ -116,8 +117,9 @@ public class RobotContainer {
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.85), intake)))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
-        driver_LB.whileHeld(new Shoot(0.65));
+        driver_LB.whileHeld((new SmartShoot(getDistance())));
         driver_X.whileHeld(new HubTrack());
+        driver_Y.whileHeld(new Shoot(20));
     }
 
      /**
@@ -190,7 +192,7 @@ public class RobotContainer {
     public static double getDistance() {
         double offsetAngle = limelight.getEntry("ty").getDouble(0.0);
         double angleGoalRads = (VisionConstants.mountAngle + offsetAngle) * (Math.PI/180);
-        return (VisionConstants.goalHeightInches - VisionConstants.limelightHeightInches)/(Math.tan(angleGoalRads));
+        return Units.InchesToMeters(VisionConstants.goalHeightInches - VisionConstants.limelightHeightInches)/(Math.tan(angleGoalRads));
     }
     /**
      * Returns the vertical offset between the target and the crosshair in degrees
