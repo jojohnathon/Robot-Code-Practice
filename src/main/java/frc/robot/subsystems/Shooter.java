@@ -19,7 +19,7 @@ public class Shooter implements Subsystem {
     private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, MotorType.kBrushless);
     private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, MotorType.kBrushless);
     private static CANSparkMax stagingMotor;
-    public static PIDController PID_CONTROLLER;
+    public static PIDController PID_CONTROLLER; //TODO: May need to replace with SparkMAX built-in PID Controller
     public static SimpleMotorFeedforward FEEDFORWARD;
     private static RelativeEncoder encoder = master.getEncoder();
     private static final DigitalInput shooterPhotoelectric = new DigitalInput(ConveyorConstants.shooterPhotoelectric); //sensor closest to shooter
