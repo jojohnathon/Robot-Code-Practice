@@ -62,13 +62,13 @@ public class RobotContainer {
         /*camera = new PhotonCamera("photonvision");*/
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
-        drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
+        //drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        intake.setDefaultCommand(new ConveyorQueue());
-        shooter.setDefaultCommand(new StagingQueue());
+        //intake.setDefaultCommand(new ConveyorQueue());
+        //shooter.setDefaultCommand(new StagingQueue());
         colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         //limelightAngle = VisionMount.getInstance();
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -141,6 +141,9 @@ public class RobotContainer {
 
     public static double getThrottle() {
         return -deadbandX(driverController.getLeftY(), Constants.DriverConstants.kJoystickDeadband);
+    }
+    public static double getAltThrottle() {
+        return -deadbandX(driverController.getRightY(), Constants.DriverConstants.kJoystickDeadband);
     }
 
     public static double getTurn() {
