@@ -15,7 +15,6 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.RobotContainer.VisionPipeline;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.VisionMount;
 
 import java.util.Set;
 
@@ -27,14 +26,13 @@ public class CargoTrack implements Command {
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
 
-    private Subsystem[] requirements = { Drivetrain.getInstance(), VisionMount.getInstance() };
+    private Subsystem[] requirements = { Drivetrain.getInstance() };
     public CargoTrack() { //TODO: Implement Timeframe (similarly to HubTrack)
         timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
     }
 
     @Override
     public void initialize() {
-        VisionMount.getInstance().setAngle(0); //TODO: Tune Cargo mounting angle
         RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
         RobotContainer.getInstance().setPipeline(RobotContainer.allianceToPipeline());
     }

@@ -4,13 +4,11 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.VisionMount;
 
 public class SmartShoot extends Shoot {
-    private Subsystem[] extraReqs = {VisionMount.getInstance()};
+    private Subsystem[] extraReqs = {};
     public SmartShoot(double distance) {
         super(distanceToVelocity(distance));
-        VisionMount.getInstance().setAngle(VisionConstants.mountAngle);
     }
 
     public static double distanceToVelocity(double distance) {

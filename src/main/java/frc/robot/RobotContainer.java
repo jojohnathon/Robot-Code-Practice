@@ -57,7 +57,6 @@ public class RobotContainer {
     public static Shooter shooter;
     public static ColorSensorV3 colorSensorV3;
     public static AHRS navX; 
-    public static VisionMount limelightAngle;
     public static Shoot shootCommand;
     private RobotContainer() {
         /*camera = new PhotonCamera("photonvision");*/
@@ -71,7 +70,7 @@ public class RobotContainer {
         intake.setDefaultCommand(new ConveyorQueue());
         shooter.setDefaultCommand(new StagingQueue());
         colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
-        limelightAngle = VisionMount.getInstance();
+        //limelightAngle = VisionMount.getInstance();
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
         bindOI();

@@ -20,14 +20,13 @@ import frc.robot.RobotContainer.IntakeVisionPipeline;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.RobotContainer.ShooterVisionPipeline;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.VisionMount;
 
 public class HubTrack implements Command {
     private static final PIDController TURN_PID_CONTROLLER = new PIDController(VisionConstants.kPTurn,
             VisionConstants.kITurn, VisionConstants.kDTurn);
     private static final PIDController DIST_PID_CONTROLLER = new PIDController(VisionConstants.kPDist,
             VisionConstants.kIDist, VisionConstants.kDDist);
-    private Subsystem[] requirements = { Drivetrain.getInstance(), VisionMount.getInstance() };
+    private Subsystem[] requirements = { Drivetrain.getInstance()};
     private Timeframe<Integer> timeframe;
     public HubTrack() {
         timeframe = new Timeframe<>(1.5, 1.0/Constants.dt);
@@ -35,7 +34,6 @@ public class HubTrack implements Command {
 
     @Override
     public void initialize() {
-        VisionMount.getInstance().setAngle(VisionConstants.mountAngle); //TODO: Tune angle
         RobotContainer.getInstance().setLEDMode(LEDMode.ON);
         RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.ROBOT);
     }
