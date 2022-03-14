@@ -87,7 +87,7 @@ public class Arm extends ProfiledPIDSubsystem {
     
     @Override
     public void periodic() {
-        super.periodic();
+        //super.periodic();
 
         SmartDashboard.putNumber("encoder value", armEncoder.get());
         SmartDashboard.putNumber("measurement", getMeasurement());
