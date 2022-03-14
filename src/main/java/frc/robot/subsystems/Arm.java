@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -15,7 +17,7 @@ import frc.robot.Constants.ArmConstants;
 
 public class Arm extends ProfiledPIDSubsystem {
     
-    private static final TalonSRX motor = Util.createTalonSRX(ArmConstants.armMotor, false);
+    private static final CANSparkMax motor = Util.createSparkMAX(ArmConstants.armMotor, MotorType.kBrushless);
     
     private static final Encoder armEncoder = new Encoder(4,3);
     
@@ -46,11 +48,11 @@ public class Arm extends ProfiledPIDSubsystem {
     private Arm() {
         super(new ProfiledPIDController(ArmConstants.kP , ArmConstants.kI, ArmConstants.kD,
                 new TrapezoidProfile.Constraints(ArmConstants.kMaxVelocity, ArmConstants.kMaxAcceleration)), 0);
-        
+        /*
         motor.configContinuousCurrentLimit(1);
         motor.configPeakCurrentLimit(0);
         motor.enableCurrentLimit(true);
-        
+        */
         setGoal(State.STORED);
 
         disable();
@@ -66,12 +68,12 @@ public class Arm extends ProfiledPIDSubsystem {
      * @param value Percent of maximum voltage to send to motor
      */
     public void rotate(double value) {
-        motor.set(ControlMode.PercentOutput, value);
+        motor.set(value);
     }
     
     public void stopArm() {
         disable();
-        motor.set(ControlMode.PercentOutput, 0);
+        motor.set(0);
     }
     
     /**
@@ -105,7 +107,7 @@ public class Arm extends ProfiledPIDSubsystem {
         // Calculate feedforward from the setpoint
         double feedforward = FEEDFORWARD.calculate(setpoint.position, setpoint.velocity);
         // Set motor, converting voltage to percent voltage
-        motor.set(ControlMode.PercentOutput, (output + feedforward)/12.0);
+        motor.set((output + feedforward)/12.0);
 
         SmartDashboard.putNumber("pos", setpoint.position);
         SmartDashboard.putNumber("output", output/12);
