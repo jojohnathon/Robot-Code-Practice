@@ -90,7 +90,7 @@ public class RobotContainer {
                     auto = auto.andThen();
             }
         } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
-            auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand(), Auto.getIntakeCommand());
+            auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand()/*, Auto.getIntakeCommand()*/);
             switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
             case 1:
                 auto = auto.andThen();
