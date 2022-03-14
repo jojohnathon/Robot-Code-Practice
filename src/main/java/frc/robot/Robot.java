@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
         Intake.getInstance().setConveyor(conveyorPower);
         break;
       case SHOOTER:
-        double shooterPower = RobotContainer.getThrottle() * DriverConstants.kDriveSens, kickerPower = RobotContainer.getAltThrottle();
+        double shooterPower = RobotContainer.getThrottle() * DriverConstants.kDriveSens, kickerPower = RobotContainer.getAltThrottle() * DriverConstants.kDriveSens;
         Shooter.getInstance().setOpenLoop(shooterPower);
         Shooter.getInstance().setStagingMotor(kickerPower);
         break;
