@@ -111,14 +111,14 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm) //TODO: update conveyor staging logic
+        /*driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm) //TODO: update conveyor staging logic
                     .alongWith(new RunCommand( ()->intake.intake(0.85)))
                     .alongWith(new RunCommand( ()->intake.setConveyor(0.85), intake)))
                 .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
                     .alongWith(new InstantCommand(intake::stopIntake)));
         driver_LB.whileHeld((new SmartShoot(getDistance())));
         driver_X.whileHeld(new HubTrack());
-        driver_Y.whileHeld(new Shoot(AutoConstants.shooterVelocity));
+        driver_Y.whileHeld(new Shoot(AutoConstants.shooterVelocity));*/
     }
 
      /**
