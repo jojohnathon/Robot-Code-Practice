@@ -15,12 +15,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake implements Subsystem {
     
-    private static final TalonSRX spinMotor = Util.createTalonSRX(IntakeConstants.spinMotor, false);
-    private static CANSparkMax conveyorMotor;
-    //private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
+    private static final CANSparkMax spinMotor = Util.createSparkMAX(IntakeConstants.spinMotor, MotorType.kBrushless);
+    //private static CANSparkMax conveyorMotor;
+    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
     
     private static final DigitalInput intakePhotoelectric = new DigitalInput(ConveyorConstants.intakePhotoelectric); //sensor closest to intake
     private static Intake instance;
@@ -30,7 +31,7 @@ public class Intake implements Subsystem {
     }
 
     private Intake(){
-        conveyorMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
+        //conveyorMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
         conveyorMotor.setInverted(true);
         conveyorMotor.burnFlash();
         /*conveyorMotor.setInverted(false);
@@ -52,7 +53,7 @@ public class Intake implements Subsystem {
      * @param value Percent of maximum voltage to send to motor
      */
     public void intake(double value) {
-        spinMotor.set(ControlMode.PercentOutput, value);
+        spinMotor.set(value);
     }
     public void setConveyor(double value) {
         conveyorMotor.set(value);
@@ -62,7 +63,7 @@ public class Intake implements Subsystem {
      * Stops the intake
      */
     public void stopIntake() {
-        spinMotor.set(ControlMode.PercentOutput, 0);
+        spinMotor.set(0);
         conveyorMotor.set(0);
     }
 
