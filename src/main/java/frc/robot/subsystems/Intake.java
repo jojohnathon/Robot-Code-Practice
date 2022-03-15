@@ -75,7 +75,7 @@ public class Intake implements Subsystem {
         if(!Robot.useV3()) {
             return !intakePhotoelectric.get();
         } else {
-            return (RobotContainer.colorSensorV3.getProximity() >= ConveyorConstants.minimumProximity);
+            return false; //(RobotContainer.colorSensorV3.getProximity() >= ConveyorConstants.minimumProximity);
         }
     }
 }

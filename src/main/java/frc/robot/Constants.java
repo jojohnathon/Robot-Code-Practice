@@ -34,7 +34,7 @@ public class Constants {
     }
     
     public static class ArmConstants {
-        public static final int armMotor = 5;
+        public static final int armMotor = 2;
 
         /* PID Constants */
         public static double kP = 2.9;
@@ -57,10 +57,10 @@ public class Constants {
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */
-            leftMaster = 0, // TalonFX
+            leftMaster = 3, // TalonFX
             leftSlave = 1, // TalonFX
-            rightMaster = 2, // TalonFX
-            rightSlave = 3; // TalonFX
+            rightMaster = 4, // TalonFX
+            rightSlave = 2; // TalonFX
         
         /* feedforward constants */
         public static final double kS = 0.364; // voltage required to overcome friction (V)
@@ -85,8 +85,8 @@ public class Constants {
 
     public static class IntakeConstants {
         /* Motors */
-        public static final int spinMotor = 6;
-        public static final int conveyorMotor = 11;
+        public static final int spinMotor = 3;
+        public static final int conveyorMotor = 1;
     }
 
     public static class ShooterConstants {
@@ -102,13 +102,13 @@ public class Constants {
  
          /* Shooter Constants */ 
          public static double kTolerance = 0;
-        public static int master;
+        public static int master = 8;
         public static int slave;
     }
     public static class ConveyorConstants {
         public static final Port colorSensorV3 = Port.kOnboard;
         public static final double minimumProximity = 1800;
-        public static final int motor = 10;
+        public static final int motor = 11;
         public static final int intakePhotoelectric = 0;
         public static final int shooterPhotoelectric = 1;
 

@@ -51,11 +51,11 @@ public class RobotContainer {
     public static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
-    public static Intake intake;
+    /*public static Intake intake;
     public static Climber climber;
     public static Arm arm;
     public static Shooter shooter;
-    public static ColorSensorV3 colorSensorV3;
+    public static ColorSensorV3 colorSensorV3;*/
     public static AHRS navX; 
     public static Shoot shootCommand;
     private RobotContainer() {
@@ -63,15 +63,15 @@ public class RobotContainer {
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         //drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
-        arm = Arm.getInstance();
-        intake = Intake.getInstance();
-        climber = Climber.getInstance();
-        shooter = Shooter.getInstance();
+        //arm = Arm.getInstance();
+        //intake = Intake.getInstance();
+        //climber = Climber.getInstance();
+        //shooter = Shooter.getInstance();
         //intake.setDefaultCommand(new ConveyorQueue());
         //shooter.setDefaultCommand(new StagingQueue());
-        colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
+        //colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         //limelightAngle = VisionMount.getInstance();
-        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        //limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
         bindOI();
     }

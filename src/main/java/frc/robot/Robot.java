@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     robot = RobotContainer.getInstance();
+    pdp.clearStickyFaults();
     t_subsystem.setDefaultOption("Test Drivetrain", TestSubsystem.DRIVETRAIN);
     t_subsystem.addOption("Test Arm", TestSubsystem.ARM);
     t_subsystem.addOption("Test Intake", TestSubsystem.INTAKE);
