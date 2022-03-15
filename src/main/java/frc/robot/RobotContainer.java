@@ -67,7 +67,7 @@ public class RobotContainer {
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        intake.setDefaultCommand(new ConveyorQueue());
+        //intake.setDefaultCommand(new ConveyorQueue());
         shooter.setDefaultCommand(new StagingQueue());
         colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         //limelightAngle = VisionMount.getInstance();
