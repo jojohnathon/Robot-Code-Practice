@@ -48,7 +48,7 @@ public class RobotContainer {
             driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
             driver_MENU = new JoystickButton(driverController, 8);
 
-    //public static NetworkTable limelight;
+    public static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
     public static Intake intake;
@@ -71,7 +71,8 @@ public class RobotContainer {
         //shooter.setDefaultCommand(new StagingQueue());
         //colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         //limelightAngle = VisionMount.getInstance();
-        //limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        setLEDMode(LEDMode.OFF);
 
         bindOI();
     }

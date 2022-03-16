@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Drivetrain implements Subsystem {
     private static Drivetrain instance = null;
     private static final TalonFX
-        leftMaster = Util.createTalonFX(DrivetrainConstants.leftMaster),
-        leftSlave = Util.createTalonFX(DrivetrainConstants.leftSlave),
-        rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster),
-        rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
+        leftMaster = new TalonFX(DrivetrainConstants.leftMaster),
+        leftSlave = new TalonFX(DrivetrainConstants.leftSlave),
+        rightMaster = new TalonFX(DrivetrainConstants.rightMaster),
+        rightSlave = new TalonFX(DrivetrainConstants.rightSlave);
     
     public static final List<TalonFX> motors = List.of(/*leftMaster, leftSlave,*/ rightMaster, rightSlave);
 
