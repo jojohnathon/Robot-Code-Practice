@@ -29,7 +29,7 @@ public class Drivetrain implements Subsystem {
         rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster),
         rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
     
-    public static final List<TalonFX> motors = List.of(leftMaster, leftSlave, rightMaster, rightSlave);
+    public static final List<TalonFX> motors = List.of(/*leftMaster, leftSlave,*/ rightMaster, rightSlave);
 
 
     public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);

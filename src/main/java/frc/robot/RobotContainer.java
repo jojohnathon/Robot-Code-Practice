@@ -48,7 +48,7 @@ public class RobotContainer {
             driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
             driver_MENU = new JoystickButton(driverController, 8);
 
-    public static NetworkTable limelight;
+    //public static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
     public static Intake intake;
@@ -71,7 +71,7 @@ public class RobotContainer {
         //shooter.setDefaultCommand(new StagingQueue());
         //colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
         //limelightAngle = VisionMount.getInstance();
-        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        //limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
         bindOI();
     }
@@ -164,7 +164,7 @@ public class RobotContainer {
      * @param ledMode The mode to set the Limelight LEDs to
      */
     public void setLEDMode(LEDMode ledMode) {
-        limelight.getEntry("ledMode").setNumber(ledMode.val);
+        //limelight.getEntry("ledMode").setNumber(ledMode.val);
     }
     /**
      * Sets the appearance of the Limelight camera stream
@@ -172,7 +172,7 @@ public class RobotContainer {
      * @param stream Stream mode to set the Limelight to
      */
     public void setStreamMode(StreamMode stream) {
-        limelight.getEntry("stream").setNumber(stream.val);
+        //limelight.getEntry("stream").setNumber(stream.val);
     }
     /**
      * Sets Limelight vision pipeline
@@ -180,7 +180,7 @@ public class RobotContainer {
      * @param pipeline The pipeline to use
      */
     public void setPipeline(IntakeVisionPipeline pipeline) {
-        limelight.getEntry("pipeline").setNumber(pipeline.val);
+        //limelight.getEntry("pipeline").setNumber(pipeline.val);
     }
     /**
      * Returns the horizontal offset between the target and the crosshair in degrees
@@ -188,11 +188,11 @@ public class RobotContainer {
      * @return the horizontal offset between the target and the crosshair in degrees
      */
     public static double getXOffset() {
-        return -limelight.getEntry("tx").getDouble(0);
+        return 0.0;//-limelight.getEntry("tx").getDouble(0);
     }
     
     public static double getDistance() {
-        double offsetAngle = limelight.getEntry("ty").getDouble(0.0);
+        double offsetAngle = 0.0;//limelight.getEntry("ty").getDouble(0.0);
         double angleGoalRads = (VisionConstants.mountAngle + offsetAngle) * (Math.PI/180);
         return Units.InchesToMeters(VisionConstants.goalHeightInches - VisionConstants.limelightHeightInches)/(Math.tan(angleGoalRads));
     }
@@ -202,7 +202,7 @@ public class RobotContainer {
      * @return the vertical offset between the target and the crosshair in degrees
      */
     public static double getYOffset() {
-        return -limelight.getEntry("ty").getDouble(0.0);
+        return 0.0;//-limelight.getEntry("ty").getDouble(0.0);
     }
     /**
      * Enum representing the different possible Limelight LED modes

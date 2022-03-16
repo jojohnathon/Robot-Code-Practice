@@ -89,7 +89,7 @@ public class Util {
         sparkMAX.restoreFactoryDefaults();
         sparkMAX.enableVoltageCompensation(voltageCompensation);
         sparkMAX.setSmartCurrentLimit(stallLimit);
-        sparkMAX.setIdleMode(IdleMode.kBrake);
+        sparkMAX.setIdleMode(IdleMode.kCoast);
 
         sparkMAX.burnFlash();
         return sparkMAX;
