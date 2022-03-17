@@ -24,7 +24,7 @@ public class Drive implements Command {
     }
 
     public enum State {
-        CurvatureDrive2019, CheesyDriveOpenLoop, CheesyDriveClosedLoop
+        CurvatureDrive2019, CheesyDriveOpenLoop, CheesyDriveClosedLoop, SillyDrive
     }
     
     private State state;
@@ -114,6 +114,25 @@ public class Drive implements Command {
                 }
                 
                 break;
+            case SillyDrive:
+                if (throttle != 0) {
+                    throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
+                    turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
+
+                    DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
+                    _wSpeeds.desaturate(DrivetrainConstants.kMaxSpeedMPS);
+
+                    left = _wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
+                    right = _wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
+
+                    // Convert voltages to percent voltages
+                    //left /= Constants.kMaxVoltage;
+                    //right /= Constants.kMaxVoltage;
+                } else {
+                    // Turns in place when there is no throttle input
+                    left = turn * DriverConstants.kTurnInPlaceSens;
+                    right = -turn * DriverConstants.kTurnInPlaceSens;
+                }
             default:
                 left = right = 0;
                 break;

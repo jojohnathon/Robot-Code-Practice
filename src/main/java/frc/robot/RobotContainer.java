@@ -71,7 +71,7 @@ public class RobotContainer {
     private RobotContainer() {
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
-        drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
+        drivetrain.setDefaultCommand(new Drive(Drive.State.SillyDrive));
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
