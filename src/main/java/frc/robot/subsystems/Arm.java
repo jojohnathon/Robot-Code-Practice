@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -20,7 +22,8 @@ public class Arm extends ProfiledPIDSubsystem {
     
     private static final CANSparkMax motor = Util.createSparkMAX(ArmConstants.actuateMotor, MotorType.kBrushless);
     
-    private static final Encoder armEncoder = new Encoder(4,3);
+    private RelativeEncoder armEncoder = motor.getEncoder();
+    //private static final Encoder armEncoder = new Encoder(4,3);
     
     private static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(ArmConstants.kS, ArmConstants.kCos, ArmConstants.kV, ArmConstants.kA);
     
@@ -76,21 +79,21 @@ public class Arm extends ProfiledPIDSubsystem {
     
     public void stopArm() {
         disable();
-        motor.set(0);
+        motor.set(0);//makes it so it moves the same as the spring pulling, comes from testing :(
     }
     
     /**
      * Resets encoders to zero
      */
     public void resetEncoders() {
-        armEncoder.reset();
+        armEncoder.setPosition(0.0);
     }
     
     @Override
     public void periodic() {
         //super.periodic();
 
-        SmartDashboard.putNumber("encoder value", armEncoder.get());
+        SmartDashboard.putNumber("encoder value", armEncoder.getPosition() * 2 * Math.PI);
         SmartDashboard.putNumber("measurement", getMeasurement());
     }
     
@@ -99,7 +102,7 @@ public class Arm extends ProfiledPIDSubsystem {
      */
     @Override
     public double getMeasurement() {
-        return armEncoder.getDistance() - ArmConstants.kArmOffset;
+        return armEncoder.getPosition() * (2 * Math.PI);
     }
     
     /**

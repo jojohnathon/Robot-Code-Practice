@@ -47,6 +47,11 @@ public class RobotContainer {
             driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
             driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
             driver_MENU = new JoystickButton(driverController, 8);
+    private static final JoystickButton operator_A = new JoystickButton(operatorController, 1),
+    operator_B = new JoystickButton(operatorController, 2), operator_X = new JoystickButton(operatorController, 3),
+    operator_Y = new JoystickButton(operatorController, 4), operator_LB = new JoystickButton(operatorController, 5),
+    operator_RB = new JoystickButton(operatorController, 6), operator_VIEW = new JoystickButton(operatorController, 7),
+    operator_MENU = new JoystickButton(operatorController, 8);
 
     public static NetworkTable limelight;
 
@@ -61,10 +66,12 @@ public class RobotContainer {
     private RobotContainer() {
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
+        drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
+        shooter.setDefaultCommand(new StagingQueue());
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         setLEDMode(LEDMode.OFF);
 
@@ -79,7 +86,19 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        
+        driver_RB.whileHeld(new RunCommand(() -> arm.setGoal(Arm.State.OUT), arm)
+                .alongWith(new RunCommand(() -> intake.intake(0.7), intake)
+                .alongWith(new RunCommand(() -> intake.setConveyor(0.5)))))
+            .whenReleased(new InstantCommand(intake::stopIntake)
+                .alongWith(new RunCommand( () -> arm.setGoal(Arm.State.STORED))) );
+        driver_LB.whileHeld(new Shoot(20));
+        driver_X.whileHeld(new HubTrack());
+        operator_X.whileHeld(new RunCommand(() -> arm.setGoal(Arm.State.OUT), arm) //Eject cargo in conveyor
+                .alongWith(new RunCommand(() -> intake.intake(-0.7), intake)
+                .alongWith(new RunCommand(() -> intake.setConveyor(-0.5)))))
+            .whenReleased(new InstantCommand(intake::stopIntake)
+                .alongWith(new RunCommand( () -> arm.setGoal(Arm.State.STORED))) ); 
+        operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
     }
 
      /**

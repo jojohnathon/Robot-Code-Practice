@@ -32,8 +32,8 @@ public class Intake implements Subsystem {
 
     private Intake(){
         //conveyorMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
-        conveyorMotor.setInverted(true);
-        conveyorMotor.burnFlash();
+        // conveyorMotor.setInverted(true);
+        // conveyorMotor.burnFlash();
         /*conveyorMotor.setInverted(false);
         conveyorMotor.burnFlash();*/
         register();
