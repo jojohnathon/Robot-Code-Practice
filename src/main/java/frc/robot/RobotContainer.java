@@ -10,6 +10,7 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SillyShoot;
 import frc.robot.commands.SmartShoot;
 import frc.robot.commands.StagingQueue;
 import frc.robot.commands.TurnXDegrees;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
@@ -53,7 +55,9 @@ public class RobotContainer {
     operator_Y = new JoystickButton(operatorController, 4), operator_LB = new JoystickButton(operatorController, 5),
     operator_RB = new JoystickButton(operatorController, 6), operator_VIEW = new JoystickButton(operatorController, 7),
     operator_MENU = new JoystickButton(operatorController, 8);
-
+    private static final POVButton operator_DPAD_UP = new POVButton(operatorController, 0),
+    operator_DPAD_RIGHT = new POVButton(operatorController, 90), operator_DPAD_DOWN = new POVButton(operatorController, 180),
+    operator_DPAD_LEFT = new POVButton(operatorController, 270);
     public static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
@@ -85,7 +89,7 @@ public class RobotContainer {
         driver_RB.whileHeld(new RunCommand(() -> intake.intake(0.7), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.5))))
             .whenReleased(new InstantCommand(intake::stopIntake));
-        driver_LB.whileHeld(new Shoot(20));
+        driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
         operator_X.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.15), arm).withTimeout(2)
                 .alongWith(new RunCommand(() -> intake.intake(-0.7), intake)
@@ -93,6 +97,10 @@ public class RobotContainer {
             .whenReleased(new InstantCommand(intake::stopIntake)
                 .alongWith(new RunCommand( () -> arm.setOpenLoop(-0.1)).withTimeout(2.0)) );
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
+        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
+        operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
+        /*operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber));
+        operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber));*/
     }
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
@@ -108,14 +116,14 @@ public class RobotContainer {
                 ),
                 new HubTrack(),
                 new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
-                new Shoot(AutoConstants.shooterVelocity)
+                new SillyShoot()
             );
             
         } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
             auto = new SequentialCommandGroup( //Start facing hub, shoot, reverse, get near cargo
                 new HubTrack(),
                 new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
-                new Shoot(AutoConstants.shooterVelocity),
+                new SillyShoot(),
                 new DriveXMeters(-AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
                 new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]),
                 new DriveXMeters(AutoConstants.distToCargo + AutoConstants.hubXOffset - AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])

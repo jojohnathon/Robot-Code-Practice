@@ -100,7 +100,8 @@ public class Constants {
          public static double kA = 0;
  
          /* Shooter Constants */ 
-         public static double kTolerance = 0;
+        public static double maxVelRadS = 70.85 * 2 * Math.PI; //estimated max speed in radians/sec
+        public static double kTolerance = 0;
         public static int master = 1;
         public static int slave;
     }
@@ -114,6 +115,7 @@ public class Constants {
 
     }
     public static class ClimbConstants {
+        public static final int rightMotor = 4, leftMotor = 5;
         /* PID constants */
         public static final double kP = 0;
         public static final double kI = 0;
