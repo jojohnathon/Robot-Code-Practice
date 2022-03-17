@@ -35,7 +35,7 @@ public class Auto {
     public static Command extendIntake() { //Arm down and spin conveyor
             /*new WaitCommand(0.3), */ // move balls in storage if needed
             return new ParallelCommandGroup(
-                new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
+                new RunCommand( ()->arm.rotate(0.1), arm).withTimeout(2),
                 new RunCommand( ()->intake.intake(0.7), intake), 
                 new RunCommand( ()->intake.setConveyor(0.5))); //TODO: update conveyor/staging during intake
 
@@ -44,7 +44,7 @@ public class Auto {
         return
             /*new WaitCommand(0.3), */ // move balls in storage if needed
             new ParallelCommandGroup(
-                new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
+                new RunCommand( ()->arm.rotate(-0.1), arm).withTimeout(2),
                 new InstantCommand(intake::stopIntake, intake));
     }
 

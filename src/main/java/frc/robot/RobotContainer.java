@@ -80,11 +80,11 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        driver_RB.whileHeld(new RunCommand(() -> arm.setGoal(Arm.State.OUT), arm)
+        driver_RB.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.15), arm)
                 .alongWith(new RunCommand(() -> intake.intake(0.7), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.5)))))
             .whenReleased(new InstantCommand(intake::stopIntake)
-                .alongWith(new RunCommand( () -> arm.setGoal(Arm.State.STORED))) );
+                .alongWith(new RunCommand( () -> arm.setOpenLoop(-0.1)).withTimeout(2.0)) );
         driver_LB.whileHeld(new Shoot(20));
         driver_X.whileHeld(new HubTrack());
         operator_X.whileHeld(new RunCommand(() -> arm.setGoal(Arm.State.OUT), arm) //Eject cargo in conveyor
@@ -99,10 +99,10 @@ public class RobotContainer {
         Command auto;
         if(selectedAuto == Auto.Selection.INTAKEFIRST) { //Start facing cargo, drive, intake, shoot
             auto = new SequentialCommandGroup(
-                new ParallelRaceGroup(
+                new ParallelCommandGroup(
                     Auto.extendIntake(),
                     new DriveXMeters(AutoConstants.distToCargo, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])),
-                new ParallelRaceGroup(
+                new ParallelCommandGroup(
                     Auto.retractIntake(),
                     new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1])
                 ),
