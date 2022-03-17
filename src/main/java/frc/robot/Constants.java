@@ -19,8 +19,8 @@ public class Constants {
 
     public static class AutoConstants {
         
-        public static final double[] DXMConstraints = {0.2, 0.1}, TXDConstraints = {480, 360};
-        public static final double hubXOffset = 0.3,  shooterVelocity = 20, backupDistance = 0.3;
+        public static final double[] DXMConstraints = {1, 0.5}, TXDConstraints = {480, 360};
+        public static final double hubXOffset = 5,  shooterVelocity = 20, backupDistance = 0.3, distToCargo = 5;
     }
 
     public static class DriverConstants {

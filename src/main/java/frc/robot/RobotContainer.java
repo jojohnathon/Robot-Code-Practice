@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -78,13 +79,6 @@ public class RobotContainer {
         bindOI();
     }
 
-
-    
-    public static RobotContainer getInstance() {
-        if(instance == null) instance = new RobotContainer();
-        return instance;
-    }
-
     private void bindOI() {
         driver_RB.whileHeld(new RunCommand(() -> arm.setGoal(Arm.State.OUT), arm)
                 .alongWith(new RunCommand(() -> intake.intake(0.7), intake)
@@ -99,6 +93,43 @@ public class RobotContainer {
             .whenReleased(new InstantCommand(intake::stopIntake)
                 .alongWith(new RunCommand( () -> arm.setGoal(Arm.State.STORED))) ); 
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
+    }
+
+    public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
+        Command auto;
+        if(selectedAuto == Auto.Selection.INTAKEFIRST) { //Start facing cargo, drive, intake, shoot
+            auto = new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                    Auto.extendIntake(),
+                    new DriveXMeters(AutoConstants.distToCargo, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])),
+                new ParallelRaceGroup(
+                    Auto.retractIntake(),
+                    new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1])
+                ),
+                new HubTrack(),
+                new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
+                new Shoot(AutoConstants.shooterVelocity)
+            );
+            
+        } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
+            auto = new SequentialCommandGroup( //Start facing hub, shoot, reverse, get near cargo
+                new HubTrack(),
+                new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
+                new Shoot(AutoConstants.shooterVelocity),
+                new DriveXMeters(-AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
+                new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]),
+                new DriveXMeters(AutoConstants.distToCargo + AutoConstants.hubXOffset - AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])
+            ); 
+
+        } else {
+            auto = null;
+        }
+        return auto;
+    }
+
+    public static RobotContainer getInstance() {
+        if(instance == null) instance = new RobotContainer();
+        return instance;
     }
 
      /**

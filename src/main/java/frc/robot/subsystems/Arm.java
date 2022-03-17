@@ -111,13 +111,15 @@ public class Arm extends ProfiledPIDSubsystem {
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         // Calculate feedforward from the setpoint
-        double feedforward = FEEDFORWARD.calculate(setpoint.position, setpoint.velocity);
+        //FEEDFORWARD.calculate(setpoint.position, setpoint.velocity);
         // Set motor, converting voltage to percent voltage
-        motor.set((output + feedforward)/12.0);
+
+
+        motor.set(setpoint.velocity + output/12); //without feedforward, use PID to correct error
 
         SmartDashboard.putNumber("pos", setpoint.position);
         SmartDashboard.putNumber("output", output/12);
-        SmartDashboard.putNumber("feedforward + output", (output+feedforward)/12);
+        //SmartDashboard.putNumber("feedforward + output", (output+feedforward)/12);
 
     }
 }

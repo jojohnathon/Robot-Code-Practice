@@ -34,6 +34,9 @@ public class Robot extends TimedRobot {
   private RobotContainer robot;
   private PowerDistribution pdp = new PowerDistribution();
   private static boolean use_csV3 = false;
+  
+  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   public static boolean useV3() {
     return use_csV3; //prevent unwanted writing operations but allow reading
   }
@@ -41,12 +44,20 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  
   @Override
   public void robotInit() {
     robot = RobotContainer.getInstance();
     pdp.clearStickyFaults();
-    
+    m_chooser.setDefaultOption("Shoot First", RobotContainer.getAutonomousCommand(Auto.Selection.SHOOTFIRST));
+    m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
+    use_V3.setDefaultOption("Use photoelectric indexing", false);
+    use_V3.addOption("Use colorsensorV3 indexing", true);
+    SmartDashboard.putData("Auto choices", m_chooser);
+    SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
+
     Drivetrain.getInstance().resetEncoders();
+    Arm.getInstance().resetEncoders();
   }
 
   /**
@@ -59,7 +70,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    
+    use_csV3 = use_V3.getSelected();
 
   }
 
@@ -77,7 +88,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-
+    CommandScheduler.getInstance().schedule(m_chooser.getSelected());
   }
 
   /** This function is called periodically during autonomous. */

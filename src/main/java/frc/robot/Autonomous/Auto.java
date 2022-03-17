@@ -32,17 +32,20 @@ public class Auto {
             this.val = val;
         }
     }
-    public static Command getIntakeCommand() { //Arm down and spin conveyor
-        return new SequentialCommandGroup(
+    public static Command extendIntake() { //Arm down and spin conveyor
+            /*new WaitCommand(0.3), */ // move balls in storage if needed
+            return new ParallelCommandGroup(
+                new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
+                new RunCommand( ()->intake.intake(0.7), intake), 
+                new RunCommand( ()->intake.setConveyor(0.5))); //TODO: update conveyor/staging during intake
+
+    }
+    public static Command retractIntake() { //Arm down and spin conveyor
+        return
             /*new WaitCommand(0.3), */ // move balls in storage if needed
             new ParallelCommandGroup(
-                new RunCommand( ()->arm.setGoal(Arm.State.OUT), arm),
-                new RunCommand( ()->intake.intake(0.85), intake), 
-                new RunCommand( ()->intake.setConveyor(0.85))), //TODO: update conveyor/staging during intake
-            new WaitCommand(1.7), 
-            new ParallelCommandGroup(
                 new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm),
-                new InstantCommand(intake::stopIntake, intake)));
+                new InstantCommand(intake::stopIntake, intake));
     }
 
     public static Command getShootCommand() { //Drive up and shoot
