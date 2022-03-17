@@ -86,12 +86,12 @@ public class Util {
      */
     public static CANSparkMax createSparkMAX(int id, MotorType motortype, int stallLimit) {
         CANSparkMax sparkMAX = new CANSparkMax(id, motortype);
-        sparkMAX.restoreFactoryDefaults();
+        /*sparkMAX.restoreFactoryDefaults();
         sparkMAX.enableVoltageCompensation(voltageCompensation);
         sparkMAX.setSmartCurrentLimit(stallLimit);
-        sparkMAX.setIdleMode(IdleMode.kCoast);
+        sparkMAX.setIdleMode(IdleMode.kCoast);*/
 
-        sparkMAX.burnFlash();
+        //sparkMAX.burnFlash();
         return sparkMAX;
     }
 

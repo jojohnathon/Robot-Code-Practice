@@ -34,7 +34,7 @@ public class Constants {
     }
     
     public static class ArmConstants {
-        public static final int armMotor = 2;
+        public static final int actuateMotor = 3; //change to actuatemotor
 
         /* PID Constants */
         public static double kP = 2.9;
@@ -85,8 +85,7 @@ public class Constants {
 
     public static class IntakeConstants {
         /* Motors */
-        public static final int spinMotor = 3;
-        public static final int conveyorMotor = 1;
+        public static final int rollerMotor = 4;
     }
 
     public static class ShooterConstants {
@@ -102,13 +101,14 @@ public class Constants {
  
          /* Shooter Constants */ 
          public static double kTolerance = 0;
-        public static int master = 8;
+        public static int master = 1;
         public static int slave;
     }
     public static class ConveyorConstants {
+        public static final int conveyorMotor = 5;// change to roller motor
         public static final Port colorSensorV3 = Port.kOnboard;
         public static final double minimumProximity = 1800;
-        public static final int motor = 11;
+        public static final int motor = 2;
         public static final int intakePhotoelectric = 0;
         public static final int shooterPhotoelectric = 1;
 

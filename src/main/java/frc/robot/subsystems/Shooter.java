@@ -29,7 +29,6 @@ public class Shooter implements Subsystem {
     private Shooter() {
         stagingMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
         stagingMotor.setInverted(true);
-        stagingMotor.burnFlash();
         PID_CONTROLLER = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
         FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
         //slave.follow(master);

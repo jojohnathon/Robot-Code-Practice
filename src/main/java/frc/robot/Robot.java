@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
     t_subsystem.addOption("Test Arm", TestSubsystem.ARM);
     t_subsystem.addOption("Test Intake", TestSubsystem.INTAKE);
     t_subsystem.addOption("Test Shooter", TestSubsystem.SHOOTER);
-    t_subsystem.addOption("Test Climb", TestSubsystem.CLIMB);
+    //t_subsystem.addOption("Test Climb", TestSubsystem.CLIMB);
     
     m_chooser.setDefaultOption("Shoot First", RobotContainer.getAutonomousCommand(Auto.Selection.SHOOTFIRST));
     m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
@@ -152,6 +152,7 @@ public class Robot extends TimedRobot {
         Shooter.getInstance().setStagingMotor(kickerPower);
         break;
     }
+
   }
 
   /** This function is called once when the robot is disabled. */

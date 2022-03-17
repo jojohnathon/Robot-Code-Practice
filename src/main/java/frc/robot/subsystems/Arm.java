@@ -14,10 +14,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Util;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.IntakeConstants;
 
 public class Arm extends ProfiledPIDSubsystem {
     
-    private static final CANSparkMax motor = Util.createSparkMAX(ArmConstants.armMotor, MotorType.kBrushless);
+    private static final CANSparkMax motor = Util.createSparkMAX(ArmConstants.actuateMotor, MotorType.kBrushless);
     
     private static final Encoder armEncoder = new Encoder(4,3);
     
