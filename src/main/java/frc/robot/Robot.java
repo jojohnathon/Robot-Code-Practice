@@ -30,14 +30,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  public enum TestSubsystem {
-    DRIVETRAIN, ARM, INTAKE, CONVEYOR, SHOOTER, CLIMB;
-  }
-  private TestSubsystem selected_subsystem;
   private String m_autoSelected;
-  private final SendableChooser<TestSubsystem> t_subsystem = new SendableChooser<>();
-  private final SendableChooser<Command> m_chooser = new SendableChooser<>();
-  private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   private RobotContainer robot;
   private PowerDistribution pdp = new PowerDistribution();
   private static boolean use_csV3 = false;
@@ -52,19 +45,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robot = RobotContainer.getInstance();
     pdp.clearStickyFaults();
-    t_subsystem.setDefaultOption("Test Drivetrain", TestSubsystem.DRIVETRAIN);
-    t_subsystem.addOption("Test Arm", TestSubsystem.ARM);
-    t_subsystem.addOption("Test Intake", TestSubsystem.INTAKE);
-    t_subsystem.addOption("Test Shooter", TestSubsystem.SHOOTER);
-    //t_subsystem.addOption("Test Climb", TestSubsystem.CLIMB);
     
-    m_chooser.setDefaultOption("Shoot First", RobotContainer.getAutonomousCommand(Auto.Selection.SHOOTFIRST));
-    m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
-    use_V3.setDefaultOption("No", false);
-    use_V3.addOption("Yes", true);
-    SmartDashboard.putData("Subsystem choices", t_subsystem);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
     Drivetrain.getInstance().resetEncoders();
   }
 
@@ -77,11 +58,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    use_csV3 = use_V3.getSelected();
     CommandScheduler.getInstance().run();
-    // SmartDashboard.putNumber("dt left enc", Drivetrain.getLeftEnc());
-    // SmartDashboard.putNumber("dt right enc", Drivetrain.getRightEnc());
-    SmartDashboard.putNumber("limelight distance", RobotContainer.getDistance());
     
 
   }
@@ -99,10 +76,7 @@ public class Robot extends TimedRobot {
   private Command auto;
   @Override
   public void autonomousInit() {
-    CommandScheduler.getInstance().schedule(auto = m_chooser.getSelected());
     pdp.clearStickyFaults();
-    //CommandScheduler.getInstance().schedule(new VisionTrack());
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
 
   }
 
@@ -131,27 +105,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    selected_subsystem = t_subsystem.getSelected();
-    switch(selected_subsystem) {
-      case DRIVETRAIN:
-        double left = RobotContainer.getThrottle() * DriverConstants.kDriveSens, right = RobotContainer.getAltThrottle() * DriverConstants.kDriveSens;
-        Drivetrain.setOpenLoop(left, right);
-        break;
-      case ARM:
-        double power = RobotContainer.getThrottle() * DriverConstants.kDriveSens;
-        Arm.getInstance().setOpenLoop(power);
-        break;
-      case INTAKE:
-        double conveyorPower = RobotContainer.getThrottle() * DriverConstants.kDriveSens;
-        Intake.getInstance().intake(conveyorPower);
-        Intake.getInstance().setConveyor(conveyorPower);
-        break;
-      case SHOOTER:
-        double shooterPower = RobotContainer.getThrottle() * DriverConstants.kDriveSens, kickerPower = RobotContainer.getAltThrottle() * DriverConstants.kDriveSens;
-        Shooter.getInstance().setOpenLoop(shooterPower);
-        Shooter.getInstance().setStagingMotor(kickerPower);
-        break;
-    }
+    
 
   }
 

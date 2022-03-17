@@ -59,51 +59,18 @@ public class RobotContainer {
     public static AHRS navX; 
     public static Shoot shootCommand;
     private RobotContainer() {
-        /*camera = new PhotonCamera("photonvision");*/
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
-        //drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        //intake.setDefaultCommand(new ConveyorQueue());
-        //shooter.setDefaultCommand(new StagingQueue());
-        //colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
-        //limelightAngle = VisionMount.getInstance();
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         setLEDMode(LEDMode.OFF);
 
         bindOI();
     }
 
-    public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
-        Command auto;
-        if(selectedAuto == Auto.Selection.INTAKEFIRST) {
-            auto = new SequentialCommandGroup(new CargoTrack(), Auto.getIntakeCommand(), new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]), Auto.getShootCommand());
-            switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
-                case 1:
-                    auto = auto.andThen();
-                case 2:
-                    auto = auto.andThen();
-                case 3:
-                    auto = auto.andThen();
-            }
-        } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
-            auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand()/*, Auto.getIntakeCommand()*/);
-            switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
-            case 1:
-                auto = auto.andThen();
-            case 2:
-                auto = auto.andThen();
-            case 3:
-                auto = auto.andThen();
-            }
-        } else {
-            auto = Auto.getShootCommand();
-        }
-        return auto;
-    }
 
     
     public static RobotContainer getInstance() {
@@ -112,14 +79,7 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        /*driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm) //TODO: update conveyor staging logic
-                    .alongWith(new RunCommand( ()->intake.intake(0.85)))
-                    .alongWith(new RunCommand( ()->intake.setConveyor(0.85), intake)))
-                .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
-                    .alongWith(new InstantCommand(intake::stopIntake)));
-        driver_LB.whileHeld((new SmartShoot(getDistance())));
-        driver_X.whileHeld(new HubTrack());
-        driver_Y.whileHeld(new Shoot(AutoConstants.shooterVelocity));*/
+        
     }
 
      /**
