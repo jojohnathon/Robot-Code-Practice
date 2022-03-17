@@ -115,7 +115,7 @@ public class Arm extends ProfiledPIDSubsystem {
         // Set motor, converting voltage to percent voltage
 
 
-        motor.set(setpoint.velocity + output/12); //without feedforward, use PID to correct error
+        motor.set(setpoint.velocity/13.209 + output/12); //without feedforward, use PID to correct error
 
         SmartDashboard.putNumber("pos", setpoint.position);
         SmartDashboard.putNumber("output", output/12);
