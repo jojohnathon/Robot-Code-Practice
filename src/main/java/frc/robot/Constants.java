@@ -110,8 +110,8 @@ public class Constants {
         public static final Port colorSensorV3 = Port.kOnboard;
         public static final double minimumProximity = 1800;
         public static final int motor = 2;
-        public static final int intakePhotoelectric = 0;
-        public static final int shooterPhotoelectric = 1;
+        public static final int intakePhotoelectric = 1;
+        public static final int shooterPhotoelectric = 3;
 
     }
     public static class ClimbConstants {
