@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.RobotContainer;
 import frc.robot.Autonomous.Auto;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.RobotContainer.LEDMode;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.Drive;
 import frc.robot.subsystems.Arm;
@@ -110,6 +111,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(auto != null) auto.cancel();
+    robot.setLEDMode(LEDMode.OFF);
 
   }
 
