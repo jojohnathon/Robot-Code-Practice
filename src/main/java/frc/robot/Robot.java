@@ -119,7 +119,6 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     
-
   }
 
   /** This function is called once when the robot is disabled. */
