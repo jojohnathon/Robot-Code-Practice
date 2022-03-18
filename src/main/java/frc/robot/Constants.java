@@ -57,8 +57,8 @@ public class Constants {
     public static class DrivetrainConstants {
         public static final int
         /* Drivetrain motor IDs */ 
-            leftMaster = 1, // TalonFX Masters & Slaves currently reversed
-            leftSlave = 3, // TalonFX
+            leftMaster = 3, // TalonFX right Masters & Slaves currently reversed
+            leftSlave = 1, // TalonFX
             rightMaster = 2, // TalonFX
             rightSlave = 4; // TalonFX
         
