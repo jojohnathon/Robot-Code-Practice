@@ -100,8 +100,8 @@ public class RobotContainer {
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
-        operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.1), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
-        operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.1), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
+        operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
+        operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
         /*operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber));
         operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber));*/
     }

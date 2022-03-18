@@ -57,7 +57,7 @@ public class Arm extends ProfiledPIDSubsystem {
         motor.configPeakCurrentLimit(0);
         motor.enableCurrentLimit(true);
         */
-        motor.setInverted(true);
+        motor.setInverted(false);
         setGoal(State.STORED);
 
         disable();
