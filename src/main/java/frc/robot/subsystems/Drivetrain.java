@@ -40,8 +40,8 @@ public class Drivetrain implements Subsystem {
     public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()));
     
     private Drivetrain() {
-        leftSlave.follow(leftMaster);
-        rightSlave.follow(rightMaster);
+        //leftSlave.follow(leftMaster);
+        //rightSlave.follow(rightMaster);
 
         // Inverting opposite sides of the drivetrain
         List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
