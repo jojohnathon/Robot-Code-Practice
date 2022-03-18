@@ -70,7 +70,7 @@ public class RobotContainer {
     public static AHRS navX; 
     public static Shoot shootCommand;
     private RobotContainer() {
-        //navX = new AHRS(Port.kMXP);
+        navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CurvatureDrive2019));
         //arm = Arm.getInstance();
