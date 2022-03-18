@@ -61,7 +61,7 @@ public class Drivetrain implements Subsystem {
         //SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Master output: ", rightMaster.getMotorOutputPercent());
         SmartDashboard.putNumber("falcon500 stator", leftSlave.getStatorCurrent());
-
+        SmartDashboard.putNumber("falcon500 bus", leftSlave.getBusVoltage());
         SmartDashboard.putNumber("falcon500 supply", leftSlave.getSupplyCurrent());
         SmartDashboard.putNumber("falcon500 temp", leftSlave.getTemperature());
         //SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
