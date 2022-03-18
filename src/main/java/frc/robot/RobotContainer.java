@@ -97,7 +97,9 @@ public class RobotContainer {
         operator_X.whenHeld(actuation = new ActuateArm())
         .whileHeld(new RunCommand(() -> intake.intake(-0.5), intake)
             .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
-        .whenReleased(new InstantCommand(intake::stopIntake).alongWith(new InstantCommand(actuation::stop)));
+        .whenReleased(new InstantCommand(intake::stopIntake)
+            .alongWith(new InstantCommand(actuation::stop)
+            .alongWith(new InstantCommand(() -> actuation = new ActuateArm()))));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));

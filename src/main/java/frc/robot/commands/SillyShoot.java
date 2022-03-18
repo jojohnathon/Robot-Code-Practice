@@ -32,12 +32,13 @@ public class SillyShoot implements Command {
         if(Shooter.getShooterVelocity() > 3000){ //TODO: encoder tuning
             Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50);     
-
+            Shooter.getInstance().setStagingMotor(0.5);
             encoderFallback.reset();
         } else if(encoderFallback.hasElapsed(1.5)){
             Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50); 
-
+            
+            Shooter.getInstance().setStagingMotor(0.3);
             
         }
         
