@@ -29,7 +29,7 @@ public class SillyShoot implements Command {
 
         Shooter.getInstance().setOpenLoop(0.65);
 
-        if(Shooter.getShooterVelocity() > 3000){
+        if(Shooter.getShooterVelocity() > 3000){ //TODO: encoder tuning
             Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50);     
 
