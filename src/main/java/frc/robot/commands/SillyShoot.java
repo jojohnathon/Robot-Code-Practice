@@ -12,7 +12,7 @@ public class SillyShoot implements Command {
     private Subsystem[] requirements = {Shooter.getInstance(), Intake.getInstance()};
     
     Timer encoderFallback;
-    double percentPower;
+    private double percentPower;
     
     public SillyShoot() {
         this(0.7);
