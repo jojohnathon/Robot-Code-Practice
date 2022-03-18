@@ -10,6 +10,7 @@ import frc.robot.Constants.DriverConstants;
 import frc.robot.RobotContainer.LEDMode;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.Drive;
+import frc.robot.commands.SillyShoot;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -89,7 +90,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-    CommandScheduler.getInstance().schedule(m_chooser.getSelected());
+    CommandScheduler.getInstance().schedule(new SillyShoot());
   }
 
   /** This function is called periodically during autonomous. */
