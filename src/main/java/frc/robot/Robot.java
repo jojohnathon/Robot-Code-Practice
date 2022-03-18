@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     use_csV3 = use_V3.getSelected();
-
+    SmartDashboard.putNumber("pdp channel 0", pdp.getCurrent(0));
   }
 
   /**
