@@ -87,7 +87,7 @@ public class RobotContainer {
     static ActuateArm actuation;
     private void bindOI() {
         driver_RB.whenHeld(actuation = new ActuateArm())
-            .whileHeld(new RunCommand(() -> intake.intake(0.5), intake)
+            .whileHeld(new RunCommand(() -> intake.intake(0.9), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
             .whenReleased(new InstantCommand(intake::stopIntake)
                 .alongWith(new InstantCommand(actuation::stop)

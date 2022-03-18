@@ -12,10 +12,15 @@ public class SillyShoot implements Command {
     private Subsystem[] requirements = {Shooter.getInstance(), Intake.getInstance()};
     
     Timer encoderFallback;
+    double percentPower;
     
     public SillyShoot() {
+        this(0.7);
+    }
+
+    public SillyShoot(double power) {
+        percentPower = power;
         encoderFallback = new Timer();
-        
     }
 
     @Override
@@ -27,9 +32,9 @@ public class SillyShoot implements Command {
     @Override
     public void execute(){
 
-        Shooter.getInstance().setOpenLoop(0.65);
+        Shooter.getInstance().setOpenLoop(percentPower);
 
-        if(Shooter.getShooterVelocity() > 3000){ //TODO: encoder tuning
+        if(Shooter.getShooterVelocity() > 3000 * (percentPower / 0.7)){ //TODO: encoder tuning
             //Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50);     
             Shooter.getInstance().setStagingMotor(0.5);
