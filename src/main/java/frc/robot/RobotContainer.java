@@ -73,15 +73,15 @@ public class RobotContainer {
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CurvatureDrive2019));
-        //arm = Arm.getInstance();
-        //intake = Intake.getInstance();
-        //climber = Climber.getInstance();
-        //shooter = Shooter.getInstance();
-        //shooter.setDefaultCommand(new StagingQueue());
-        //limelight = NetworkTableInstance.getDefault().getTable("limelight");
-        //setLEDMode(LEDMode.OFF);
+        arm = Arm.getInstance();
+        intake = Intake.getInstance();
+        climber = Climber.getInstance();
+        shooter = Shooter.getInstance();
+        shooter.setDefaultCommand(new StagingQueue());
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        setLEDMode(LEDMode.OFF);
 
-        //bindOI();
+        bindOI();
     }
 
     private void bindOI() {
