@@ -46,10 +46,10 @@ public class Util {
      */
     public static TalonSRX createTalonSRX(int id, int continuousCurrentLimit, int peakCurrentLimit, int peakCurrentDuration) {
         TalonSRXConfiguration config = new TalonSRXConfiguration();
-        config.continuousCurrentLimit = continuousCurrentLimit;
+        /*config.continuousCurrentLimit = continuousCurrentLimit;
         config.peakCurrentLimit = peakCurrentLimit;
         config.peakCurrentDuration = peakCurrentDuration;
-        config.voltageCompSaturation = voltageCompensation;
+        config.voltageCompSaturation = voltageCompensation;*/
 
         TalonSRX talon = new TalonSRX(id);
         talon.configFactoryDefault();
