@@ -28,8 +28,13 @@ public class ActuateArm implements Command {
     }
 
     public boolean isFinished() {
-        if(timer.hasElapsed(1.0)) return true;
+        if(timer.hasElapsed(1.0)) {
+            timer.stop(); 
+        }
         return false;
+    }
+    public void stop() {
+        end(false);
     }
 
     public void end(boolean interrupted) {
