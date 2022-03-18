@@ -25,11 +25,11 @@ public class Drivetrain implements Subsystem {
     private static Drivetrain instance = null;
     private static final TalonFX
         leftMaster = Util.createTalonFX(DrivetrainConstants.leftMaster),
-        leftSlave = Util.createTalonFX(DrivetrainConstants.leftSlave),
-        rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster),
-        rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
+        //leftSlave = Util.createTalonFX(DrivetrainConstants.leftSlave),
+        rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster);
+        //rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
     
-    public static final List<TalonFX> motors = List.of(/*leftMaster, leftSlave,*/ rightMaster, rightSlave);
+    public static final List<TalonFX> motors = List.of(/*leftMaster, leftSlave,*/ rightMaster /*, rightSlave*/);
 
 
     public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(DrivetrainConstants.kTrackWidth);
@@ -44,8 +44,8 @@ public class Drivetrain implements Subsystem {
         //rightSlave.follow(rightMaster);
 
         // Inverting opposite sides of the drivetrain
-        List.of(leftMaster, leftSlave).forEach(motor -> motor.setInverted(false));
-        List.of(rightMaster, rightSlave).forEach(motor -> motor.setInverted(true));
+        List.of(leftMaster /*, leftSlave*/).forEach(motor -> motor.setInverted(false));
+        List.of(rightMaster /*, rightSlave*/).forEach(motor -> motor.setInverted(true));
 
         register();
     }
@@ -56,9 +56,9 @@ public class Drivetrain implements Subsystem {
         getLeftEncMeters(),
         getRightEncMeters());
         SmartDashboard.putNumber("Left Master output: ", leftMaster.getMotorOutputPercent());
-        SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
+        //SmartDashboard.putNumber("Left Slave output: ", leftSlave.getMotorOutputPercent());
         SmartDashboard.putNumber("Right Master output: ", rightMaster.getMotorOutputPercent());
-        SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
+        //SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
         
     }
 

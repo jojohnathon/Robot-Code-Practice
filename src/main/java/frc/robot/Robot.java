@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
 
     Drivetrain.getInstance().resetEncoders();
-    Arm.getInstance().resetEncoders();
+    //Arm.getInstance().resetEncoders();
   }
 
   /**
@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(auto != null) auto.cancel();
-    robot.setLEDMode(LEDMode.OFF);
+    //robot.setLEDMode(LEDMode.OFF);
 
   }
 
