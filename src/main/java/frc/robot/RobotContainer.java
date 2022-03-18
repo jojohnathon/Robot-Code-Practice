@@ -14,6 +14,7 @@ import frc.robot.commands.SillyShoot;
 import frc.robot.commands.SmartShoot;
 import frc.robot.commands.StagingQueue;
 import frc.robot.commands.TurnXDegrees;
+import frc.robot.commands.ActuateArm;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.subsystems.*;
@@ -84,18 +85,16 @@ public class RobotContainer {
     }
 
     private void bindOI() {
-        driver_RB.whenPressed(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(0.5))
-            .whenReleased(new RunCommand( () -> arm.setOpenLoop(-0.05)).withTimeout(0.5) );
-        driver_RB.whileHeld(new RunCommand(() -> intake.intake(0.5), intake)
+        driver_RB.whenHeld(new ActuateArm())
+            .whileHeld(new RunCommand(() -> intake.intake(0.5), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
             .whenReleased(new InstantCommand(intake::stopIntake));
         driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
-        operator_X.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm).withTimeout(0.5)
-                .alongWith(new RunCommand(() -> intake.intake(-0.5), intake)
-                .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))))
-            .whenReleased(new InstantCommand(intake::stopIntake)
-                .alongWith(new RunCommand( () -> arm.setOpenLoop(-0.05)).withTimeout(0.5)) );
+        operator_X.whenHeld(new ActuateArm())
+            .whileHeld(new RunCommand(() -> intake.intake(-0.5), intake)
+                .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
+            .whenReleased(new InstantCommand(intake::stopIntake));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
