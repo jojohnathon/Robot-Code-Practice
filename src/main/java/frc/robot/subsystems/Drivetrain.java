@@ -8,6 +8,7 @@ import frc.robot.Util;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -25,9 +26,9 @@ public class Drivetrain implements Subsystem {
     private static Drivetrain instance = null;
     private static final TalonFX
         leftMaster = Util.createTalonFX(DrivetrainConstants.leftMaster),
-        //leftSlave = Util.createTalonFX(DrivetrainConstants.leftSlave),
-        rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster);
-        //rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
+        leftSlave = Util.createTalonFX(DrivetrainConstants.leftSlave),
+        rightMaster = Util.createTalonFX(DrivetrainConstants.rightMaster),
+        rightSlave = Util.createTalonFX(DrivetrainConstants.rightSlave);
     
     public static final List<TalonFX> motors = List.of(/*leftMaster, leftSlave,*/ rightMaster /*, rightSlave*/);
 
@@ -42,7 +43,8 @@ public class Drivetrain implements Subsystem {
     private Drivetrain() {
         //leftSlave.follow(leftMaster);
         //rightSlave.follow(rightMaster);
-
+        leftSlave.setNeutralMode(NeutralMode.Coast);
+        rightSlave.setNeutralMode(NeutralMode.Coast);
         // Inverting opposite sides of the drivetrain
         List.of(leftMaster /*, leftSlave*/).forEach(motor -> motor.setInverted(false));
         List.of(rightMaster /*, rightSlave*/).forEach(motor -> motor.setInverted(true));
