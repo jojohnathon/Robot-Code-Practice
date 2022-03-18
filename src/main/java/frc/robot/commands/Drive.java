@@ -114,30 +114,6 @@ public class Drive implements Command {
                 }
                 
                 break;
-            case SillyDrive:
-                if (throttle != 0) {
-                    /*throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
-                    turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
-
-                    DifferentialDriveWheelSpeeds _wSpeeds = Drivetrain.KINEMATICS.toWheelSpeeds(new ChassisSpeeds(throttle, 0, turn));
-                    _wSpeeds.desaturate(DrivetrainConstants.kMaxSpeedMPS);
-
-                    left = _wSpeeds.leftMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;
-                    right = _wSpeeds.rightMetersPerSecond / DrivetrainConstants.kMaxSpeedMPS;*/
-
-                    // Convert voltages to percent voltages
-                    //left /= Constants.kMaxVoltage;
-                    //right /= Constants.kMaxVoltage;*/
-                    left = (throttle + throttle * turn )* DriverConstants.kDriveSens;
-                    right = (throttle - throttle * turn) * DriverConstants.kDriveSens;
-                    //if(Math.abs(left) > DriverConstants.kDriveSens) left = Math.signum(left);
-                    //if(Math.abs(right) > 1) right = Math.signum(right);
-                } else {
-                    // Turns in place when there is no throttle input
-                    left = turn * DriverConstants.kTurnInPlaceSens;
-                    right = -turn * DriverConstants.kTurnInPlaceSens;
-                }
-                break;
             default:
                 left = right = 0;
                 break;
