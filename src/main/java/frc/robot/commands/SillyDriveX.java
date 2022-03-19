@@ -31,4 +31,8 @@ public class SillyDriveX implements Command {
         double avgdist = (Drivetrain.getLeftEncMeters() + Drivetrain.getRightEncMeters()) / 2;
         return (avgdist > this.meters);
     }
+
+    public void end(boolean interrupted) {
+        Drivetrain.getInstance().stop();
+    }
 }
