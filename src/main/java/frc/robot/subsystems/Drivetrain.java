@@ -39,7 +39,6 @@ public class Drivetrain implements Subsystem {
     public static final ProfiledPIDController LEFT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
     public static final ProfiledPIDController RIGHT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
     public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()));
-    
     private Drivetrain() {
         //leftSlave.follow(leftMaster);
         //rightSlave.follow(rightMaster);
@@ -67,10 +66,22 @@ public class Drivetrain implements Subsystem {
         //SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
         
     }
+    private static int kInverted = 1; //1 or -1
+    public static int getkInvert() { //only for teleop driving, up to user to read this flag
+        return kInverted;
+    }
 
     public static void setOpenLoop(double left, double right) {
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
+    }
+
+    public static void setInverted(boolean status) { //For defense, the back of the robot becomes the front
+        if(status) {
+            kInverted = -1;
+        } else {
+            kInverted = 1;
+        }
     }
 
     public void stop() {

@@ -37,9 +37,13 @@ public class Robot extends TimedRobot {
   private RobotContainer robot;
   private PowerDistribution pdp = new PowerDistribution();
   private static boolean use_csV3 = false;
+  private enum TeleopStrat {
+    OFFENSE, DEFENSE
+  }
   
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
+  private final SendableChooser<TeleopStrat> teleopStrat = new SendableChooser<>();
   public static boolean useV3() {
     return use_csV3; //prevent unwanted writing operations but allow reading
   }
@@ -56,8 +60,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
     use_V3.setDefaultOption("Use photoelectric indexing", false);
     use_V3.addOption("Use colorsensorV3 indexing", true);
+    teleopStrat.setDefaultOption("Offense", TeleopStrat.OFFENSE);
+    teleopStrat.addOption("Defense", TeleopStrat.DEFENSE);
     SmartDashboard.putData("Auto choices", m_chooser);
     SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
+    SmartDashboard.putData("Teleop Strategy", teleopStrat);
 
     Drivetrain.getInstance().resetEncoders();
     //Arm.getInstance().resetEncoders();
@@ -120,7 +127,14 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+    switch(teleopStrat.getSelected()) {
+      case OFFENSE:
+        Drivetrain.setInverted(false);
+        break;
+      case DEFENSE:
+        Drivetrain.setInverted(true);
+        break;
+    }
   }
 
   /** This function is called once when the robot is disabled. */
