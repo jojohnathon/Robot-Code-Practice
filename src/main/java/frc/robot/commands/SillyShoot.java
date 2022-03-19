@@ -10,12 +10,12 @@ import frc.robot.subsystems.Shooter;
 
 public class SillyShoot implements Command {
     private Subsystem[] requirements = {Shooter.getInstance(), Intake.getInstance()};
-    
+    static final double defaultSpeed = 0.65;
     Timer encoderFallback;
     private double percentPower;
     
     public SillyShoot() {
-        this(0.7);
+        this(defaultSpeed);
     }
 
     public SillyShoot(double power) {
@@ -34,7 +34,7 @@ public class SillyShoot implements Command {
 
         Shooter.getInstance().setOpenLoop(percentPower);
 
-        if(Shooter.getShooterVelocity() > 3000 * (percentPower / 0.7)){ //TODO: encoder tuning
+        if(Shooter.getShooterVelocity() > 3000 * (percentPower / defaultSpeed)){ //TODO: encoder tuning
             //Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50);     
             Shooter.getInstance().setStagingMotor(0.5);
