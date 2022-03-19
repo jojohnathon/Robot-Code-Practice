@@ -40,13 +40,13 @@ public class Drivetrain implements Subsystem {
     public static final ProfiledPIDController RIGHT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
     public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()));
     private Drivetrain() {
-        //leftSlave.follow(leftMaster);
-        //rightSlave.follow(rightMaster);
-        leftSlave.setNeutralMode(NeutralMode.Coast);
-        rightSlave.setNeutralMode(NeutralMode.Coast);
+        leftSlave.follow(leftMaster);
+        rightSlave.follow(rightMaster);
+        //leftSlave.setNeutralMode(NeutralMode.Coast);
+        //rightSlave.setNeutralMode(NeutralMode.Coast);
         // Inverting opposite sides of the drivetrain
-        List.of(leftMaster /*, leftSlave*/).forEach(motor -> motor.setInverted(false));
-        List.of(rightMaster /*, rightSlave*/).forEach(motor -> motor.setInverted(true));
+        List.of(leftMaster , leftSlave).forEach(motor -> motor.setInverted(false));
+        List.of(rightMaster , rightSlave).forEach(motor -> motor.setInverted(true));
 
         register();
     }

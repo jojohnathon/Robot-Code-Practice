@@ -33,7 +33,12 @@ public class Drive implements Command {
     public void execute(){
         // Retrieving the deadbanded throttle and turn values (the controller joystick values)
         double throttle = RobotContainer.getThrottle() * Drivetrain.getkInvert();
-        double turn = RobotContainer.getTurn() * Drivetrain.getkInvert();
+        double turn = RobotContainer.getTurn(); //* Drivetrain.getkInvert();
+        
+        if(Drivetrain.getkInvert() == -1) {
+            turn *= Math.signum(throttle) * -1;
+        }
+
         double altThrottle = RobotContainer.getAltThrottle() * Drivetrain.getkInvert();
         SmartDashboard.putNumber("turn input", turn);
         SmartDashboard.putNumber("throttle input", throttle);
