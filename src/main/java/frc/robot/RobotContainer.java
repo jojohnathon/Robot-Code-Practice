@@ -77,7 +77,7 @@ public class RobotContainer {
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        shooter.setDefaultCommand(new StagingQueue());
+        //shooter.setDefaultCommand(new StagingQueue());
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
         setLEDMode(LEDMode.OFF);
 
@@ -91,15 +91,15 @@ public class RobotContainer {
         driver_RB.whenHeld(driversActuation = new ActuateArm())
             .whileHeld(new RunCommand(() -> intake.intake(0.9), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
-            .whenReleased(new InstantCommand(intake::stopIntake)
-                .alongWith(new InstantCommand(driversActuation::stop)));
+            .whenReleased(new InstantCommand(intake::stopIntake));
+                //.alongWith(new InstantCommand(driversActuation::stop)));
         driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
         operator_X.whenHeld(operatorsActuation = new ActuateArm())
             .whileHeld(new RunCommand(() -> intake.intake(-0.5), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
-            .whenReleased(new InstantCommand(intake::stopIntake)
-                .alongWith(new InstantCommand(operatorsActuation::stop)));
+            .whenReleased(new InstantCommand(intake::stopIntake));
+                //.alongWith(new InstantCommand(operatorsActuation::stop)));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
