@@ -5,6 +5,7 @@ import java.util.Set;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Arm;
@@ -43,7 +44,8 @@ public class ActuateArm implements Command {
     public void end(boolean interrupted) {
         Arm.getInstance().setOpenLoop(0.0);
         timer.stop();
-        CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05)).withTimeout(timer.get())); //retract arm TODO: test whether or not this can require Arm subsystem and work
+        CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05)).withTimeout(timer.get())
+            .andThen(new InstantCommand(() -> Arm.getInstance().stopArm()))); //retract arm TODO: test whether or not this can require Arm subsystem and work
     }
 
     public Set<Subsystem> getRequirements() {

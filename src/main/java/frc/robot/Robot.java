@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     if(auto != null) auto.cancel();
-    //robot.setLEDMode(LEDMode.OFF);
+    robot.setLEDMode(LEDMode.OFF);
 
   }
 

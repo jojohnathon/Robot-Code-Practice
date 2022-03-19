@@ -126,7 +126,7 @@ public class Constants {
         /*
             Servo Constants
         */
-        public static final int servoChannel = 0;
+        //public static final int servoChannel = 0;
 
         /* Color Sensor Constants */
         public static final int minimumProximity = 450;
@@ -144,7 +144,7 @@ public class Constants {
         public static double kDDist = 0;
         public static double kDistTolerance = 0;
         /* For calculating distance from goal */
-        public static double mountAngle = 0;
+        public static double mountAngle = 45; //TODO: verify distance constants
         public static double goalHeightInches = 35.8+2.6;
         public static double limelightHeightInches = 35.8;
     }
