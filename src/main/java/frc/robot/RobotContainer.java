@@ -84,8 +84,8 @@ public class RobotContainer {
         bindOI();
     }
     
-    static ActuateArm driversActuation;
-    static ActuateArm operatorsActuation;
+    private static ActuateArm driversActuation;
+    private static ActuateArm operatorsActuation;
 
     private void bindOI() {
         driver_RB.whenHeld(driversActuation = new ActuateArm())
