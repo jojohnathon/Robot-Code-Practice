@@ -33,6 +33,7 @@ public class Shooter implements Subsystem {
         PID_CONTROLLER = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
         FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
         //slave.follow(master);
+        register();
     }
 
     public static Shooter getInstance() {
