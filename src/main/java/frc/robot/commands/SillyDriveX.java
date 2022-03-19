@@ -14,21 +14,30 @@ public class SillyDriveX implements Command {
         return Set.of(Drivetrain.getInstance());
     }
     private double meters;
+    private boolean reverse;
+
+    public SillyDriveX(double meters, boolean reverse) {
+        this.meters = meters;
+        this.reverse = reverse;
+    }
 
     public SillyDriveX(double meters) {
         this.meters = meters;
+        this.reverse = false;
     }
     
     public void initialize() {
         Drivetrain.getInstance().resetEncoders();
     }
     public void execute() {
-        Drivetrain.setOpenLoop(DrivetrainConstants.sdx, DrivetrainConstants.sdx);
+        if (this.reverse) Drivetrain.setOpenLoop(-DrivetrainConstants.sdx, -DrivetrainConstants.sdx);
+        else Drivetrain.setOpenLoop(-DrivetrainConstants.sdx, -DrivetrainConstants.sdx);
     }
 
     public boolean isFinished() {
         double avgdist = (Drivetrain.getLeftEncMeters() + Drivetrain.getRightEncMeters()) / 2;
-        return (avgdist > this.meters);
+        if (this.reverse) return (avgdist < -this.meters);
+        else return (avgdist > this.meters);
     }
 
     public void end(boolean interrupted) {
