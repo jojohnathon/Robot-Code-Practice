@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-    CommandScheduler.getInstance().schedule(new SillyDriveX(Units.InchesToMeters(32.3), true).andThen((new SillyShoot()).withTimeout(5).andThen(new RunCommand(() -> Drivetrain.setOpenLoop(-0.2, -0.2), Drivetrain.getInstance()).withTimeout(3))));
+    CommandScheduler.getInstance().schedule(new SillyDriveX(Units.InchesToMeters(35.3), true).andThen((new SillyShoot()).withTimeout(5).andThen(new RunCommand(() -> Drivetrain.setOpenLoop(-0.2, -0.2), Drivetrain.getInstance()).withTimeout(2))));
     //CommandScheduler.getInstance().schedule(new SillyDriveX(0.5, true));
   }
 
