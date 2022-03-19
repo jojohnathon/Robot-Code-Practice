@@ -25,12 +25,12 @@ public class ActuateArm implements Command {
     @Override
     public void execute() {
         Arm.getInstance().setOpenLoop(0.05);
-    }
-
-    public boolean isFinished() {
         if(timer.hasElapsed(1.0)) {
             timer.stop(); 
         }
+    }
+
+    public boolean isFinished() {
         return false;
     }
     public void stop() {
