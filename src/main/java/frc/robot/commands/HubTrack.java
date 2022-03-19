@@ -81,6 +81,7 @@ public class HubTrack implements Command {
     @Override
     public void end(boolean interrupted) { //TODO: return limelight servo to driving position
         RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
+        RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
         Drivetrain.setOpenLoop(0.0, 0.0);
     }
 
