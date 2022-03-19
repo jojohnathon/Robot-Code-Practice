@@ -55,8 +55,8 @@ public class HubTrack implements Command {
         right = -turn /** DrivetrainConstants.kMaxSpeedMPS*/ * DriverConstants.kTurnInPlaceSens;
         double maxMagnitude;
         if((maxMagnitude = Math.max(Math.abs(left), Math.abs(right))) > DriverConstants.kTurnInPlaceSens) {
-            left /= maxMagnitude * DriverConstants.kDriveSens;
-            right /= maxMagnitude * DriverConstants.kDriveSens;
+            left /= maxMagnitude * DriverConstants.kTurnInPlaceSens;
+            right /= maxMagnitude * DriverConstants.kTurnInPlaceSens;
         }
         //left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
         //right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
