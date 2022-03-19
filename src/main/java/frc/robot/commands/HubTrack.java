@@ -51,11 +51,15 @@ public class HubTrack implements Command {
 
         
         // Turns in place when there is no throttle input
-        left = turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
-        right = -turn * DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kTurnInPlaceSens;
-
-        left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
-        right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
+        left = turn /** DrivetrainConstants.kMaxSpeedMPS*/ * DriverConstants.kTurnInPlaceSens;
+        right = -turn /** DrivetrainConstants.kMaxSpeedMPS*/ * DriverConstants.kTurnInPlaceSens;
+        double maxMagnitude;
+        if((maxMagnitude = Math.max(Math.abs(left), Math.abs(right))) > DriverConstants.kTurnInPlaceSens) {
+            left /= maxMagnitude;
+            right /= maxMagnitude;
+        }
+        //left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
+        //right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
         
 
         if(turnError == 0) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
