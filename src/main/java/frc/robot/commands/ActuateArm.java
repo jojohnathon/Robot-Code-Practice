@@ -14,12 +14,12 @@ public class ActuateArm implements Command {
     private static Subsystem[] requirements = {Arm.getInstance()};
     private Timer timer;
     public ActuateArm() {
-
+        timer = new Timer();
     }
 
     @Override
     public void initialize() {
-        timer = new Timer();
+        timer.reset();
         timer.start();
     }
 

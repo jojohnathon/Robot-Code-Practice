@@ -92,16 +92,14 @@ public class RobotContainer {
             .whileHeld(new RunCommand(() -> intake.intake(0.9), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
             .whenReleased(new InstantCommand(intake::stopIntake)
-                .alongWith(new InstantCommand(driversActuation::stop)
-                .alongWith(new InstantCommand(() -> driversActuation = new ActuateArm()))));
+                .alongWith(new InstantCommand(driversActuation::stop)));
         driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
         operator_X.whenHeld(operatorsActuation = new ActuateArm())
-        .whileHeld(new RunCommand(() -> intake.intake(-0.5), intake)
-            .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
-        .whenReleased(new InstantCommand(intake::stopIntake)
-            .alongWith(new InstantCommand(operatorsActuation::stop)
-            .alongWith(new InstantCommand(() -> operatorsActuation = new ActuateArm()))));
+            .whileHeld(new RunCommand(() -> intake.intake(-0.5), intake)
+                .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
+            .whenReleased(new InstantCommand(intake::stopIntake)
+                .alongWith(new InstantCommand(operatorsActuation::stop)));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
