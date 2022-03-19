@@ -25,7 +25,7 @@ public class ActuateArm implements Command {
     @Override
     public void execute() {
         
-        if(timer.hasElapsed(1.0)) {
+        if(timer.hasElapsed(1.7)) {
             Arm.getInstance().setOpenLoop(0.0);
             timer.stop(); 
         } else {
@@ -42,7 +42,7 @@ public class ActuateArm implements Command {
 
     public void end(boolean interrupted) {
         timer.stop();
-        CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05)).withTimeout(timer.get())); //retract arm TODO: test whether or not this can require Arm subsystem and work
+        //CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05)).withTimeout(timer.get())); //retract arm TODO: test whether or not this can require Arm subsystem and work
     }
 
     public Set<Subsystem> getRequirements() {
