@@ -35,7 +35,7 @@ public class Drive implements Command {
         double throttle = RobotContainer.getThrottle() * Drivetrain.getkInvert();
         double turn = RobotContainer.getTurn(); //* Drivetrain.getkInvert();
         
-        if(Drivetrain.getkInvert() == -1) {
+        if(Drivetrain.getkInvert() == -1 && throttle != 0) {
             turn *= Math.signum(throttle) * -1;
         }
 
