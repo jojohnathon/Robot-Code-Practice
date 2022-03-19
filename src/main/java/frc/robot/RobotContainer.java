@@ -84,22 +84,20 @@ public class RobotContainer {
         bindOI();
     }
     
-    private static ActuateArm driversActuation;
-    private static ActuateArm operatorsActuation;
 
     private void bindOI() {
-        driver_RB.whenHeld(driversActuation = new ActuateArm())
+        driver_RB.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1))
             .whileHeld(new RunCommand(() -> intake.intake(0.9), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
-            .whenReleased(new InstantCommand(intake::stopIntake));
-                //.alongWith(new InstantCommand(driversActuation::stop)));
+            .whenReleased(new InstantCommand(() -> intake.stopIntake())
+                .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1)));
         driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
-        operator_X.whenHeld(operatorsActuation = new ActuateArm())
-            .whileHeld(new RunCommand(() -> intake.intake(-0.5), intake)
+        operator_X.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1))
+            .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
                 .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
-            .whenReleased(new InstantCommand(intake::stopIntake));
-                //.alongWith(new InstantCommand(operatorsActuation::stop)));
+            .whenReleased(new InstantCommand(() -> intake.stopIntake())
+                .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1)));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake));
         operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
         operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));

@@ -42,7 +42,7 @@ public class ActuateArm implements Command {
     }
 
     public void end(boolean interrupted) {
-        Arm.getInstance().setOpenLoop(0.0);
+        Arm.getInstance().stopArm();
         timer.stop();
         CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(timer.get())
             .andThen(new InstantCommand(() -> Arm.getInstance().stopArm()))); //retract arm TODO: test whether or not this can require Arm subsystem and work
