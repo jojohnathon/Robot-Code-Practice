@@ -32,14 +32,11 @@ public class Drive implements Command {
     @Override
     public void execute(){
         // Retrieving the deadbanded throttle and turn values (the controller joystick values)
-        double throttle = RobotContainer.getThrottle() * Drivetrain.getkInvert();
+        double throttle = RobotContainer.getThrottle();
         double turn = RobotContainer.getTurn(); //* Drivetrain.getkInvert();
         
-        if(Drivetrain.getkInvert() == -1 && throttle != 0) {
-            turn *= Math.signum(throttle) * -1;
-        }
-
-        double altThrottle = RobotContainer.getAltThrottle() * Drivetrain.getkInvert();
+        
+        double altThrottle = RobotContainer.getAltThrottle();
         SmartDashboard.putNumber("turn input", turn);
         SmartDashboard.putNumber("throttle input", throttle);
 
@@ -49,6 +46,8 @@ public class Drive implements Command {
             case CurvatureDrive2019:
                 // Differential drive as long as throttle is greater than zero (deadbanded).
                 if (throttle != 0) {
+                    throttle *= Drivetrain.getkInvert();
+                    turn *= Drivetrain.getkInvert();
                     left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
                     right = (throttle - throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
 
@@ -59,7 +58,6 @@ public class Drive implements Command {
                         left = left / maxMagnitude * DriverConstants.kDriveSens;
                         right = right / maxMagnitude * DriverConstants.kDriveSens;
                     } 
-
                 } else {
                     // Turns in place when there is no throttle input
                     left = turn * DriverConstants.kTurnInPlaceSens;
