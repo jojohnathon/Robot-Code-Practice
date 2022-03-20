@@ -77,4 +77,8 @@ public class Timeframe<N extends Number> {
     public void forEach(Consumer<? super N> action) {
         frame.forEach(action);
     }
+
+    public void reset() {
+        frame.clear();
+    }
 }

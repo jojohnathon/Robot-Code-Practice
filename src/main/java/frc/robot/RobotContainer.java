@@ -78,7 +78,7 @@ public class RobotContainer {
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
         //shooter.setDefaultCommand(new StagingQueue());
-        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        limelight = NetworkTableInstance.getDefault().getTable("limelight-intake");
         setLEDMode(LEDMode.OFF);
 
         bindOI();
@@ -270,7 +270,7 @@ public class RobotContainer {
     }
 
     public enum IntakeVisionPipeline {
-        RED(0), BLUE(1), ROBOT(3), DRIVER(2), INVALID(4);
+        RED(2), BLUE(1), ROBOT(0), DRIVER(3), INVALID(4);
 
         public int val;
 
