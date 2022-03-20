@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
     if(auto != null) auto.cancel();
     robot.setLEDMode(LEDMode.OFF);
 
-    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance()));
+    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.64), Shooter.getInstance()));
   }
 
   /** This function is called periodically during operator control. */
