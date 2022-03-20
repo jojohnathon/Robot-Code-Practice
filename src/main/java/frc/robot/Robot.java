@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-    CommandScheduler.getInstance().schedule(new SillyDriveX(Units.InchesToMeters(35.3), true).andThen(new HubTrack()).andThen((new SillyShoot()).withTimeout(5).andThen(new RunCommand(() -> Drivetrain.setOpenLoop(-0.2, -0.2), Drivetrain.getInstance()).withTimeout(2))));
+    CommandScheduler.getInstance().schedule(new SillyDriveX(Units.InchesToMeters(33.8), true).andThen(new HubTrack().withTimeout(3.0)).andThen((new SillyShoot()).withTimeout(3).andThen(new RunCommand(() -> Drivetrain.setOpenLoop(-0.2, -0.2), Drivetrain.getInstance()).withTimeout(2))));
     CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.5).andThen(new InstantCommand(() -> Arm.getInstance().stopArm())));
     //CommandScheduler.getInstance().schedule(new SillyDriveX(0.5, true));
   }
@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
     if(auto != null) auto.cancel();
     robot.setLEDMode(LEDMode.OFF);
 
-    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.64), Shooter.getInstance()));
+    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance()));
   }
 
   /** This function is called periodically during operator control. */
