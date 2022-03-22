@@ -136,6 +136,8 @@ public class RobotContainer {
                 new DriveXMeters(AutoConstants.distToCargo + AutoConstants.hubXOffset - AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])
             ); 
 
+        } else if(selectedAuto == Auto.Selection.SILLY) {
+            auto = Auto.getSillyAuto();
         } else {
             auto = null;
         }

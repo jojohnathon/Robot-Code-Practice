@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
     pdp.clearStickyFaults();
     m_chooser.setDefaultOption("Shoot First", RobotContainer.getAutonomousCommand(Auto.Selection.SHOOTFIRST));
     m_chooser.addOption("Intake First", RobotContainer.getAutonomousCommand(Auto.Selection.INTAKEFIRST));
+    m_chooser.addOption("Be Silly", RobotContainer.getAutonomousCommand(Auto.Selection.SILLY));
     use_V3.setDefaultOption("Use photoelectric indexing", false);
     use_V3.addOption("Use colorsensorV3 indexing", true);
     teleopStrat.setDefaultOption("Offense", TeleopStrat.OFFENSE);
@@ -101,8 +102,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     pdp.clearStickyFaults();
-    CommandScheduler.getInstance().schedule(new SillyDriveX(Units.InchesToMeters(33.8), true).andThen(new HubTrack().withTimeout(3.0)).andThen((new SillyShoot()).withTimeout(3).andThen(new RunCommand(() -> Drivetrain.setOpenLoop(-0.2, -0.2), Drivetrain.getInstance()).withTimeout(2))));
-    CommandScheduler.getInstance().schedule(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.5).andThen(new InstantCommand(() -> Arm.getInstance().stopArm())));
+    CommandScheduler.getInstance().schedule();
     //CommandScheduler.getInstance().schedule(new SillyDriveX(0.5, true));
   }
 
