@@ -19,9 +19,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake implements Subsystem {
     
-    private static final CANSparkMax spinMotor = Util.createSparkMAX(IntakeConstants.spinMotor, MotorType.kBrushless);
+    private static final CANSparkMax rollerMotor = Util.createSparkMAX(IntakeConstants.rollerMotor, MotorType.kBrushless);
     //private static CANSparkMax conveyorMotor;
-    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(IntakeConstants.conveyorMotor, MotorType.kBrushless);
+    private static final CANSparkMax conveyorMotor = Util.createSparkMAX(ConveyorConstants.conveyorMotor, MotorType.kBrushless);
     
     private static final DigitalInput intakePhotoelectric = new DigitalInput(ConveyorConstants.intakePhotoelectric); //sensor closest to intake
     private static Intake instance;
@@ -31,9 +31,11 @@ public class Intake implements Subsystem {
     }
 
     private Intake(){
-        //conveyorMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
         conveyorMotor.setInverted(true);
-        conveyorMotor.burnFlash();
+        rollerMotor.setInverted(false);
+        //conveyorMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
+        // conveyorMotor.setInverted(true);
+        // conveyorMotor.burnFlash();
         /*conveyorMotor.setInverted(false);
         conveyorMotor.burnFlash();*/
         register();
@@ -53,7 +55,7 @@ public class Intake implements Subsystem {
      * @param value Percent of maximum voltage to send to motor
      */
     public void intake(double value) {
-        spinMotor.set(value);
+        rollerMotor.set(value);
     }
     public void setConveyor(double value) {
         conveyorMotor.set(value);
@@ -63,7 +65,7 @@ public class Intake implements Subsystem {
      * Stops the intake
      */
     public void stopIntake() {
-        spinMotor.set(0);
+        rollerMotor.set(0);
         conveyorMotor.set(0);
     }
 
@@ -75,7 +77,7 @@ public class Intake implements Subsystem {
         if(!Robot.useV3()) {
             return !intakePhotoelectric.get();
         } else {
-            return (RobotContainer.colorSensorV3.getProximity() >= ConveyorConstants.minimumProximity);
+            return false; //(RobotContainer.colorSensorV3.getProximity() >= ConveyorConstants.minimumProximity);
         }
     }
 }

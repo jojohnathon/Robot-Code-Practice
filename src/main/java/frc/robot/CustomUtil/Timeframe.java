@@ -24,6 +24,14 @@ public class Timeframe<N extends Number> {
         frame.add(value);
     }
 
+    public double getAverageValue() { //gets the average value throughout the timeframe
+        double accumulator = 0.0;
+        for(int i = 0; i < frame.size(); i++) {
+            accumulator += frame.get(i).doubleValue();
+        }
+        return accumulator / frame.size();
+    }
+
     /*
         Get a percentage of existing entries that are greater than a target number
         @param target the target to compare other data points to
@@ -68,5 +76,9 @@ public class Timeframe<N extends Number> {
 
     public void forEach(Consumer<? super N> action) {
         frame.forEach(action);
+    }
+
+    public void reset() {
+        frame.clear();
     }
 }

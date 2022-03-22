@@ -46,10 +46,10 @@ public class Util {
      */
     public static TalonSRX createTalonSRX(int id, int continuousCurrentLimit, int peakCurrentLimit, int peakCurrentDuration) {
         TalonSRXConfiguration config = new TalonSRXConfiguration();
-        config.continuousCurrentLimit = continuousCurrentLimit;
+        /*config.continuousCurrentLimit = continuousCurrentLimit;
         config.peakCurrentLimit = peakCurrentLimit;
         config.peakCurrentDuration = peakCurrentDuration;
-        config.voltageCompSaturation = voltageCompensation;
+        config.voltageCompSaturation = voltageCompensation;*/
 
         TalonSRX talon = new TalonSRX(id);
         talon.configFactoryDefault();
@@ -86,12 +86,12 @@ public class Util {
      */
     public static CANSparkMax createSparkMAX(int id, MotorType motortype, int stallLimit) {
         CANSparkMax sparkMAX = new CANSparkMax(id, motortype);
-        sparkMAX.restoreFactoryDefaults();
+        /*sparkMAX.restoreFactoryDefaults();
         sparkMAX.enableVoltageCompensation(voltageCompensation);
         sparkMAX.setSmartCurrentLimit(stallLimit);
-        sparkMAX.setIdleMode(IdleMode.kBrake);
+        sparkMAX.setIdleMode(IdleMode.kCoast);*/
 
-        sparkMAX.burnFlash();
+        //sparkMAX.burnFlash();
         return sparkMAX;
     }
 

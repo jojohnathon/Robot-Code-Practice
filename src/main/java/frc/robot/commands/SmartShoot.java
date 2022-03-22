@@ -18,8 +18,6 @@ public class SmartShoot extends Shoot {
 
 
     public Set<Subsystem> getRequirements() {
-        Set<Subsystem> requirements = Set.of(extraReqs);
-        requirements.addAll(super.getRequirements());
-        return Set.of(extraReqs);
+        return super.getRequirements();
     }
 }

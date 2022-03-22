@@ -10,9 +10,11 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SillyShoot;
 import frc.robot.commands.SmartShoot;
 import frc.robot.commands.StagingQueue;
 import frc.robot.commands.TurnXDegrees;
+import frc.robot.commands.ActuateArm;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.ConveyorQueue;
 import frc.robot.subsystems.*;
@@ -24,10 +26,12 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.ColorSensorV3;
@@ -47,7 +51,14 @@ public class RobotContainer {
             driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
             driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
             driver_MENU = new JoystickButton(driverController, 8);
-
+    private static final JoystickButton operator_A = new JoystickButton(operatorController, 1),
+    operator_B = new JoystickButton(operatorController, 2), operator_X = new JoystickButton(operatorController, 3),
+    operator_Y = new JoystickButton(operatorController, 4), operator_LB = new JoystickButton(operatorController, 5),
+    operator_RB = new JoystickButton(operatorController, 6), operator_VIEW = new JoystickButton(operatorController, 7),
+    operator_MENU = new JoystickButton(operatorController, 8);
+    private static final POVButton operator_DPAD_UP = new POVButton(operatorController, 0),
+    operator_DPAD_RIGHT = new POVButton(operatorController, 90), operator_DPAD_DOWN = new POVButton(operatorController, 180),
+    operator_DPAD_LEFT = new POVButton(operatorController, 270);
     public static NetworkTable limelight;
 
     public static Drivetrain drivetrain;
@@ -59,66 +70,83 @@ public class RobotContainer {
     public static AHRS navX; 
     public static Shoot shootCommand;
     private RobotContainer() {
-        /*camera = new PhotonCamera("photonvision");*/
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
-        drivetrain.setDefaultCommand(new Drive(Drive.State.CheesyDriveOpenLoop));
+        drivetrain.setDefaultCommand(new Drive(Drive.State.CurvatureDrive2019));
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
         shooter = Shooter.getInstance();
-        //intake.setDefaultCommand(new ConveyorQueue());
-        shooter.setDefaultCommand(new StagingQueue());
-        colorSensorV3 = Util.createColorSensorV3(ConveyorConstants.colorSensorV3);
-        //limelightAngle = VisionMount.getInstance();
-        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+        //shooter.setDefaultCommand(new StagingQueue());
+        limelight = NetworkTableInstance.getDefault().getTable("limelight-intake");
+        setLEDMode(LEDMode.OFF);
 
         bindOI();
+    }
+    
+
+    private void bindOI() {
+        driver_RB.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7))
+            .whileHeld(new RunCommand(() -> intake.intake(0.95), intake)
+                .alongWith(new RunCommand(() -> intake.setConveyor(0.3))))
+            .whenReleased(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7)
+                .alongWith(new RunCommand(() -> intake.intake(0.0), intake).withTimeout(1.7).andThen(new InstantCommand(() -> intake.stopIntake()))));
+        //driver_LB.whileHeld(new SillyShoot());
+        driver_X.whileHeld(new HubTrack());
+        operator_X.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7))
+        .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
+            .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
+        .whenReleased(new InstantCommand(() -> intake.stopIntake())
+            .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7)));
+        driver_LB.whileHeld(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.3)) //NOTE: requiring shooter will cancel the default command keeping the flywheel spinning
+            .alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.5), Intake.getInstance())))
+            .whenReleased(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.0)).alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.0))));
+        operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake)).whenReleased(new InstantCommand(()-> intake.stopIntake(), intake));
+        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
+        operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
+        operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
+        operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
+        /*operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber));
+        operator_MENU.whileHeld(new RunCommand(() -> climber.setRightMotor(0.5), climber));*/
     }
 
     public static Command getAutonomousCommand(Auto.Selection selectedAuto) { //TODO: change auto based on selected strategy
         Command auto;
-        if(selectedAuto == Auto.Selection.INTAKEFIRST) {
-            auto = new SequentialCommandGroup(new CargoTrack(), Auto.getIntakeCommand(), new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]), Auto.getShootCommand());
-            switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
-                case 1:
-                    auto = auto.andThen();
-                case 2:
-                    auto = auto.andThen();
-                case 3:
-                    auto = auto.andThen();
-            }
+        if(selectedAuto == Auto.Selection.INTAKEFIRST) { //Start facing cargo, drive, intake, shoot
+            auto = new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    Auto.extendIntake(),
+                    new DriveXMeters(AutoConstants.distToCargo, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])),
+                new ParallelCommandGroup(
+                    Auto.retractIntake(),
+                    new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1])
+                ),
+                new HubTrack(),
+                new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
+                new SillyShoot()
+            );
+            
         } else if(selectedAuto == Auto.Selection.SHOOTFIRST) {
-            auto = new SequentialCommandGroup(Auto.getShootCommand(), Auto.getBackupCommand()/*, Auto.getIntakeCommand()*/);
-            switch(DriverStation.getLocation()) { //TODO: change how auto functions based on our team's starting position on the field
-            case 1:
-                auto = auto.andThen();
-            case 2:
-                auto = auto.andThen();
-            case 3:
-                auto = auto.andThen();
-            }
+            auto = new SequentialCommandGroup( //Start facing hub, shoot, reverse, get near cargo
+                new HubTrack(),
+                new DriveXMeters(AutoConstants.hubXOffset, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
+                new SillyShoot(),
+                new DriveXMeters(-AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1]),
+                new TurnXDegrees(180, AutoConstants.TXDConstraints[0], AutoConstants.TXDConstraints[1]),
+                new DriveXMeters(AutoConstants.distToCargo + AutoConstants.hubXOffset - AutoConstants.backupDistance, AutoConstants.DXMConstraints[0], AutoConstants.DXMConstraints[1])
+            ); 
+
+        } else if(selectedAuto == Auto.Selection.SILLY) {
+            auto = Auto.getSillyAuto();
         } else {
-            auto = Auto.getShootCommand();
+            auto = null;
         }
         return auto;
     }
 
-    
     public static RobotContainer getInstance() {
         if(instance == null) instance = new RobotContainer();
         return instance;
-    }
-
-    private void bindOI() {
-        driver_RB.whileHeld(new RunCommand(()->arm.setGoal(Arm.State.OUT), arm) //TODO: update conveyor staging logic
-                    .alongWith(new RunCommand( ()->intake.intake(0.85)))
-                    .alongWith(new RunCommand( ()->intake.setConveyor(0.85), intake)))
-                .whenReleased(new RunCommand( ()->arm.setGoal(Arm.State.STORED), arm)
-                    .alongWith(new InstantCommand(intake::stopIntake)));
-        driver_LB.whileHeld((new SmartShoot(getDistance())));
-        driver_X.whileHeld(new HubTrack());
-        driver_Y.whileHeld(new Shoot(AutoConstants.shooterVelocity));
     }
 
      /**
@@ -141,6 +169,9 @@ public class RobotContainer {
 
     public static double getThrottle() {
         return -deadbandX(driverController.getLeftY(), Constants.DriverConstants.kJoystickDeadband);
+    }
+    public static double getAltThrottle() {
+        return -deadbandX(driverController.getRightY(), Constants.DriverConstants.kJoystickDeadband);
     }
 
     public static double getTurn() {
@@ -241,7 +272,7 @@ public class RobotContainer {
     }
 
     public enum IntakeVisionPipeline {
-        RED(0), BLUE(1), ROBOT(3), DRIVER(2), INVALID(3);
+        RED(2), BLUE(1), ROBOT(0), DRIVER(3), INVALID(4);
 
         public int val;
 
