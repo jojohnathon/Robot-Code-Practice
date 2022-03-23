@@ -1,6 +1,8 @@
 package frc.robot;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+
 import frc.robot.Constants;
 import frc.robot.Autonomous.Auto;
 import frc.robot.Autonomous.Auto.Selection;
@@ -186,19 +188,22 @@ public class RobotContainer {
         // An example trajectory to follow.  All units in meters.
         Trajectory trajectory = Robot.trajectory;
         RamseteCommand ramseteCommand =
-            /*new RamseteCommand(
+            new RamseteCommand(
                 trajectory,
                 (()-> {return Drivetrain.ODOMETRY.getPoseMeters();}),
                 new RamseteController(),
                 Drivetrain.FEEDFORWARD,
                 Drivetrain.KINEMATICS,
-                Drivetrain.getWheelSpeeds(),
+                Drivetrain::getWheelSpeeds,
                 new PIDController(DrivetrainConstants.kPV, 0, 0),
                 new PIDController(DrivetrainConstants.kPV, 0, 0),
                 // RamseteCommand passes volts to the callback
-                Drivetrain::setVoltages,
-                Drivetrain.getInstance());*/
-                null;
+                new BiConsumer<Double,Double>() {
+                    public void accept(Double l, Double r) {
+                        Drivetrain.setVoltages(l, r);
+                    }
+                },
+                Drivetrain.getInstance());
 
         // Reset odometry to the starting pose of the trajectory.
         Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d());
