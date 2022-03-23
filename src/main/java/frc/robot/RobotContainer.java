@@ -198,11 +198,7 @@ public class RobotContainer {
                 new PIDController(DrivetrainConstants.kPV, 0, 0),
                 new PIDController(DrivetrainConstants.kPV, 0, 0),
                 // RamseteCommand passes volts to the callback
-                new BiConsumer<Double,Double>() {
-                    public void accept(Double l, Double r) {
-                        Drivetrain.setVoltages(l, r);
-                    }
-                },
+                Drivetrain::setVoltages,
                 Drivetrain.getInstance());
 
         // Reset odometry to the starting pose of the trajectory.
