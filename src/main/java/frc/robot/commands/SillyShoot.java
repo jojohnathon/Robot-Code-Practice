@@ -34,7 +34,7 @@ public class SillyShoot implements Command {
 
         Shooter.getInstance().setOpenLoop(percentPower);
 
-        if(Shooter.getShooterVelocity() > 3000 * (percentPower / defaultSpeed)){ //TODO: encoder tuning
+        if(Shooter.getShooterVelocity() > 3000 * (percentPower / defaultSpeed)){ //Rough RPM at .65 ~= 3520
             //Intake.getInstance().intake(0.55);
             Intake.getInstance().setConveyor(0.50);     
             Shooter.getInstance().setStagingMotor(0.5);
