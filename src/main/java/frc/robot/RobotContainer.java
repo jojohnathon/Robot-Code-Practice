@@ -1,11 +1,13 @@
 package frc.robot;
 
+import java.util.*;
 import frc.robot.Constants;
 import frc.robot.Autonomous.Auto;
 import frc.robot.Autonomous.Auto.Selection;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.ConveyorConstants;
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.commands.Drive;
 import frc.robot.commands.DriveXMeters;
 import frc.robot.commands.HubTrack;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -39,8 +42,19 @@ import com.revrobotics.ColorSensorV3;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+
 
 public class RobotContainer {
     private static RobotContainer instance = null;
@@ -93,17 +107,19 @@ public class RobotContainer {
                 .alongWith(new RunCommand(() -> intake.intake(0.0), intake).withTimeout(1.7).andThen(new InstantCommand(() -> intake.stopIntake()))));
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
+
         operator_X.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7))
         .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
             .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
         .whenReleased(new InstantCommand(() -> intake.stopIntake())
             .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7)));
+
         driver_LB.whileHeld(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.3)) //NOTE: requiring shooter will cancel the default command keeping the flywheel spinning
             .alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.5), Intake.getInstance())))
             .whenReleased(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.0)).alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.0))));
         operator_B.whileHeld(new RunCommand(() -> intake.setConveyor(0.5), intake)).whenReleased(new InstantCommand(()-> intake.stopIntake(), intake));
-        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.5), climber));
-        operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.5), climber));
+        operator_DPAD_UP.whileHeld(new RunCommand(() -> climber.climb(0.01), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
+        operator_DPAD_DOWN.whileHeld(new RunCommand(() -> climber.climb(-0.01), climber)).whenReleased(new InstantCommand(() -> climber.stop()));
         operator_DPAD_LEFT.whileHeld(new RunCommand(() -> arm.setOpenLoop(0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
         operator_DPAD_RIGHT.whileHeld(new RunCommand(() -> arm.setOpenLoop(-0.05), arm)).whenReleased(new RunCommand(()->arm.setOpenLoop(0.0)));
         /*operator_VIEW.whileHeld(new RunCommand(() -> climber.setLeftMotor(0.5), climber));
@@ -147,6 +163,48 @@ public class RobotContainer {
     public static RobotContainer getInstance() {
         if(instance == null) instance = new RobotContainer();
         return instance;
+    }
+
+    public static Command getPathweaverCommand() {
+        // Create a voltage constraint to ensure we don't accelerate too fast
+        var autoVoltageConstraint =
+            new DifferentialDriveVoltageConstraint(
+                Drivetrain.FEEDFORWARD,
+                Drivetrain.KINEMATICS,
+                10);
+
+        // Create config for trajectory
+        TrajectoryConfig config =
+            new TrajectoryConfig(
+                    DrivetrainConstants.kMaxSpeedMPS,
+                    DrivetrainConstants.kMaxAcceleration)
+                // Add kinematics to ensure max speed is actually obeyed
+                .setKinematics(Drivetrain.KINEMATICS)
+                // Apply the voltage constraint
+                .addConstraint(autoVoltageConstraint);
+
+        // An example trajectory to follow.  All units in meters.
+        Trajectory trajectory = Robot.trajectory;
+        RamseteCommand ramseteCommand =
+            /*new RamseteCommand(
+                trajectory,
+                (()-> {return Drivetrain.ODOMETRY.getPoseMeters();}),
+                new RamseteController(),
+                Drivetrain.FEEDFORWARD,
+                Drivetrain.KINEMATICS,
+                Drivetrain.getWheelSpeeds(),
+                new PIDController(DrivetrainConstants.kPV, 0, 0),
+                new PIDController(DrivetrainConstants.kPV, 0, 0),
+                // RamseteCommand passes volts to the callback
+                Drivetrain::setVoltages,
+                Drivetrain.getInstance());*/
+                null;
+
+        // Reset odometry to the starting pose of the trajectory.
+        Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d());
+
+        // Run path following command, then stop at the end.
+        return ramseteCommand.andThen(() -> Drivetrain.setOpenLoop(0, 0));
     }
 
      /**

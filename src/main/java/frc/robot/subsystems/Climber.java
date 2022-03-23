@@ -14,6 +14,12 @@ public class Climber implements Subsystem {
         left.setInverted(false);
         register();
     }
+
+    @Override
+    public void periodic() {
+        
+    }
+
     public static Climber getInstance() {
         if(instance == null) instance = new Climber();
         return instance;

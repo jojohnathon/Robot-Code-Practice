@@ -17,6 +17,13 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -44,6 +51,8 @@ public class Robot extends TimedRobot {
     OFFENSE, DEFENSE
   }
   
+  public static Trajectory trajectory = new Trajectory();
+  private static String trajectoryJSON = "paths/Small.wpilib.json";
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   private final SendableChooser<TeleopStrat> teleopStrat = new SendableChooser<>();
@@ -70,6 +79,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
     SmartDashboard.putData("Teleop Strategy", teleopStrat);
 
+    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    try {
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException e) {
+      System.out.println("silly pathweaver bad");
+      e.printStackTrace();
+    }
     Drivetrain.getInstance().resetEncoders();
     //Arm.getInstance().resetEncoders();
   }
@@ -85,7 +101,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     use_csV3 = use_V3.getSelected();
-    SmartDashboard.putNumber("pdp channel 0", pdp.getCurrent(0));
+    SmartDashboard.putNumber("pdp channel 10", pdp.getCurrent(10));
   }
 
   /**

@@ -83,6 +83,8 @@ public class Constants {
         public static final double kMaxCurvature = Math.toRadians(-162); // Maximum turn rate in radians per meter
 
         public static final double sdx = 0.2;
+
+        public static final double kPV = 0;
     }
 
     public static class IntakeConstants {
@@ -117,7 +119,7 @@ public class Constants {
 
     }
     public static class ClimbConstants {
-        public static final int rightMotor = 4, leftMotor = 5;
+        public static final int rightMotor = 5, leftMotor = 4;
         /* PID constants */
         public static final double kP = 0;
         public static final double kI = 0;

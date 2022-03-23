@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Units;
 import frc.robot.Util;
@@ -75,6 +76,10 @@ public class Drivetrain implements Subsystem {
     public static void setOpenLoop(double left, double right) {
         leftMaster.set(ControlMode.PercentOutput, left);
         rightMaster.set(ControlMode.PercentOutput, right);
+    }
+
+    public static void setVoltages(double leftv, double rightv) {
+        setOpenLoop(leftv/Constants.kMaxVoltage, rightv/Constants.kMaxVoltage);
     }
 
     public static void setInverted(boolean status) { //For defense, the back of the robot becomes the front
