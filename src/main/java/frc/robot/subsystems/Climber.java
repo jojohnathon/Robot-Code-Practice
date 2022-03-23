@@ -4,10 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Util;
 import frc.robot.Constants.ClimbConstants;
 
 public class Climber implements Subsystem {
-    private static TalonFX right = new TalonFX(ClimbConstants.rightMotor), left = new TalonFX(ClimbConstants.leftMotor);
+    private static TalonFX right = Util.createTalonFX(ClimbConstants.rightMotor), left = Util.createTalonFX(ClimbConstants.leftMotor);
     private static Climber instance = null;
     private Climber() {
         right.setInverted(false);
@@ -17,7 +18,7 @@ public class Climber implements Subsystem {
 
     @Override
     public void periodic() {
-        
+
     }
 
     public static Climber getInstance() {
