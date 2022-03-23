@@ -21,6 +21,9 @@ import frc.robot.subsystems.Shooter;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -142,8 +145,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(auto != null) auto.cancel();
     robot.setLEDMode(LEDMode.OFF);
-
-    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance()));
+    //Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance())); TODO: bring back
   }
 
   /** This function is called periodically during operator control. */
