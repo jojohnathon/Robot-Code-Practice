@@ -15,8 +15,8 @@ import frc.robot.Constants.ConveyorConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class Shooter implements Subsystem {
-    private static final CANSparkMax master = Util.createSparkMAX(ShooterConstants.master, MotorType.kBrushless);
-    private static final CANSparkMax slave = Util.createSparkMAX(ShooterConstants.slave, MotorType.kBrushless);
+    private static final CANSparkMax master = new CANSparkMax(ShooterConstants.master, MotorType.kBrushless);
+    private static final CANSparkMax slave = new CANSparkMax(ShooterConstants.slave, MotorType.kBrushless);
     private static CANSparkMax stagingMotor;
     public static PIDController PID_CONTROLLER; //TODO: May need to replace with SparkMAX built-in PID Controller
     public static SimpleMotorFeedforward FEEDFORWARD;
@@ -26,13 +26,14 @@ public class Shooter implements Subsystem {
     private static Shooter instance = null;
 
     private Shooter() {
-        stagingMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
-        stagingMotor.setInverted(false);
-        master.setInverted(false);
-        slave.setInverted(!master.getInverted()); //Both motors are facing opposite directions
+
         PID_CONTROLLER = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
         FEEDFORWARD = new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
-        slave.follow(master);
+        stagingMotor = Util.createSparkMAX(ConveyorConstants.motor, MotorType.kBrushless);
+        stagingMotor.setInverted(false);
+        master.setInverted(false); //TODO: return to false
+        //slave.follow(master); NOTE: this seems to stop the flywheel, hence the individual use of the master and slave motors
+        slave.setInverted(!master.getInverted()); //Both motors are facing opposite directions
         register();
     }
 
@@ -52,11 +53,13 @@ public class Shooter implements Subsystem {
 
     public void setOpenLoop(final double value){
         master.set(value);
+        slave.set(value);
     }
 
     public void stop(){
         master.stopMotor();
-        stagingMotor.stopMotor();;
+        slave.stopMotor();
+        stagingMotor.stopMotor();
     }
     
     public boolean getShooterSensor() {
