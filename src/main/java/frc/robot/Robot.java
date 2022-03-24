@@ -67,6 +67,18 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   
+  public Trajectory initializeTrajectory(final String tjson) {
+    Trajectory t = null;
+    Path tPath = Filesystem.getDeployDirectory().toPath().resolve(tjson);
+    try {
+      t = TrajectoryUtil.fromPathweaverJson(tPath);
+    } catch (IOException e) {
+      System.out.println("silly pathweaver bad");
+      e.printStackTrace();
+    }
+    return t;
+  }
+
   @Override
   public void robotInit() {
     robot = RobotContainer.getInstance();
@@ -82,13 +94,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Use ColorSensorV3 queuing?", use_V3);
     SmartDashboard.putData("Teleop Strategy", teleopStrat);
 
-    Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    /*Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
     try {
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
     } catch (IOException e) {
       System.out.println("silly pathweaver bad");
       e.printStackTrace();
-    }
+    }*/
+    trajectory = initializeTrajectory(trajectoryJSON);
     Drivetrain.getInstance().resetEncoders();
     //Arm.getInstance().resetEncoders();
   }
