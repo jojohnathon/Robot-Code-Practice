@@ -34,7 +34,10 @@ public class Drive implements Command {
         // Retrieving the deadbanded throttle and turn values (the controller joystick values)
         double throttle = RobotContainer.getThrottle();
         double turn = RobotContainer.getTurn(); //* Drivetrain.getkInvert();
-        
+        if(throttle != 0) { //TODO: test reverse driving in offense and defense modes
+            turn *= Math.signum(throttle) * Drivetrain.getkInvert();
+            throttle *= Drivetrain.getkInvert();
+        }
         
         double altThrottle = RobotContainer.getAltThrottle();
         SmartDashboard.putNumber("turn input", turn);
@@ -46,8 +49,6 @@ public class Drive implements Command {
             case CurvatureDrive2019:
                 // Differential drive as long as throttle is greater than zero (deadbanded).
                 if (throttle != 0) {
-                    throttle *= Drivetrain.getkInvert();
-                    turn *= Drivetrain.getkInvert();
                     left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
                     right = (throttle - throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
 
@@ -65,7 +66,7 @@ public class Drive implements Command {
                 }
 
                 break;
-                case CheesyDriveOpenLoop:
+            case CheesyDriveOpenLoop:
                 if (throttle != 0) {
                     throttle *= DrivetrainConstants.kMaxSpeedMPS * DriverConstants.kDriveSens;
                     turn *= DrivetrainConstants.kMaxCurvature * DriverConstants.kTurnSens * throttle;
