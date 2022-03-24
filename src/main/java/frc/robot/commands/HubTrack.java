@@ -39,6 +39,7 @@ public class HubTrack implements Command {
         RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.ROBOT);
     }
 
+    boolean atTarget;
     @Override
     public void execute() {
         double left, right;
@@ -64,14 +65,13 @@ public class HubTrack implements Command {
         }
         //left = Drivetrain.FEEDFORWARD.calculate(left) / Constants.kMaxVoltage;
         //right = Drivetrain.FEEDFORWARD.calculate(right) / Constants.kMaxVoltage;
-        
-
-        if(turnError == 0) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
+        atTarget = ((int)turnError == 0);
+        if(atTarget) { //TODO: Test timeframe and if it works well, tune the desired "matching percentage"
             timeframe.update(1);
         } else {
             timeframe.update(0);
         }
-        SmartDashboard.putNumber("AtTarget?", (turnError == 0) ? 1 : 0);
+        SmartDashboard.putNumber("AtTarget?", (atTarget) ? 1 : 0);
         SmartDashboard.putBoolean("Adequate tracking?", (timeframe.percentEqual(1) >= 0.85));
         Drivetrain.setOpenLoop(left, right);
 
@@ -83,7 +83,7 @@ public class HubTrack implements Command {
     }
 
     @Override
-    public void end(boolean interrupted) { //TODO: return limelight servo to driving position
+    public void end(boolean interrupted) {
         RobotContainer.getInstance().setLEDMode(LEDMode.OFF);
         //RobotContainer.getInstance().setPipeline(IntakeVisionPipeline.DRIVER);
         Drivetrain.setOpenLoop(0.0, 0.0);
