@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
   }
   
   public static Trajectory trajectory = new Trajectory();
-  private static String trajectoryJSON = "paths/Small.wpilib.json";
+  private static final String trajectoryJSON = "paths/Small.wpilib.json";
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   private final SendableChooser<TeleopStrat> teleopStrat = new SendableChooser<>();
