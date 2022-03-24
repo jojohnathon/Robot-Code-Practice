@@ -107,7 +107,7 @@ public class Constants {
         public static double maxVelRadS = 70.85 * 2 * Math.PI; //estimated max speed in radians/sec
         public static double kTolerance = 0;
         public static int master = 1;
-        public static int slave;
+        public static int slave = 10;
     }
     public static class ConveyorConstants {
         public static final int conveyorMotor = 5;// change to roller motor

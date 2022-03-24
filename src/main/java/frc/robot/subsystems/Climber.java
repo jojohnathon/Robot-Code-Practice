@@ -12,7 +12,7 @@ public class Climber implements Subsystem {
     private static Climber instance = null;
     private Climber() {
         right.setInverted(false);
-        left.setInverted(false);
+        left.setInverted(!right.getInverted()); //Motors facing opposite direction
         register();
     }
 
