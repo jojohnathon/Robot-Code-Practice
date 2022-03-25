@@ -128,7 +128,7 @@ public class Drive implements Command {
         }
         SmartDashboard.putNumber("left dt commanded", left);
         SmartDashboard.putNumber("right dt commanded", right);
-        //drivetrain.setOpenLoop(left, right); TODO: bring back
+        drivetrain.setOpenLoop(left, right); 
     }
 
     @Override

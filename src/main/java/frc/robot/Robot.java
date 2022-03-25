@@ -158,7 +158,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(auto != null) auto.cancel();
     robot.setLEDMode(LEDMode.OFF);
-    //Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance())); //TODO: set shooter to 65 when done
+    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance())); //TODO: set shooter to 65 when done
   }
 
   /** This function is called periodically during operator control. */
