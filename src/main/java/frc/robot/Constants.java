@@ -99,11 +99,12 @@ public class Constants {
         public static final double kD = 0; // :|
 
          /* Feedforward Constants */ 
-         public static double kS = 0;
-         public static double kV = 0;
-         public static double kA = 0;
+         public static double kS = 0.17205;
+         public static double kV = 0.40335;
+         public static double kA = 0.016457;
  
          /* Shooter Constants */ 
+        public static double wheelDiameter = Units.InchesToMeters(4);
         public static double maxVelRadS = 70.85 * 2 * Math.PI; //estimated max speed in radians/sec
         public static double kTolerance = 0;
         public static int master = 1;

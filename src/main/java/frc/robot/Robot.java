@@ -11,6 +11,7 @@ import frc.robot.RobotContainer.LEDMode;
 import frc.robot.commands.CargoTrack;
 import frc.robot.commands.Drive;
 import frc.robot.commands.HubTrack;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.SillyDriveX;
 import frc.robot.commands.SillyShoot;
 import frc.robot.subsystems.Arm;
@@ -158,7 +159,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(auto != null) auto.cancel();
     robot.setLEDMode(LEDMode.OFF);
-    Shooter.getInstance().setDefaultCommand(new RunCommand(() -> Shooter.getInstance().setOpenLoop(0.65), Shooter.getInstance())); //TODO: set shooter to 65 when done
+    Shooter.getInstance().setDefaultCommand(new Shoot(18.965)); //TODO: set shooter to 65 when done
   }
 
   /** This function is called periodically during operator control. */
