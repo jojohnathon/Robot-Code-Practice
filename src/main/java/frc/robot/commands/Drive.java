@@ -35,7 +35,7 @@ public class Drive implements Command {
         double throttle = RobotContainer.getThrottle();
         double turn = RobotContainer.getTurn(); //* Drivetrain.getkInvert();
         if(throttle != 0) { //TODO: test reverse driving in offense and defense modes
-            turn *= Math.signum(throttle) * Drivetrain.getkInvert();
+            turn *= /*Math.signum(throttle) * */ Drivetrain.getkInvert();
             throttle *= Drivetrain.getkInvert();
         }
         
@@ -128,7 +128,7 @@ public class Drive implements Command {
         }
         SmartDashboard.putNumber("left dt commanded", left);
         SmartDashboard.putNumber("right dt commanded", right);
-        drivetrain.setOpenLoop(left, right);
+        //drivetrain.setOpenLoop(left, right); TODO: bring back
     }
 
     @Override

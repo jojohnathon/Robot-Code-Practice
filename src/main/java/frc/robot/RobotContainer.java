@@ -89,6 +89,7 @@ public class RobotContainer {
         navX = new AHRS(Port.kMXP);
         drivetrain = Drivetrain.getInstance();
         drivetrain.setDefaultCommand(new Drive(Drive.State.CurvatureDrive2019));
+        //drivetrain.setDefaultCommand(new Drive(Drive.State.TankDrive));
         arm = Arm.getInstance();
         intake = Intake.getInstance();
         climber = Climber.getInstance();
