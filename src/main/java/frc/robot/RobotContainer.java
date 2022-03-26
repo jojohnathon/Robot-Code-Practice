@@ -181,7 +181,10 @@ public class RobotContainer {
         return instance;
     }
 
-    public static Command getPathweaverCommand() {
+    /*
+        @param trajectory: the trajectory to follow
+    */
+    public static Command getPathweaverCommand(Trajectory trajectory) {
         // Create a voltage constraint to ensure we don't accelerate too fast
         var autoVoltageConstraint =
             new DifferentialDriveVoltageConstraint(
@@ -200,7 +203,6 @@ public class RobotContainer {
                 .addConstraint(autoVoltageConstraint);
 
         // An example trajectory to follow.  All units in meters.
-        Trajectory trajectory = Robot.trajectory;
         RamseteCommand ramseteCommand =
             new RamseteCommand(
                 trajectory,
@@ -214,7 +216,7 @@ public class RobotContainer {
                 // RamseteCommand passes volts to the callback
                 Drivetrain::setVoltages,
                 Drivetrain.getInstance());
-
+        drivetrain.resetEncoders();
         // Reset odometry to the starting pose of the trajectory.
         Drivetrain.ODOMETRY.resetPosition(trajectory.getInitialPose(), navX.getRotation2d());
 

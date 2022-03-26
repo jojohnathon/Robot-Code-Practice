@@ -55,18 +55,17 @@ public class Robot extends TimedRobot {
     OFFENSE, DEFENSE
   }
   
-  public static Trajectory trajectory = new Trajectory();
-  private static final String trajectoryJSON = "paths/Small.wpilib.json";
+  public static Trajectory smallTraj = new Trajectory();
+  private static final String smallJSON = "paths/Small.wpilib.json";
+  
+  private static final String[] auto1JSON = {"paths/Auto1.wpilib.json", "paths/Auto2.wpilib.json", "paths/Auto3.wpilib.json"};
+  public static Trajectory[] autoGroup1 = new Trajectory[3];
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
   private final SendableChooser<Boolean> use_V3 = new SendableChooser<>(); //Use ColorSensorV3 over Photoelectric for conveyor queuing
   private final SendableChooser<TeleopStrat> teleopStrat = new SendableChooser<>();
   public static boolean useV3() {
     return use_csV3; //prevent unwanted writing operations but allow reading
   }
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
   
   public Trajectory initializeTrajectory(final String tjson) {
     Trajectory t = null;
@@ -80,6 +79,10 @@ public class Robot extends TimedRobot {
     return t;
   }
 
+  /**
+   * This function is run when the robot is first started up and should be used for any
+   * initialization code.
+   */
   @Override
   public void robotInit() {
     robot = RobotContainer.getInstance();
@@ -102,7 +105,10 @@ public class Robot extends TimedRobot {
       System.out.println("silly pathweaver bad");
       e.printStackTrace();
     }*/
-    trajectory = initializeTrajectory(trajectoryJSON);
+    smallTraj = initializeTrajectory(smallJSON);
+    for(int i = 0; i < autoGroup1.length; i++) {
+      autoGroup1[i] = initializeTrajectory(auto1JSON[i]);
+    }
     Drivetrain.getInstance().resetEncoders();
     //Arm.getInstance().resetEncoders();
   }
