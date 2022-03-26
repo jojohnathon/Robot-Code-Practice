@@ -159,7 +159,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     if(auto != null) auto.cancel();
     robot.setLEDMode(LEDMode.OFF);
-    Shooter.getInstance().setDefaultCommand(new Shoot(18.965)); //TODO: set shooter to 65 when done
+    Shooter.getInstance().setDefaultCommand(new Shoot(18.965)); //TODO: test RPM (should be > 3500)
   }
 
   /** This function is called periodically during operator control. */

@@ -111,11 +111,24 @@ public class RobotContainer {
         //driver_LB.whileHeld(new SillyShoot());
         driver_X.whileHeld(new HubTrack());
 
-        operator_X.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7))
-        .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
-            .alongWith(new RunCommand(() -> intake.setConveyor(-0.3))))
-        .whenReleased(new InstantCommand(() -> intake.stopIntake())
-            .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7)));
+        for(JoystickButton button : Set.of(driver_B, operator_X)) {
+            button.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7)) //Can reimplement with StartEndCommand
+                .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
+                    .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))
+                    .alongWith(new RunCommand(() -> shooter.setStagingMotor(-0.2))))
+                .whenReleased(new InstantCommand(() -> intake.stopIntake())
+                    .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7))
+                    .alongWith(new RunCommand(() -> shooter.setStagingMotor(0.0))));
+        }
+        
+
+        /*operator_X.whenHeld(new RunCommand(() -> Arm.getInstance().setOpenLoop(0.05), Arm.getInstance()).withTimeout(1.7))
+            .whileHeld(new RunCommand(() -> intake.intake(-0.7), intake)
+                .alongWith(new RunCommand(() -> intake.setConveyor(-0.3)))
+                .alongWith(new RunCommand(() -> shooter.setStagingMotor(-0.2))))
+            .whenReleased(new InstantCommand(() -> intake.stopIntake())
+                .alongWith(new RunCommand(() -> Arm.getInstance().setOpenLoop(-0.05), Arm.getInstance()).withTimeout(1.7))
+                .alongWith(new RunCommand(() -> shooter.setStagingMotor(0.0))));*/
 
         driver_LB.whileHeld(new RunCommand(() -> Shooter.getInstance().setStagingMotor(0.3)) //NOTE: requiring shooter will cancel the default command keeping the flywheel spinning
             .alongWith(new RunCommand(() -> Intake.getInstance().setConveyor(0.5), Intake.getInstance())))
