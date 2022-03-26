@@ -3,11 +3,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.I2C.Port;
 import frc.robot.Units;
 
-/*  Robot Specs:
-    4 TalonFX motors
-    4-6 NEO motors
-    2 TalonSRX motors
-*/
 //Hello
 public class Constants {
     public static final double dt = 0.02;
