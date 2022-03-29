@@ -6,6 +6,6 @@ Your commands folder should hold the files for all the commands you define for t
     
     Commands typically use the basic, low level methods provided by the subsystems and perform the complex logic necessary to accomplish
     a task. Commands often vary in complexity depending on what goal they wish to attend. Individual commands can be chained into
-    command groups using a variety of methods, including many convenience factors.
+    command groups using a variety of methods, including many convenience factors. Options for doing this are well documented in WPILIB
     
     For an example of what a command may look like, see ExampleSubsystem.java included in this project

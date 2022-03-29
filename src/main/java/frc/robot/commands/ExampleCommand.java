@@ -27,7 +27,15 @@ public class ExampleCommand implements Command {
     public void execute() { //Runs every 20ms while the Command is being run by the Command Scheduler
         if(counter >= 100 * Constants.dt) counter = 0;
         exampleTimeframe.update((counter+=Constants.dt));
-        subsystem.setOpenLoop(0.05);
+        subsystem.setOpenLoop(0.05); //Basic implementation
+
+        /* 
+        Advanced implementation: Use feedforward and feedback control for precise motion
+        
+        double feedforward = ExampleSubsystem.FEEDFORWARD.calculate(0.1); //calculate feedforward for 0.1 m/s
+        double output = ExampleSubsystem.velController.calculate(subsystem.getEncoderMPS(), 0.1); //calculate the error correction if our goal is 0.1m/s
+        subsystem.setOpenLoop((feedforward + output) / Constants.kMaxVoltage); //feedforward is always in units of voltage, and our PID would hypothetically be calibrated in terms of voltage as well, so to go from a voltage to a percent, take our total voltage and divide by max voltage (max V always 12)
+        */
     }
 
     @Override
