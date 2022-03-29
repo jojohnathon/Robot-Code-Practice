@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+  public void robotPeriodic() { //All periodic methods, such as this one, run every 20ms. This one runs as long as the robot is on, and this is generally where we run the CommandScheduler 
+    CommandScheduler.getInstance().run(); //One of the most important lines in this entire project: this is what allows all commands and subsystem periodic methods to run. Basically anything that says 20ms somewhere, probably relies on this very line of code to actually do anything
   }
 
   /**

@@ -8,6 +8,10 @@ public class Constants {
     public static final double dt = 0.02;
     public static final double kMaxVoltage = 12.0;
 
+    public static class ExampleConstants {
+        public static final int exampleTalon = 1;
+    }
+
     public static class InputPorts {
         public static final int driverController = 0, operatorController = 1;
     }
