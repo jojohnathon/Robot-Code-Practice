@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    robot = RobotContainer.getInstance();
+    robot = RobotContainer.getInstance(); //Since robotcontainer initializes subsystems, defines default commands, and maps controller inputs to actual functions, robotcontainer should be the first thing that the robot initializes when it is powered on and running
     pdp.clearStickyFaults();
   }
 

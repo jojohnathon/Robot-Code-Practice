@@ -1,9 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
@@ -24,15 +25,28 @@ public class RobotContainer {
     operator_DPAD_RIGHT = new POVButton(operatorController, 90), operator_DPAD_DOWN = new POVButton(operatorController, 180),
     operator_DPAD_LEFT = new POVButton(operatorController, 270);
 
+    //TODO: define all subsystems here
+    public ExampleSubsystem exampleSubsystem;
+
     private RobotContainer() {
         //TODO: initialize subsystems here
+        exampleSubsystem = ExampleSubsystem.getInstance();
 
+        //TODO: define default commands here
+        exampleSubsystem.setDefaultCommand(new ExampleCommand());
+
+        //bindOI should be the last thing that runs during construction of RobotContainer
         bindOI();
     }
     
 
     private void bindOI() {
         //TODO: bind controller inputs to commands/runnables
+        /* i.e.
+        driver_x.whileHeld(new ExampleCommand(), exampleSubsystem);
+            or
+        driver_x.whileHeld(new StartEndCommand(() -> exampleSubsystem.setOpenLoop(0.05), exampleSubsystem::stop, exampleSubsystem));
+        */
     }
 
     
