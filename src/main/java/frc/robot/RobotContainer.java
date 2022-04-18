@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.Drive.State;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
@@ -27,14 +29,15 @@ public class RobotContainer {
 
     //TODO: define all subsystems here
     public ExampleSubsystem exampleSubsystem;
-
+    public Drivetrain drivetrain;
     private RobotContainer() {
         //TODO: initialize subsystems here
         exampleSubsystem = ExampleSubsystem.getInstance();
+        drivetrain = Drivetrain.getInstance();
 
         //TODO: define default commands here
         exampleSubsystem.setDefaultCommand(new ExampleCommand());
-
+        drivetrain.setDefaultCommand(new Drive(State.TankDrive));
         //bindOI should be the last thing that runs during construction of RobotContainer
         bindOI();
     }

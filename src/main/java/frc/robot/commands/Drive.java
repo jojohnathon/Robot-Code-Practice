@@ -39,7 +39,7 @@ public class Drive implements Command {
 
     @Override
     public void end(boolean interrupted) {
-        drivetrain.setOpenLoop(0, 0);
+        Drivetrain.setOpenLoop(0, 0);
     }
 
     public Set<Subsystem> getRequirements() {
