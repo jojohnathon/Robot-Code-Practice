@@ -23,23 +23,23 @@ public class Drive implements Command {
 
     @Override
     public void execute() {
-       double throttle = RobotContainer.getThrottle();
-        //double turn = RobotContainer.getTurn();
+       double leftThrottle = RobotContainer.getThrottle();
 
-        double altThrottle = RobotContainer.getAltThrottle();
+
+        double rightThrottle = RobotContainer.getAltThrottle();
         double left, right;
 
         switch(state) {
             case TankDrive:
-                left = throttle;
-                right = altThrottle;
+                left = leftThrottle;
+                right = rightThrottle;
                 break;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        Drivetrain.setOpenLoop(0, 0);
+        drivetrain.setOpenLoop(0, 0);
     }
 
     public Set<Subsystem> getRequirements() {

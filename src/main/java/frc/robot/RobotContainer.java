@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -8,6 +9,12 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drive.State;
 import frc.robot.subsystems.*;
+
+
+import frc.robot.subsystems.Drivetrain;
+
+import edu.wpi.first.wpilibj.Encoder;
+import com.ctre.phoenix.CANifier.GeneralPin;
 
 public class RobotContainer {
     private static RobotContainer instance = null;
@@ -37,7 +44,7 @@ public class RobotContainer {
 
         //TODO: define default commands here
         exampleSubsystem.setDefaultCommand(new ExampleCommand());
-        drivetrain.setDefaultCommand(new Drive(State.TankDrive));
+        drivetrain.setDefaultCommand(new Drive(Drive.State.TankDrive));
         //bindOI should be the last thing that runs during construction of RobotContainer
         bindOI();
     }
@@ -51,6 +58,7 @@ public class RobotContainer {
         driver_x.whileHeld(new StartEndCommand(() -> exampleSubsystem.setOpenLoop(0.05), exampleSubsystem::stop, exampleSubsystem));
         */
     }
+
 
     
 
@@ -67,7 +75,7 @@ public class RobotContainer {
      * @param deadband The deadband
      * @return the input rescaled and to fit [-1, -deadband], [deadband, 1]
      */
-    public static double deadbandX(double input, double deadband) {
+    public static double deadbandX(double input, double deadband) { //deadzone for joysticks
         if(Math.abs(input) <= deadband) {
             return 0;
         } else if(Math.abs(input) == 1) {
