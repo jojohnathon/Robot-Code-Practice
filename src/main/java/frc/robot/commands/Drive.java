@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import frc.robot.*;
+import frc.robot.Constants.DriverConstants;
 import frc.robot.subsystems.Drivetrain;
 
 import java.util.Set;
@@ -31,10 +32,13 @@ public class Drive implements Command {
 
         switch(state) {
             case TankDrive:
-                left = leftThrottle;
-                right = rightThrottle;
+                left = leftThrottle * DriverConstants.kDriveSens;
+                right = rightThrottle * DriverConstants.kDriveSens;
                 break;
-        }
+            default:
+                left = right = 0;
+        } 
+        Drivetrain.setOpenLoop(left, right);
     }
 
     @Override

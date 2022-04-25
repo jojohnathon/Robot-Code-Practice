@@ -27,6 +27,7 @@ public class Drivetrain implements Subsystem{
         leftSlave.follow(leftMaster);
         rightSlave.follow(rightMaster);
         rightMaster.setInverted(true); //invert right side for tank drive
+        rightSlave.setInverted(true);
         register(); //allows this subsytem to work with the command scheduler 
     }
 
