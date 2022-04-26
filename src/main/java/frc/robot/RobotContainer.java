@@ -44,7 +44,7 @@ public class RobotContainer {
 
         //TODO: define default commands here
         exampleSubsystem.setDefaultCommand(new ExampleCommand());
-        drivetrain.setDefaultCommand(new Drive(Drive.State.TankDrive));
+        drivetrain.setDefaultCommand(new Drive(Drive.State.CurvatureDrive));
         //bindOI should be the last thing that runs during construction of RobotContainer
         bindOI();
     }

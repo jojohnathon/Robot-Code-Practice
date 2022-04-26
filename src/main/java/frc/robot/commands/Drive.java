@@ -17,24 +17,41 @@ public class Drive implements Command {
     }
 
     public enum State {
-        TankDrive
+        TankDrive, CurvatureDrive
     }
 
     private State state;
 
     @Override
     public void execute() {
-       double leftThrottle = RobotContainer.getThrottle();
-
-
-        double rightThrottle = RobotContainer.getAltThrottle();
+        // double leftThrottle = RobotContainer.getThrottle();
+        double altThrottle = RobotContainer.getAltThrottle();
         double left, right;
+        double throttle = RobotContainer.getThrottle();
+        double turn = RobotContainer.getTurn();
 
         switch(state) {
             case TankDrive:
-                left = leftThrottle * DriverConstants.kDriveSens;
-                right = rightThrottle * DriverConstants.kDriveSens;
+                left = throttle * DriverConstants.kDriveSens;
+                right = altThrottle * DriverConstants.kDriveSens;
                 break;
+            case CurvatureDrive:
+                if (throttle != 0) {
+                    left = (throttle + throttle * turn * DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
+                    right = (throttle - throttle * turn *DriverConstants.kTurnSens) * DriverConstants.kDriveSens;
+
+                    double maxMagnitude = Math.max(Math.abs(left), Math.abs(right));
+
+                    if(maxMagnitude > DriverConstants.kDriveSens) {
+                        left = left / maxMagnitude * DriverConstants.kDriveSens;
+                        right = right / maxMagnitude * DriverConstants.kDriveSens;
+                    } else {
+                        left = turn * DriverConstants.kTurnInPlaceSens;
+                        right = -turn * DriverConstants.kTurnInPlaceSens;
+                    }
+                    
+                    break;
+                }
             default:
                 left = right = 0;
         } 
