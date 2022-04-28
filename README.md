@@ -9,7 +9,7 @@ This robotic code is made as a starting template for programming our Rapid React
 Members of the programming department are to fork this repository to their own account and write their own code for the 2022 robot! Examples/templates for writing subsystems and commands are provided, and members are encouraged to use the resources at their disposal to create a working project.
 
 ## Timeline/Suggested Order of Priorities
-**Driving** [x]<br> 
+**Driving** <br> 
 Since absolutely no hardware has been initialized in this template, members are encouraged to first write a drivetrain subsystem, test that it works, and then write a default drive command to allow driving of the robot. It is suggested that all subsystems are held as fields in RobotContainer.java, initialized in RobotContainer's constructor, and that default commands are defined after all of the subsystems.
 
 **Intake/ejection** <br>
