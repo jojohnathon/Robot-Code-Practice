@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -69,6 +70,16 @@ public class RobotContainer {
             }, intake)).withTimeout(1.2)
             .andThen(intake::stopArm, intake).andThen(intake::stopIntake));
         
+        driver_Y.whenHeld(new RunCommand(() -> intake.setArm(-0.05), intake).withTimeout(1.7))
+            .whileHeld(new RunCommand(() -> {
+                intake.intake(0.95);
+                intake.setConveyor(0.3);
+            }, intake))
+            .whenReleased(new InstantCommand(() -> {
+                intake.stopArm();
+                intake.stopIntake();
+            }, intake));
+            
     }
 
 
