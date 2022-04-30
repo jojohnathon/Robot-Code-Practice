@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -9,10 +10,6 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.Drive.State;
 import frc.robot.subsystems.*;
-
-
-import frc.robot.subsystems.Drivetrain;
-
 import edu.wpi.first.wpilibj.Encoder;
 import com.ctre.phoenix.CANifier.GeneralPin;
 
@@ -36,6 +33,7 @@ public class RobotContainer {
 
     //TODO: define all subsystems here
     public ExampleSubsystem exampleSubsystem;
+    public Intake intake;
     public Drivetrain drivetrain;
     private RobotContainer() {
         //TODO: initialize subsystems here
@@ -57,6 +55,20 @@ public class RobotContainer {
             or
         driver_x.whileHeld(new StartEndCommand(() -> exampleSubsystem.setOpenLoop(0.05), exampleSubsystem::stop, exampleSubsystem));
         */
+        driver_RB.whenHeld(new RunCommand(() -> intake.setArm(0.05), intake).withTimeout(1.7))
+            .whileHeld(new RunCommand(() -> {
+                intake.intake(0.95);
+                intake.setConveyor(0.3);
+            }, intake))
+            .whenReleased(new RunCommand(() -> {
+                intake.setArm(-0.5);
+                // intake.intake(0.7);
+            }, intake).withTimeout(0.5).andThen(new RunCommand(() ->{
+                intake.intake(0.0);
+                intake.setConveyor(0.3);
+            }, intake)).withTimeout(1.2)
+            .andThen(intake::stopArm, intake).andThen(intake::stopIntake));
+        
     }
 
 

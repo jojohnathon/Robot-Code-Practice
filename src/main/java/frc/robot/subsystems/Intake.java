@@ -22,12 +22,7 @@ public class Intake implements Subsystem{
         if (instance == null) instance = new Intake();
         return instance;
     }
-
-    private void Arm() { //check why this method has to be void and Intake() doesn't
-        armMotor.setInverted(false);
-        register();
-    }
-
+    
     public void setArm(double value) {
         armMotor.set(value);
     }
@@ -41,6 +36,7 @@ public class Intake implements Subsystem{
     }
     private Intake(){
         conveyorMotor.setInverted(true);
+        armMotor.setInverted(false);
         rollerMotor.setInverted(false);
         register();
     }
