@@ -10,16 +10,26 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.simulation.ADXRS450_GyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -43,11 +53,20 @@ public class Drivetrain implements Subsystem {
     public static final ProfiledPIDController LEFT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
     public static final ProfiledPIDController RIGHT_PID_CONTROLLER = new ProfiledPIDController(DrivetrainConstants.kP, DrivetrainConstants.kI, DrivetrainConstants.kD, constraints);
     public static DifferentialDriveOdometry ODOMETRY = new DifferentialDriveOdometry(Rotation2d.fromDegrees(RobotContainer.navX.getAngle()), getLeftEnc(), getRightEnc());
-
-    public DifferentialDrivetrainSim differentialDrivetrainSim;
-    private EncoderSim m_leftEncoderSim;
-    private EncoderSim m_rightEncoderSim;
+    
+    private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro(); //onbaord rio gyro
+    //Simulation objects
+    public DifferentialDrivetrainSim m_DrivetrainSim;
+    private TalonFXSimCollection m_leftEncoderSim;
+    private TalonFXSimCollection m_rightEncoderSim;
+    //Field2d class shows the field on the sim GUI
     private Field2d m_fieldSim;
+    private ADXRS450_GyroSim m_gyroSim;
+    private final int kCountsPerRev = 2048;  //Encoder counts per revolution of the motor shaft.
+    private final double kSensorGearRatio = 1; //Gear ratio is the ratio between the *encoder* and the wheels.  On the AndyMark drivetrain, encoders mount 1:1 with the gearbox shaft.
+    private final double kWheelRadiusInches = 3;
+    private final int k100msPerSecond = 10;
+
 
     private Drivetrain() {
         leftSlave.follow(leftMaster);
@@ -57,6 +76,28 @@ public class Drivetrain implements Subsystem {
         // Inverting opposite sides of the drivetrain
         List.of(leftMaster , leftSlave).forEach(motor -> motor.setInverted(false));
         List.of(rightMaster , rightSlave).forEach(motor -> motor.setInverted(true));
+        
+
+        if (RobotBase.isSimulation()) {
+            m_DrivetrainSim = DifferentialDrivetrainSim.createKitbotSim(
+                KitbotMotor.kDoubleFalcon500PerSide, 
+                KitbotGearing.k5p95, //TODO find actual gear ratio
+                KitbotWheelSize.kSixInch, 
+                /*
+                * The standard deviations for measurement noise:
+                * x and y:          0.001 m
+                * heading:          0.001 rad
+                * l and r velocity: 0.1   m/s
+                * l and r position: 0.005 m
+                */
+                VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005)); //not accurate at all probably
+            m_leftEncoderSim = leftMaster.getSimCollection();
+            m_rightEncoderSim = rightMaster.getSimCollection();
+            m_gyroSim = new ADXRS450_GyroSim(m_gyro);
+
+            m_fieldSim = new Field2d();
+            SmartDashboard.putData("Field", m_fieldSim);
+        }
 
         register();
     }
@@ -72,7 +113,92 @@ public class Drivetrain implements Subsystem {
         SmartDashboard.putNumber("NavX heading", RobotContainer.navX.getAngle());
         //SmartDashboard.putNumber("Right Slave output: ", rightSlave.getMotorOutputPercent());
         
+
+        m_fieldSim.setRobotPose(ODOMETRY.getPoseMeters());
+
     }
+    @Override
+    public void simulationPeriodic() {
+        /* Pass the robot battery voltage to the simulated Talon SRXs */
+        m_leftEncoderSim.setBusVoltage(RobotController.getBatteryVoltage());
+        m_rightEncoderSim.setBusVoltage(RobotController.getBatteryVoltage());
+
+        /*
+        * CTRE simulation is low-level, so SimCollection inputs
+        * and outputs are not affected by SetInverted(). Only
+        * the regular user-level API calls are affected.
+        *
+        * WPILib expects +V to be forward.
+        * Positive motor output lead voltage is ccw. We observe
+        * on our physical robot that this is reverse for the
+        * right motor, so negate it.
+        *
+        * We are hard-coding the negation of the values instead of
+        * using getInverted() so we can catch a possible bug in the
+        * robot code where the wrong value is passed to setInverted().
+        */
+        m_DrivetrainSim.setInputs(
+            m_leftEncoderSim.getMotorOutputLeadVoltage(),
+            -m_rightEncoderSim.getMotorOutputLeadVoltage());
+
+        /*
+        * Advance the model by 20 ms. Note that if you are running this
+        * subsystem in a separate thread or have changed the nominal
+        * timestep of TimedRobot, this value needs to match it.
+        */
+        m_DrivetrainSim.update(0.02);
+
+        /*
+        * Update all of our sensors.
+        *
+        * Since WPILib's simulation class is assuming +V is forward,
+        * but -V is forward for the right motor, we need to negate the
+        * position reported by the simulation class. Basically, we
+        * negated the input, so we need to negate the output.
+        *
+        * We also observe on our physical robot that a positive voltage
+        * across the output leads results in a positive sensor velocity
+        * for both the left and right motors, so we do not need to negate
+        * the output any further.
+        * If we had observed that a positive voltage results in a negative
+        * sensor velocity, we would need to negate the output once more.
+        */
+        m_leftEncoderSim.setIntegratedSensorRawPosition(
+                        distanceToNativeUnits(
+                            m_DrivetrainSim.getLeftPositionMeters()
+                        ));
+        m_leftEncoderSim.setIntegratedSensorVelocity(
+                        velocityToNativeUnits(
+                            m_DrivetrainSim.getLeftVelocityMetersPerSecond()
+                        ));
+        m_rightEncoderSim.setIntegratedSensorRawPosition(
+                        distanceToNativeUnits(
+                            -m_DrivetrainSim.getRightPositionMeters()
+                        ));
+        m_rightEncoderSim.setIntegratedSensorVelocity(
+                        velocityToNativeUnits(
+                            -m_DrivetrainSim.getRightVelocityMetersPerSecond()
+                        ));
+        m_gyroSim.setAngle(-m_DrivetrainSim.getHeading().getDegrees());
+    }
+
+    private int distanceToNativeUnits(double positionMeters){
+        double wheelRotations = positionMeters/(2 * Math.PI * Units.InchesToMeters(kWheelRadiusInches));
+        double motorRotations = wheelRotations * kSensorGearRatio;
+        int sensorCounts = (int)(motorRotations * kCountsPerRev);
+        return sensorCounts;
+    }
+
+    private int velocityToNativeUnits(double velocityMetersPerSecond){
+        double wheelRotationsPerSecond = velocityMetersPerSecond/(2 * Math.PI * Units.InchesToMeters(kWheelRadiusInches));
+        double motorRotationsPerSecond = wheelRotationsPerSecond * kSensorGearRatio;
+        double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
+        int sensorCountsPer100ms = (int)(motorRotationsPer100ms * kCountsPerRev);
+        return sensorCountsPer100ms;
+    }
+
+
+  
     private static int kInverted = 1; //1 or -1
     public static int getkInvert() { //only for teleop driving, up to user to read this flag
         return kInverted;
